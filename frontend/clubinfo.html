@@ -105,17 +105,7 @@ body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#
 <body>
 
 <!-- NAVBAR -->
-<nav class="ai-nav">
-  <div class="nav-logo-wrap">
-    <img src="assets/p.png" alt="PUC" onerror="this.style.display='none'">
-    <span class="nav-brand">PUC HUB <span class="nav-tag">Club Information</span></span>
-  </div>
-  <div class="nav-actions">
-    <a href="index.html" class="nav-btn">Home</a>
-    <a href="index.html#services" class="nav-btn">Services</a>
-    <button onclick="history.back()" class="nav-btn">Back</button>
-  </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <button id="backToTop" title="Go to top">&#8593;</button>
 
@@ -550,5 +540,6 @@ btn.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smoot
 if(localStorage.getItem('isLoggedIn') !== 'true'){ alert('Please login first!'); window.location.href='login.html'; }
 if(typeof trackUserActivity === 'function') trackUserActivity('Club Information');
 </script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

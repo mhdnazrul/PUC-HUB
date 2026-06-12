@@ -40,18 +40,7 @@
 </head>
 <body>
 
-<nav class="ai-nav">
-    <div class="nav-logo-wrap">
-        <img src="assets/p.png" alt="PUC" onerror="this.style.display='none'">
-        <span class="nav-brand">PUC HUB <span class="nav-tag">Holiday Calendar</span></span>
-    </div>
-    <div class="nav-actions">
-        <a href="assets/calender.pdf" download class="nav-btn nav-btn-dl">⬇ Download</a>
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="index.html#services" class="nav-btn">Services</a>
-        <button onclick="window.location.href='index.html#standard'" class="nav-btn">Back</button>
-    </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="pdf-container" id="pdfContainer">
     <iframe src="assets/calender.pdf" id="pdfFrame" title="Holiday Calendar PDF"></iframe>
@@ -77,5 +66,6 @@ if(typeof trackUserActivity==='function'){trackUserActivity('Holiday Calendar');
 <script src="js/routes.js"></script>
 <script src="js/tracker.js"></script>
 <script src="js/app.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

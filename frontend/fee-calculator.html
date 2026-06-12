@@ -138,17 +138,7 @@ body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#
 <body>
 
 <!-- NAVBAR -->
-<nav class="ai-nav">
-  <div class="nav-logo-wrap">
-    <img src="assets/p.png" alt="PUC" onerror="this.style.display='none'">
-    <span class="nav-brand">PUC HUB <span class="nav-tag">Fee Calculator</span></span>
-  </div>
-  <div class="nav-actions">
-    <a href="index.html" class="nav-btn">Home</a>
-    <a href="index.html#services" class="nav-btn">Services</a>
-    <button onclick="history.back()" class="nav-btn">Back</button>
-  </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="page">
   <div class="hero-strip">
@@ -244,5 +234,6 @@ function resetAll(){selectedSem=null;document.querySelectorAll('.sem-btn').forEa
 function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='ok'?' tok':type==='err'?' terr':'');clearTimeout(t._t);t._t=setTimeout(function(){t.className='toast';},3500);}
 document.addEventListener('DOMContentLoaded',function(){if(localStorage.getItem('isLoggedIn')!=='true'){window.location.href='login.html';}});
 </script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

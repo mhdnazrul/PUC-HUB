@@ -66,17 +66,7 @@
     </style>
 </head>
 <body>
-<nav class="ai-nav">
-    <div class="nav-logo">
-        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
-        <span>PUC HUB <span class="nav-tag">AI Assignment Writer</span></span>
-    </div>
-    <div class="nav-actions">
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="index.html#services" class="nav-btn">Services</a>
-        <button onclick="history.back()" class="nav-btn">Back</button>
-    </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="page">
     <div class="page-title">AI Assignment Writer</div>
@@ -279,5 +269,6 @@ if (localStorage.getItem('isLoggedIn') !== 'true') {
 }
 if (typeof trackUserActivity === 'function') trackUserActivity('AI Assignment Writer');
 </script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

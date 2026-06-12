@@ -107,17 +107,7 @@ input.err,select.err{border-color:rgba(231,76,60,0.8)!important;background:rgba(
 </head>
 <body>
 
-<nav class="ai-nav">
-  <div class="nav-logo-wrap">
-    <img src="assets/p.png" onerror="this.style.display='none'" alt="">
-    <span class="nav-brand">PUC HUB <span class="nav-tag">Study Partner Finder</span></span>
-  </div>
-  <div class="nav-actions">
-    <a href="index.html" class="nav-btn">Home</a>
-    <a href="index.html#services" class="nav-btn">Services</a>
-    <button onclick="history.back()" class="nav-btn">Back</button>
-  </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="hero">
   <div class="hero-badge">PUC HUB — Study Network</div>
@@ -317,5 +307,6 @@ if(typeof trackUserActivity==='function'){trackUserActivity('Study Partner Finde
 <script src="js/routes.js"></script>
 <script src="js/tracker.js"></script>
 <script src="js/app.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

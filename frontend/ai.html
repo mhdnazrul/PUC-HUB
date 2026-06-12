@@ -60,21 +60,7 @@ body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#
 </head>
 <body>
 
-<nav class="ai-nav">
-  <div class="nav-logo-wrap">
-    <img src="assets/ai.png" alt="PUC" onerror="this.src='assets/p.png'">
-    <span class="nav-brand">PUC HUB <span class="nav-tag">AI Assistant</span></span>
-  </div>
-  <div class="nav-mid">
-    <div class="nav-mid-title">PUC AI Assistant</div>
-    <div class="nav-mid-sub">Powered by Premier University Problem Solver Team</div>
-  </div>
-  <div class="nav-actions">
-    <button class="nav-btn" onclick="clearChat()">Clear</button>
-    <button class="nav-btn" onclick="newChat()">New Chat</button>
-    <a href="index.html" class="nav-btn">Back</a>
-  </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="messages" id="messages">
   <div class="empty-state" id="emptyState">
@@ -171,5 +157,6 @@ function newChat(){if(history.length<=1)return;if(!confirm('Start a new chat? Cu
 function clearChat(){if(history.length<=1)return;if(!confirm('Clear this conversation?'))return;resetChat();}
 function resetChat(){history=[{role:'system',content:SYSTEM_TEXT}];document.getElementById('messages').innerHTML='<div class="empty-state" id="emptyState"><h3>How can I help you?</h3><p>Ask me about coding, assignments, CGPA calculations, lab reports, or any university topic.</p></div>';}
 </script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

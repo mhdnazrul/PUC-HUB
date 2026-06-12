@@ -48,19 +48,7 @@
 </head>
 <body>
 
-<nav class="ai-nav">
-    <div class="nav-logo-wrap">
-        <img src="assets/p.png" alt="PUC" onerror="this.style.display='none'">
-        <span class="nav-brand">PUC HUB <span class="nav-tag">Faculty Contact</span></span>
-    </div>
-    <div class="nav-actions">
-        <a href="assets/teacher.pdf" download="teacher.pdf" class="nav-btn nav-btn-dl">⬇ Teacher List</a>
-        <a href="assets/cr.pdf" download="cr.pdf" class="nav-btn nav-btn-dl">⬇ CR</a>
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="index.html#services" class="nav-btn">Services</a>
-        <button onclick="window.location.href='index.html#standard'" class="nav-btn">Back</button>
-    </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="tab-bar" id="tabBar">
     <button class="tab-btn active" onclick="switchTab('teacher',this)">📋 Teacher List</button>
@@ -103,5 +91,6 @@ if(typeof trackUserActivity==='function'){trackUserActivity('Faculty Contact');}
 <script src="js/routes.js"></script>
 <script src="js/tracker.js"></script>
 <script src="js/app.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

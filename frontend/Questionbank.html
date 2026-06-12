@@ -217,21 +217,7 @@ body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#
 </head>
 <body>
 
-<nav class="ai-nav">
-  <div class="nav-logo-wrap">
-    <img src="assets/p.png" alt="PUC" onerror="this.style.display='none'">
-    <span class="nav-brand">PUC HUB <span class="nav-tag">Question Bank</span></span>
-  </div>
-  <div class="nav-mid">
-    <div class="nav-mid-title">Question Bank</div>
-    <div class="nav-mid-msg">Help Juniors &amp; Seniors — Please Contribute Question Papers</div>
-  </div>
-  <div class="nav-actions">
-    <a href="index.html" class="nav-btn">Home</a>
-    <a href="index.html#services" class="nav-btn">Services</a>
-    <button onclick="history.back()" class="nav-btn">Back</button>
-  </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="hero">
   <div class="hero-powered">PUC Question Bank — Powered by Premier University Problem Solver Team</div>
@@ -360,5 +346,6 @@ document.addEventListener('DOMContentLoaded',function(){if(localStorage.getItem(
 <script src="js/routes.js"></script>
 <script src="js/tracker.js"></script>
 <script src="js/app.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

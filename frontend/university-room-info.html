@@ -103,17 +103,7 @@
     </style>
 </head>
 <body>
-<nav class="ai-nav">
-    <div class="nav-logo">
-        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
-        <span>PUC HUB <span class="nav-tag">Room Info & Booking</span></span>
-    </div>
-    <div class="nav-actions">
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="index.html#services" class="nav-btn">Services</a>
-        <button onclick="history.back()" class="nav-btn">Back</button>
-    </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <div class="page">
     <div class="page-title">University Room Info & Booking</div>
@@ -333,5 +323,6 @@ function renderAll() { renderRooms(); renderMyBookings(); }
 document.getElementById('bookingModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
 buildFloorTabs(); renderAll();
 </script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

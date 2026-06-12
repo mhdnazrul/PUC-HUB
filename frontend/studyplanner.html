@@ -130,17 +130,7 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="nav-left">
-        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
-        <div><div class="nav-title">Routine Generator</div><div class="nav-sub">PUC HUB</div></div>
-    </div>
-    <div class="nav-right">
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="index.html#services" class="nav-btn">Services</a>
-        <button onclick="history.back()" class="nav-btn">Back</button>
-    </div>
-</nav>
+<nav id="puc-navbar"></nav>
 
 <!-- ══ PAGE 1: FORM ══ -->
 <div id="formPage" class="page active">
@@ -500,5 +490,6 @@ function printRoutine(){
 
 addSlot('theory');
 </script>
+<script src="js/navbar.js"></script>
 </body>
 </html>
