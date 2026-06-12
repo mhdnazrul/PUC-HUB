@@ -115,7 +115,7 @@ export const googleCallback = async (req, res) => {
       maxAge: 60 * 1000
     });
 
-    res.redirect(`${FRONTEND_URL}/login.html?oauth=success`);
+    res.redirect(`${FRONTEND_URL}/login.html?oauth=success&token=${accessToken}`);
   } catch (error) {
     logger.error('Google OAuth callback error', { error: error.message });
     res.redirect(`${FRONTEND_URL}/login.html?error=oauth_failed`);
@@ -123,7 +123,12 @@ export const googleCallback = async (req, res) => {
 };
 
 export const authMe = async (req, res) => {
-  const handoffToken = req.cookies.oauth_handoff;
+  // Support taking token from header (bypasses 3P cookie blocks) or fallback to cookie
+  const authHeader = req.headers.authorization;
+  const handoffToken = (authHeader && authHeader.startsWith('Bearer ')) 
+    ? authHeader.split(' ')[1] 
+    : req.cookies.oauth_handoff;
+
   if (!handoffToken) {
     return res.status(401).json({ success: false, message: 'No handoff token found.' });
   }

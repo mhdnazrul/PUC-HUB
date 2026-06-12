@@ -590,11 +590,13 @@
             <!-- Alert -->
             <div class="alert-box" id="alertBox"></div>
 
-            <!-- Username -->
-            <div class="form-group">
-                <label>Your Name / Nickname</label>
-                <input type="text" id="username" placeholder="Enter your name" autocomplete="off">
-            </div>
+            <!-- Form Wrapper -->
+            <form id="loginForm" onsubmit="doLogin(event)">
+                <!-- Username -->
+                <div class="form-group">
+                    <label>Your Name / Nickname</label>
+                    <input type="text" id="username" placeholder="Enter your name" autocomplete="off">
+                </div>
 
             <!-- Student ID -->
             <div class="form-group">
@@ -614,10 +616,11 @@
             </div>
 
             <!-- Login Button -->
-            <button class="login-btn" id="loginBtn" onclick="doLogin()">
+            <button class="login-btn" id="loginBtn" type="submit">
                 <span class="spinner" id="spinner"></span>
                 <span id="btnText">Login or Register</span>
             </button>
+            </form>
 
             <!-- Google Login Button -->
             <button class="google-btn" type="button" onclick="loginWithGoogle()">
@@ -654,11 +657,18 @@
         // ── Google OAuth return path ──────────────────────────────────────
         if (urlParams.get('oauth') === 'success') {
             showAlert('Completing Google sign-in…', 'success');
+            const token = urlParams.get('token');
+            console.log("Captured Handoff Token:", token ? "Token present" : "Missing token");
+            
             try {
-                // Exchange the short-lived httpOnly handoff cookie for user data.
-                // The token was NEVER placed in the URL — it travels only via cookie.
+                // We securely passed the token in the URL to bypass 3P cookie blocking.
+                // We send it to the backend via the Authorization header.
                 const res = await fetch(window.API_BASE + '/auth/me', {
-                    credentials: 'include' // send the oauth_handoff cookie
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    credentials: 'include' // Still send jid cookie if possible
                 });
                 const data = await res.json();
 
@@ -698,7 +708,7 @@
 
         ['username', 'studentId', 'password'].forEach(function(id) {
             document.getElementById(id).addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') doLogin();
+                // Form submit handles Enter key now
             });
         });
 
@@ -771,7 +781,8 @@
 
     // ── Main login (student ID + password) ───────────────────────────────
 
-    async function doLogin() {
+    async function doLogin(e) {
+        if (e) e.preventDefault();
         const username  = document.getElementById('username').value.trim();
         const studentId = document.getElementById('studentId').value.trim();
         const password  = document.getElementById('password').value;

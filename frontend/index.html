@@ -215,53 +215,8 @@
 </head>
 <body>
 
-<!-- ══ NAVBAR — study-partner.html এর মতো structure ══ -->
-<nav class="ai-nav">
-    <div class="nav-logo">
-        <img src="assets/p.png" alt="PUC Logo" onerror="this.src='assets/p.png'">
-        <span class="nav-logo-text">PUC HUB</span>
-    </div>
-
-    <!-- JS দিয়ে ইনজেক্ট হবে -->
-    <div class="nav-actions" id="navActions">
-        <a href="#home" class="nav-link-item active">Home</a>
-        <div class="nav-dropdown">
-            <a href="#services" class="nav-link-item">Services ▾</a>
-            <div class="nav-dropdown-menu">
-                <div class="drop-label">⭐ Premium</div>
-                <a href="#" onclick="scrollToSection('premium');return false;">📚 Question Bank</a>
-                <a href="#" onclick="scrollToSection('premium');return false;">🤖 PUC AI Assistant</a>
-                <a href="#" onclick="scrollToSection('premium');return false;">📝 Cover Page Generator</a>
-                <a href="#" onclick="scrollToSection('premium');return false;">🩸 Blood Donation</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">🔵 Standard</div>
-                <a href="#" onclick="scrollToSection('standard');return false;">🏠 Mess &amp; Housing</a>
-                <a href="#" onclick="scrollToSection('standard');return false;">💰 Fee Calculator</a>
-                <a href="#" onclick="scrollToSection('standard');return false;">📞 Faculty Contacts</a>
-                <a href="#" onclick="scrollToSection('standard');return false;">🎓 CGPA Calculator</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">⚪ General</div>
-                <a href="#" onclick="scrollToSection('general');return false;">📅 Class Routine</a>
-                <a href="#" onclick="scrollToSection('general');return false;">📋 Exam Routine</a>
-                <a href="#" onclick="scrollToSection('general');return false;">📢 Notice Board</a>
-                <a href="#" onclick="scrollToSection('general');return false;">🏛 Club Info</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">🟢 Normal</div>
-                <a href="#" onclick="scrollToSection('normal');return false;">👥 Study Partner Finder</a>
-                <a href="#" onclick="scrollToSection('normal');return false;">🏫 University Room Info</a>
-                <a href="#" onclick="scrollToSection('normal');return false;">🎬 YouTube Playlists</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">🤖 AI Tools</div>
-                <a href="#" onclick="scrollToSection('aitools');return false;">📊 AI Study Tracker</a>
-                <a href="#" onclick="scrollToSection('aitools');return false;">🧠 Notes Summarizer</a>
-                <a href="#" onclick="scrollToSection('aitools');return false;">🐛 Code Debugger</a>
-                <a href="#" onclick="scrollToSection('aitools');return false;">✍️ Assignment Writer</a>
-            </div>
-        </div>
-        <a href="#team" class="nav-link-item">Team</a>
-        <button class="login-btn" onclick="goToLogin()">Login</button>
-    </div>
-</nav>
+<!-- ══ GLOBAL NAVBAR ══ -->
+<nav id="puc-navbar"></nav>
 
 <button id="backToTop" class="back-to-top" title="Go to top">&#8593;</button>
 
@@ -436,90 +391,12 @@
 <script src="js/routes.js"></script>
 <script src="js/tracker.js"></script>
 <script src="js/app.js"></script>
+<script src="js/navbar.js"></script>
 
 <script>
 // ══════════════════════════════════════════════
-// ✅ NAVBAR AUTH UPDATE
-// সমস্যা ছিল: inline handleServiceClick শুধু alert করত
-// এখন: routes.js এর handleServiceClick ব্যবহার হবে সরাসরি
+// GLOBAL NAVBAR HANDLED BY js/navbar.js
 // ══════════════════════════════════════════════
-function updateNavbarAuth() {
-    var isLoggedIn = localStorage.getItem('isLoggedIn');
-    var userData   = localStorage.getItem('userData');
-    var nav        = document.getElementById('navActions');
-    if (!nav) return;
-
-    var dropdownHTML = `
-        <div class="nav-dropdown">
-            <a href="#services" class="nav-link-item">Services ▾</a>
-            <div class="nav-dropdown-menu">
-                <div class="drop-label">⭐ Premium</div>
-                <a href="#" onclick="scrollToSection('premium');return false;">📚 Question Bank</a>
-                <a href="#" onclick="scrollToSection('premium');return false;">🤖 PUC AI Assistant</a>
-                <a href="#" onclick="scrollToSection('premium');return false;">📝 Cover Page Generator</a>
-                <a href="#" onclick="scrollToSection('premium');return false;">🩸 Blood Donation</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">🔵 Standard</div>
-                <a href="#" onclick="scrollToSection('standard');return false;">🏠 Mess &amp; Housing</a>
-                <a href="#" onclick="scrollToSection('standard');return false;">💰 Fee Calculator</a>
-                <a href="#" onclick="scrollToSection('standard');return false;">📞 Faculty Contacts</a>
-                <a href="#" onclick="scrollToSection('standard');return false;">🎓 CGPA Calculator</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">⚪ General</div>
-                <a href="#" onclick="scrollToSection('general');return false;">📅 Class Routine</a>
-                <a href="#" onclick="scrollToSection('general');return false;">📋 Exam Routine</a>
-                <a href="#" onclick="scrollToSection('general');return false;">📢 Notice Board</a>
-                <a href="#" onclick="scrollToSection('general');return false;">🏛 Club Info</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">🟢 Normal</div>
-                <a href="#" onclick="scrollToSection('normal');return false;">👥 Study Partner Finder</a>
-                <a href="#" onclick="scrollToSection('normal');return false;">🏫 University Room Info</a>
-                <a href="#" onclick="scrollToSection('normal');return false;">🎬 YouTube Playlists</a>
-                <div class="drop-divider"></div>
-                <div class="drop-label">🤖 AI Tools</div>
-                <a href="#" onclick="scrollToSection('aitools');return false;">📊 AI Study Tracker</a>
-                <a href="#" onclick="scrollToSection('aitools');return false;">🧠 Notes Summarizer</a>
-                <a href="#" onclick="scrollToSection('aitools');return false;">🐛 Code Debugger</a>
-                <a href="#" onclick="scrollToSection('aitools');return false;">✍️ Assignment Writer</a>
-            </div>
-        </div>`;
-
-    if (isLoggedIn === 'true' && userData) {
-        try {
-            var user = JSON.parse(userData);
-            var img  = (user.profileImage && user.profileImage.startsWith('data:image'))
-                       ? user.profileImage : 'assets/p.png';
-            nav.innerHTML = `
-                <a href="#home" class="nav-link-item active">Home</a>
-                ${dropdownHTML}
-                <a href="#team" class="nav-link-item">Team</a>
-                <a href="history.html" class="my-activity-btn">📊 My Activity</a>
-                <div class="profile-dropdown">
-                    <button class="profile-btn">
-                        <img src="${img}" class="profile-thumb" onerror="this.src='assets/p.png'">
-                        <span>${user.username || 'Profile'}</span>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="profile.html">👤 My Profile</a>
-                        <a href="history.html">📊 My Activity</a>
-                        <a href="#" onclick="doLogout();return false;">🚪 Logout</a>
-                    </div>
-                </div>`;
-        } catch(e) {
-            nav.innerHTML = `
-                <a href="#home" class="nav-link-item active">Home</a>
-                ${dropdownHTML}
-                <a href="#team" class="nav-link-item">Team</a>
-                <button class="login-btn" onclick="goToLogin()">Login</button>`;
-        }
-    } else {
-        nav.innerHTML = `
-            <a href="#home" class="nav-link-item active">Home</a>
-            ${dropdownHTML}
-            <a href="#team" class="nav-link-item">Team</a>
-            <button class="login-btn" onclick="goToLogin()">Login</button>`;
-    }
-}
 
 // ══ UTILITY FUNCTIONS ══
 function doLogout() {
@@ -564,7 +441,6 @@ document.getElementById('vipModal').addEventListener('click',      function(e){ 
 
 // ══ INIT ══
 document.addEventListener('DOMContentLoaded', function() {
-    updateNavbarAuth();
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
@@ -573,18 +449,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btt) {
         window.addEventListener('scroll', function(){ btt.classList.toggle('show', window.scrollY > 300); });
         btt.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
-    }
-
-    // Navbar scroll effect
-    var navbar = document.querySelector('.ai-nav');
-    if (navbar) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 100) {
-                navbar.style.background = 'rgba(30,16,8,0.98)';
-            } else {
-                navbar.style.background = 'rgba(43,24,15,0.95)';
-            }
-        }, { passive: true });
     }
 });
 </script>
