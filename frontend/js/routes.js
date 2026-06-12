@@ -26,12 +26,12 @@ function goToHoliday()          { if (!requireLogin()) return; if (typeof trackU
 function goToFaculty()          { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Faculty Contact');       window.location.href = 'faculty.html'; }
 function goToNotices()          { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Notice Board');          window.location.href = 'notices.html'; }
 function goToExamRoutine()      { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Exam Routine');          window.location.href = 'examroutine.html'; }
-function goToBusRoute()         { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Bus Route Map');         window.location.href = 'busroute.html'; }
+function goToBusRoute()         { if (typeof pucToast === 'function') pucToast('Bus Route Map is coming soon!', 'info'); else alert('Bus Route Map coming soon!'); }
 function goToClassRoutine()     { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Class Routine');         window.location.href = 'classroutine.html'; }
 function goToFeeCalculator()    { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Fee Calculator');        window.location.href = 'fee-calculator.html'; }
 function goToCGPA()             { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('CGPA Calculator');       window.location.href = 'cgpa.html'; }
-function goToBloodDonation()    { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Blood Donation');        window.location.href = 'blooddonation.html'; }
-function goToMessHousing()      { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Mess & Housing');        window.location.href = 'messnhousing.html'; }
+function goToBloodDonation()    { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Blood Donation');        window.location.href = 'Blooddonation.html'; }
+function goToMessHousing()      { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Mess & Housing');        window.location.href = 'Messnhousing.html'; }
 function goToCoverPage()        { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Cover Page Generator');  window.location.href = 'coverpages.html'; }
 function openClubInfo()         { if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Club Information');      window.location.href = 'clubinfo.html'; }
 function goToStudyPartnerFinder(){ if (!requireLogin()) return; if (typeof trackUserActivity === 'function') trackUserActivity('Study Partner Finder'); window.location.href = 'study-partner-finder.html'; }

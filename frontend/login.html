@@ -760,7 +760,12 @@
         // Clear query params before navigating away
         history.replaceState(null, '', window.location.pathname);
         setTimeout(function() {
-            window.location.href = userData.profileCompleted ? 'index.html' : 'profile.html';
+            // Admins go to the admin panel, others to their profile/dashboard
+            if (userData.isAdmin) {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = userData.profileCompleted ? 'index.html' : 'profile.html';
+            }
         }, 800);
     }
 
@@ -784,8 +789,9 @@
         setLoading(true);
 
         try {
-            // First, get a CSRF token (required by the backend for all POST requests)
-            const csrfRes = await fetch(window.API_BASE.replace('/api/v1', '') + '/api/v1/csrf-token', {
+            // First, get a CSRF token (required by the backend for all POST requests).
+            // window.API_BASE already contains /api/v1 — just append /csrf-token.
+            const csrfRes = await fetch(window.API_BASE + '/csrf-token', {
                 credentials: 'include'
             });
             const { csrfToken } = await csrfRes.json();

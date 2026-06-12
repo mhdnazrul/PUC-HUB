@@ -1,3 +1,16 @@
+/**
+ * seed-admin.js
+ *
+ * Creates an admin user in the database.
+ * Uses credentials from .env (ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_STUDENT_ID, ADMIN_USERNAME).
+ * Falls back to safe defaults if env vars are not set.
+ *
+ * Run with: node scripts/seed-admin.js
+ *
+ * NOTE: knexfile.js itself calls dotenv.config() at module evaluation time (ES Module
+ * static imports are hoisted), so environment variables are available before we call
+ * dotenv.config() here. The call below is kept as an explicit safety net.
+ */
 import knex from 'knex';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
@@ -5,49 +18,60 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import knexConfig from '../knexfile.js';
 
-// Load env variables
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname  = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const db = knex(knexConfig[process.env.NODE_ENV || 'development']);
+const env = process.env.NODE_ENV || 'development';
+const db  = knex(knexConfig[env]);
 
 async function seed() {
-  const adminEmail = 'admin@puchub.com';
-  const adminPassword = 'AdminPUCHub2026!';
-  const adminUsername = 'Admin';
-  const adminStudentId = '0000000000000000'; // Unique fallback student ID
+  const adminEmail     = process.env.ADMIN_EMAIL      || 'admin@puchub.com';
+  const adminPassword  = process.env.ADMIN_PASSWORD   || 'AdminPUCHub2026!';
+  const adminUsername  = process.env.ADMIN_USERNAME   || 'Admin';
+  const adminStudentId = process.env.ADMIN_STUDENT_ID || '0000000000000000';
 
-  console.log('Seeding default admin user...');
+  console.log(`\n🌱 Seeding admin user (env: ${env})…`);
+  console.log(`   Email:     ${adminEmail}`);
+  console.log(`   StudentID: ${adminStudentId}\n`);
 
   try {
-    // Check if an admin with this email already exists
-    const existingUser = await db('users').where({ email: adminEmail }).first();
-    if (existingUser) {
-      console.log(`Admin user with email ${adminEmail} already exists. No changes made.`);
+    // Idempotent: skip if admin already exists (matched by email or student_id)
+    const existing = await db('users')
+      .where(function () {
+        this.where({ email: adminEmail }).orWhere({ student_id: adminStudentId });
+      })
+      .first();
+
+    if (existing) {
+      console.log(`✅ Admin already exists (ID: ${existing.id}). No changes made.`);
       return;
     }
 
     const password_hash = await bcrypt.hash(adminPassword, 12);
 
     const [user] = await db('users').insert({
-      username: adminUsername,
-      email: adminEmail,
-      student_id: adminStudentId,
-      password_hash: password_hash,
-      is_admin: true,
+      username:     adminUsername,
+      email:        adminEmail,
+      student_id:   adminStudentId,
+      password_hash,
+      is_admin:     true,
       auth_provider: 'local'
     }).returning('*');
 
+    // Create a matching profile row
     await db('profiles').insert({
-      user_id: user.id,
-      email: adminEmail,
+      user_id:   user.id,
+      email:     adminEmail,
       completed: true
     });
 
-    console.log(`Admin user seeded successfully. Email: ${adminEmail}, User ID: ${user.id}`);
+    console.log(`🎉 Admin seeded successfully!`);
+    console.log(`   User ID:  ${user.id}`);
+    console.log(`   Email:    ${adminEmail}`);
+    console.log(`   Password: (from ADMIN_PASSWORD env var)\n`);
   } catch (error) {
-    console.error('Seeding failed:', error.message);
+    console.error('❌ Seeding failed:', error.message);
     process.exit(1);
   } finally {
     await db.destroy();

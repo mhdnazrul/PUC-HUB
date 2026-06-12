@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — PUC HUB</title>
+  <meta name="description" content="PUC HUB Administrator Control Panel" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:          #0d0f18;
+      --surface:     #151823;
+      --surface2:    #1c2030;
+      --border:      #2a2f45;
+      --accent:      #6c63ff;
+      --accent-glow: rgba(108,99,255,.35);
+      --green:       #22c55e;
+      --red:         #ef4444;
+      --yellow:      #f59e0b;
+      --text:        #e2e8f0;
+      --text-muted:  #8892a4;
+      --radius:      12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────────────── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 8px 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-logo .icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      box-shadow: 0 0 18px var(--accent-glow);
+    }
+
+    .sidebar-logo h2 { font-size: 15px; font-weight: 700; letter-spacing: .3px; }
+    .sidebar-logo span { font-size: 11px; color: var(--text-muted); }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all .2s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover  { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: var(--accent-glow); color: var(--accent); }
+    .nav-item .emoji { font-size: 16px; width: 20px; text-align: center; }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    /* ── Main ────────────────────────────────────────────────────────────── */
+    .main { flex: 1; overflow-x: hidden; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar h1 { font-size: 20px; font-weight: 700; }
+
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .content { padding: 32px; }
+
+    /* ── Stats ───────────────────────────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+
+    .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .8px; }
+    .stat-value { font-size: 32px; font-weight: 800; }
+    .stat-value.green { color: var(--green); }
+    .stat-value.red   { color: var(--red); }
+    .stat-value.accent{ color: var(--accent); }
+    .stat-value.yellow{ color: var(--yellow); }
+
+    /* ── Table section ───────────────────────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 { font-size: 17px; font-weight: 700; }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      min-width: 260px;
+    }
+
+    .search-bar input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .search-bar input::placeholder { color: var(--text-muted); }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead tr { background: var(--surface2); }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    tbody tr {
+      border-top: 1px solid var(--border);
+      transition: background .15s;
+    }
+
+    tbody tr:hover { background: var(--surface2); }
+
+    tbody td {
+      padding: 13px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge.green  { background: rgba(34,197,94,.15);  color: var(--green); }
+    .badge.red    { background: rgba(239,68,68,.15);   color: var(--red); }
+    .badge.purple { background: rgba(108,99,255,.2);   color: var(--accent); }
+    .badge.gray   { background: rgba(136,146,164,.15); color: var(--text-muted); }
+    .badge.yellow { background: rgba(245,158,11,.15);  color: var(--yellow); }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity .2s, transform .15s;
+      font-family: inherit;
+    }
+
+    .btn:hover        { opacity: .85; transform: translateY(-1px); }
+    .btn:active       { transform: translateY(0); }
+    .btn.primary      { background: var(--accent); color: #fff; }
+    .btn.danger       { background: var(--red); color: #fff; }
+    .btn.success      { background: var(--green); color: #fff; }
+    .btn.ghost        { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+
+    /* ── Pagination ──────────────────────────────────────────────────────── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .page-btn {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .page-btn.active, .page-btn:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* ── Loading ─────────────────────────────────────────────────────────── */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 14px;
+      gap: 10px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    /* ── Toast notifications ─────────────────────────────────────────────── */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 999;
+    }
+
+    .toast {
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      animation: slideIn .3s ease;
+      max-width: 340px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    }
+
+    .toast.success { background: #16a34a; color: #fff; }
+    .toast.error   { background: #dc2626; color: #fff; }
+    .toast.info    { background: var(--accent); color: #fff; }
+
+    @keyframes slideIn { from { opacity: 0; transform: translateX(60px); } }
+
+    /* ── Modal ───────────────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      width: min(460px, 95vw);
+      box-shadow: 0 24px 80px rgba(0,0,0,.6);
+      animation: popIn .25s ease;
+    }
+
+    @keyframes popIn { from { opacity: 0; transform: scale(.95); } }
+
+    .modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .modal p  { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; display: block; }
+    .form-group textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+    }
+    .form-group textarea:focus { border-color: var(--accent); }
+
+    /* ── Empty state ─────────────────────────────────────────────────────── */
+    .empty {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+    .empty p { margin-top: 10px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="icon">🎓</div>
+      <div>
+        <h2>PUC HUB</h2>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+
+    <button class="nav-item active" onclick="showView('dashboard')" id="nav-dashboard">
+      <span class="emoji">📊</span> Dashboard
+    </button>
+    <button class="nav-item" onclick="showView('users')" id="nav-users">
+      <span class="emoji">👥</span> Users
+    </button>
+
+    <div class="sidebar-bottom">
+      <button class="nav-item" onclick="doLogout()" id="btn-logout">
+        <span class="emoji">🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────────────── -->
+  <div class="main">
+    <div class="topbar">
+      <h1 id="page-title">Dashboard</h1>
+      <div class="topbar-actions">
+        <div id="admin-avatar" class="avatar">A</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- ── Dashboard View ──────────────────────────────────────────── -->
+      <div id="view-dashboard">
+        <div class="stats-grid" id="stats-grid">
+          <div class="loading"><div class="spinner"></div> Loading stats…</div>
+        </div>
+      </div>
+
+      <!-- ── Users View ──────────────────────────────────────────────── -->
+      <div id="view-users" style="display:none;">
+        <div class="section-header">
+          <h2>All Users</h2>
+          <div class="search-bar">
+            <span>🔍</span>
+            <input type="text" id="user-search" placeholder="Search by name, ID, or email…" oninput="debouncedSearch()" />
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Student ID</th>
+                <th>Provider</th>
+                <th>Status</th>
+                <th>Admin</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="7"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr>
+            </tbody>
+          </table>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modals ───────────────────────────────────────────────────────── -->
+
+  <!-- Notes Modal -->
+  <div class="modal-overlay" id="notes-modal">
+    <div class="modal">
+      <h3>✏️ Admin Notes</h3>
+      <p>These notes are only visible to admins.</p>
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea id="notes-input" placeholder="e.g. Warned for spam on 2026-06-12…"></textarea>
+      </div>
+      <input type="hidden" id="notes-user-id" />
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeModal('notes-modal')">Cancel</button>
+        <button class="btn primary" onclick="saveNotes()">Save Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal">
+      <h3 id="confirm-title">Are you sure?</h3>
+      <p id="confirm-body">This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeModal('confirm-modal')">Cancel</button>
+        <button class="btn danger" id="confirm-ok-btn" onclick="runConfirmedAction()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script src="js/config.js"></script>
+  <script>
+    // ── State ─────────────────────────────────────────────────────────────────
+    let currentPage  = 1;
+    let totalPages   = 1;
+    let searchQuery  = '';
+    let searchTimer  = null;
+    let confirmAction = null;
+
+    // ── Boot ──────────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      // Auth guard
+      const userData = tryParseUser();
+      if (!userData || !userData.isAdmin) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Show admin initial
+      const initial = (userData.username || 'A').charAt(0).toUpperCase();
+      document.getElementById('admin-avatar').textContent = initial;
+
+      loadStats();
+    });
+
+    // ── Navigation ────────────────────────────────────────────────────────────
+    function showView(name) {
+      ['dashboard', 'users'].forEach(v => {
+        document.getElementById('view-' + v).style.display = v === name ? '' : 'none';
+        document.getElementById('nav-' + v).classList.toggle('active', v === name);
+      });
+      document.getElementById('page-title').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+
+      if (name === 'users' && document.getElementById('users-tbody').children.length === 1) {
+        loadUsers();
+      }
+    }
+
+    // ── Auth helpers ──────────────────────────────────────────────────────────
+    function tryParseUser() {
+      try { return JSON.parse(localStorage.getItem('userData')); }
+      catch { return null; }
+    }
+
+    function getToken() {
+      const u = tryParseUser();
+      return u ? u.accessToken : null;
+    }
+
+    async function apiFetch(path, options = {}) {
+      const token = getToken();
+      options.headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers
+      };
+      options.credentials = 'include';
+
+      const res = await fetch(window.API_BASE + path, options);
+
+      if (res.status === 401 || res.status === 403) {
+        toast('Session expired. Redirecting to login…', 'error');
+        setTimeout(() => {
+          localStorage.clear();
+          window.location.href = 'login.html';
+        }, 1500);
+        throw new Error('Unauthorized');
+      }
+      return res;
+    }
+
+    function doLogout() {
+      apiFetch('/auth/logout', { method: 'POST' })
+        .catch(() => {})
+        .finally(() => {
+          localStorage.clear();
+          window.location.href = 'login.html';
+        });
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    function toast(msg, type = 'info') {
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = msg;
+      document.getElementById('toast-container').appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    // ── Stats ─────────────────────────────────────────────────────────────────
+    async function loadStats() {
+      try {
+        const res  = await apiFetch('/admin/stats');
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        const s = data.data;
+        document.getElementById('stats-grid').innerHTML = `
+          <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value accent">${s.total_users}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Users</div>
+            <div class="stat-value green">${s.active_users}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Blocked Users</div>
+            <div class="stat-value red">${s.blocked_users}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Admins</div>
+            <div class="stat-value yellow">${s.admin_count}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Posts</div>
+            <div class="stat-value">${s.total_posts}</div>
+          </div>
+        `;
+      } catch (err) {
+        document.getElementById('stats-grid').innerHTML =
+          `<div class="empty">Failed to load stats: ${err.message}</div>`;
+      }
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    function debouncedSearch() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        searchQuery = document.getElementById('user-search').value.trim();
+        currentPage = 1;
+        loadUsers();
+      }, 400);
+    }
+
+    async function loadUsers() {
+      const tbody = document.getElementById('users-tbody');
+      tbody.innerHTML = `<tr><td colspan="7"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr>`;
+
+      try {
+        const params = new URLSearchParams({ page: currentPage, limit: 20 });
+        if (searchQuery) params.set('search', searchQuery);
+
+        const res  = await apiFetch(`/admin/users?${params}`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        totalPages = Math.max(1, Math.ceil(data.pagination.total / 20));
+        renderUsers(data.data);
+        renderPagination();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty">Error: ${err.message}</div></td></tr>`;
+      }
+    }
+
+    function renderUsers(users) {
+      const tbody = document.getElementById('users-tbody');
+      if (!users.length) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty">🔍<p>No users found.</p></div></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => {
+        const isDeleted = !!u.deleted_at;
+        const loginDate = u.last_login ? new Date(u.last_login).toLocaleDateString() : '—';
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight:600">${escHtml(u.username)}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${escHtml(u.email || '—')}</div>
+            </td>
+            <td style="font-family:monospace;font-size:13px">${escHtml(u.student_id || '—')}</td>
+            <td>
+              <span class="badge ${u.auth_provider === 'google' ? 'yellow' : 'gray'}">
+                ${u.auth_provider === 'google' ? '🔑 Google' : '🔒 Local'}
+              </span>
+            </td>
+            <td>
+              ${isDeleted
+                ? '<span class="badge red">🗑 Deleted</span>'
+                : u.is_blocked
+                  ? '<span class="badge red">🚫 Blocked</span>'
+                  : '<span class="badge green">✓ Active</span>'}
+            </td>
+            <td>
+              ${u.is_admin
+                ? '<span class="badge purple">⭐ Admin</span>'
+                : '<span class="badge gray">User</span>'}
+            </td>
+            <td style="font-size:13px;color:var(--text-muted)">${loginDate}</td>
+            <td>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                ${!isDeleted ? `
+                  <button class="btn ghost" style="padding:5px 10px;font-size:12px"
+                    onclick="toggleBlock('${u.id}', ${!u.is_blocked})">
+                    ${u.is_blocked ? '✅ Unblock' : '🚫 Block'}
+                  </button>
+                  <button class="btn ghost" style="padding:5px 10px;font-size:12px"
+                    onclick="toggleAdmin('${u.id}', ${!u.is_admin})">
+                    ${u.is_admin ? '👤 Demote' : '⭐ Promote'}
+                  </button>
+                  <button class="btn ghost" style="padding:5px 10px;font-size:12px"
+                    onclick="openNotesModal('${u.id}')">
+                    ✏️ Notes
+                  </button>
+                  <button class="btn danger" style="padding:5px 10px;font-size:12px"
+                    onclick="openConfirm('Delete user?','This will soft-delete the user.',()=>deleteUser('${u.id}'))">
+                    🗑
+                  </button>
+                ` : '<span style="font-size:12px;color:var(--text-muted)">Deleted</span>'}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderPagination() {
+      const el = document.getElementById('pagination');
+      if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+      let html = '';
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="page-btn${i === currentPage ? ' active' : ''}"
+          onclick="goPage(${i})">${i}</button>`;
+      }
+      el.innerHTML = html;
+    }
+
+    function goPage(p) {
+      currentPage = p;
+      loadUsers();
+    }
+
+    // ── User actions ──────────────────────────────────────────────────────────
+    async function toggleBlock(userId, blocked) {
+      try {
+        const res  = await apiFetch(`/admin/users/${userId}/block`, {
+          method: 'PATCH',
+          body: JSON.stringify({ blocked })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        toast(data.message, 'success');
+        loadUsers();
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    async function toggleAdmin(userId, is_admin) {
+      try {
+        const res  = await apiFetch(`/admin/users/${userId}/promote`, {
+          method: 'PATCH',
+          body: JSON.stringify({ is_admin })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        toast(data.message, 'success');
+        loadUsers();
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    async function deleteUser(userId) {
+      try {
+        const res  = await apiFetch(`/admin/users/${userId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        toast('User deleted.', 'success');
+        loadUsers();
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    function openNotesModal(userId) {
+      document.getElementById('notes-user-id').value = userId;
+      document.getElementById('notes-input').value   = '';
+      document.getElementById('notes-modal').classList.add('open');
+    }
+
+    async function saveNotes() {
+      const userId = document.getElementById('notes-user-id').value;
+      const notes  = document.getElementById('notes-input').value.trim();
+      try {
+        const res  = await apiFetch(`/admin/users/${userId}/notes`, {
+          method: 'PATCH',
+          body: JSON.stringify({ admin_notes: notes })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        toast('Notes saved.', 'success');
+        closeModal('notes-modal');
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    // ── Confirm modal ─────────────────────────────────────────────────────────
+    function openConfirm(title, body, action) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-body').textContent  = body;
+      confirmAction = action;
+      document.getElementById('confirm-modal').classList.add('open');
+    }
+
+    function runConfirmedAction() {
+      closeModal('confirm-modal');
+      if (confirmAction) confirmAction();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+      el.addEventListener('click', e => {
+        if (e.target === el) closeModal(el.id);
+      });
+    });
+
+    // ── Utility ───────────────────────────────────────────────────────────────
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+  </script>
+</body>
+</html>

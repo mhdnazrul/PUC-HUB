@@ -7,6 +7,17 @@ import db from '../db.js';
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-insecure-secret';
 const hashToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Shared cookie options for the httpOnly refresh token
+const refreshCookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? 'none' : 'lax',
+  path: '/api/v1/auth/refresh',
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+};
+
 export const register = async (req, res) => {
   const { student_id, username, password } = req.body;
 
@@ -29,7 +40,7 @@ export const register = async (req, res) => {
     const password_hash = await bcrypt.hash(password, 12);
     const [user] = await db('users')
       .insert({ username, student_id, password_hash, auth_provider: 'local' })
-      .returning(['id', 'username', 'student_id', 'is_admin']);
+      .returning(['id', 'username', 'student_id', 'email', 'is_admin']);
 
     await db('profiles').insert({ user_id: user.id });
 
@@ -50,7 +61,21 @@ export const login = async (req, res) => {
 
   try {
     const user = await db('users').where({ student_id }).whereNull('deleted_at').first();
-    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials.' });
+    }
+
+    // Guard against Google-only accounts (no password_hash)
+    if (!user.password_hash) {
+      return res.status(401).json({
+        success: false,
+        message: 'This account uses Google Sign-In. Please use the "Continue with Google" button.'
+      });
+    }
+
+    const passwordMatches = await bcrypt.compare(password, user.password_hash);
+    if (!passwordMatches) {
       return res.status(401).json({ success: false, message: 'Invalid credentials.' });
     }
 
@@ -74,23 +99,19 @@ export const login = async (req, res) => {
       expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     });
 
-    res.cookie('jid', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production' ? true : false,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      path: '/api/v1/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
+    res.cookie('jid', refreshToken, refreshCookieOptions);
 
     logger.info('User logged in', { userId: user.id, traceId: req.traceId });
     res.status(200).json({
       success: true,
       accessToken,
       user: {
-        id: user.id,
-        username: user.username,
+        id:         user.id,
+        username:   user.username,
         student_id: user.student_id,
-        is_admin: user.is_admin
+        email:      user.email || null,
+        is_admin:   user.is_admin,
+        provider:   user.auth_provider || 'local'
       }
     });
   } catch (error) {
@@ -113,6 +134,7 @@ export const refresh = async (req, res) => {
     }
 
     if (existingToken.is_revoked) {
+      // Refresh token reuse — revoke entire family
       await db('refresh_tokens').where({ user_id: existingToken.user_id }).update({ is_revoked: true });
       logger.warn('Refresh token reuse detected — revoking entire session family.', {
         userId: existingToken.user_id,
@@ -120,8 +142,8 @@ export const refresh = async (req, res) => {
       });
       res.clearCookie('jid', {
         path: '/api/v1/auth/refresh',
-        secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax'
       });
       return res.status(403).json({
         success: false,
@@ -136,8 +158,11 @@ export const refresh = async (req, res) => {
 
     await db('refresh_tokens').where({ id: existingToken.id }).update({ is_revoked: true });
 
+    // Re-fetch user to get latest is_admin flag
+    const user = await db('users').where({ id: existingToken.user_id }).first();
+
     const newAccessToken = jwt.sign(
-      { userId: existingToken.user_id },
+      { userId: user.id, isAdmin: user.is_admin },
       JWT_SECRET,
       { expiresIn: '15m' }
     );
@@ -145,19 +170,12 @@ export const refresh = async (req, res) => {
     const newHash = hashToken(newRefreshToken);
 
     await db('refresh_tokens').insert({
-      user_id: existingToken.user_id,
+      user_id: user.id,
       token_hash: newHash,
       expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     });
 
-    res.cookie('jid', newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production' ? true : false,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      path: '/api/v1/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
-
+    res.cookie('jid', newRefreshToken, refreshCookieOptions);
     res.status(200).json({ success: true, accessToken: newAccessToken });
   } catch (error) {
     logger.error('Token refresh error', { traceId: req.traceId, error: error.message });
@@ -177,8 +195,8 @@ export const logout = async (req, res) => {
   }
   res.clearCookie('jid', {
     path: '/api/v1/auth/refresh',
-    secure: process.env.NODE_ENV === 'production' ? true : false,
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax'
   });
   res.status(200).json({ success: true, message: 'Logged out successfully.' });
 };
