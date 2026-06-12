@@ -1,0 +1,283 @@
+openapi: 3.0.3
+info:
+  title: PUC HUB Student Portal API
+  description: |
+    Production-grade REST API for the Premier University Chittagong Student Portal.
+    Authentication uses JWT access tokens (15-minute expiry) + httpOnly refresh token cookies (7-day expiry).
+    All state-changing endpoints (POST/PUT/DELETE) require a valid `X-CSRF-Token` header.
+  version: 1.1.0
+  contact:
+    name: PUC HUB Team
+    email: support@puc-hub.vercel.app
+
+servers:
+  - url: https://puc-hub-api.onrender.com/api/v1
+    description: Production (Render)
+  - url: http://localhost:3000/api/v1
+    description: Local Development
+
+tags:
+  - name: Auth
+    description: Student authentication (local and Google OAuth)
+  - name: Health
+    description: Liveness and readiness probes
+
+paths:
+
+  # ─────────────────────────────────────────────
+  # Authentication
+  # ─────────────────────────────────────────────
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new student account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [student_id, username, password]
+              properties:
+                student_id:
+                  type: string
+                  minLength: 16
+                  maxLength: 16
+                  pattern: '^\d{16}$'
+                  example: "0222310005101070"
+                username:
+                  type: string
+                  example: "Rahul Ahmed"
+                password:
+                  type: string
+                  minLength: 6
+                  example: "securepass123"
+      responses:
+        '201':
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          description: Student ID is already registered
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in with student ID and password
+      description: |
+        Returns a short-lived JWT access token (15 min) in the response body.
+        Also sets an httpOnly `jid` refresh token cookie (7 days).
+        Requires the `X-CSRF-Token` header from `/csrf-token`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [student_id, password]
+              properties:
+                student_id:
+                  type: string
+                  example: "0222310005101070"
+                password:
+                  type: string
+                  example: "securepass123"
+      responses:
+        '200':
+          description: Login successful — access token returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid student ID or password
+        '403':
+          description: Account is suspended
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh access token using httpOnly cookie
+      description: |
+        Reads the `jid` cookie (set at login) and issues a new access token.
+        Implements token rotation with reuse detection — a reused token invalidates the entire session.
+      responses:
+        '200':
+          description: New access token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  accessToken:
+                    type: string
+        '401':
+          description: Missing, expired, or invalid refresh token
+        '403':
+          description: Token reuse detected — session invalidated
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Log out — revoke refresh token and clear cookie
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+
+  /auth/google/login:
+    get:
+      tags: [Auth]
+      summary: Initiate Google OAuth2 sign-in flow
+      description: Redirects the browser to Google's OAuth consent screen.
+      responses:
+        '302':
+          description: Redirect to Google OAuth consent screen
+        '503':
+          description: Google OAuth is not configured on this server
+
+  /auth/google/callback:
+    get:
+      tags: [Auth]
+      summary: Google OAuth2 callback handler
+      description: |
+        Called by Google after user consent. Exchanges the code for tokens,
+        creates or links the user account, then redirects to the frontend
+        with `?oauth=success`. The JWT is delivered via a short-lived httpOnly
+        handoff cookie — never in the URL.
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to frontend login page
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Exchange Google OAuth handoff cookie for user data
+      description: |
+        Called by the frontend immediately after receiving `?oauth=success`.
+        Reads the one-time `oauth_handoff` httpOnly cookie, verifies it, clears it,
+        and returns user data + a fresh access token.
+      responses:
+        '200':
+          description: Handoff successful — user data and access token returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: No valid handoff cookie found
+
+  # ─────────────────────────────────────────────
+  # Health
+  # ─────────────────────────────────────────────
+
+  /health:
+    get:
+      tags: [Health]
+      summary: API health check (database ping)
+      responses:
+        '200':
+          description: API and database are operational
+        '500':
+          description: Database connection failure
+
+# ─────────────────────────────────────────────
+# Components
+# ─────────────────────────────────────────────
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        accessToken:
+          type: string
+          description: JWT access token (15 min expiry)
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            username:
+              type: string
+            student_id:
+              type: string
+            is_admin:
+              type: boolean
+
+    RegisterResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Account created successfully."
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            username:
+              type: string
+            student_id:
+              type: string
+
+    SuccessMessage:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+
+  responses:
+    ValidationError:
+      description: Input validation failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error_code:
+                type: string
+                example: VALIDATION_FAILED
+              errors:
+                type: array
+                items:
+                  type: object

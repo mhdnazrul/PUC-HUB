@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!-- Made by: Team PUC HUB | Internet Programming Lab Project | Rudra -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Notes Summarizer — PUC HUB</title>
+    <link rel="icon" type="image/png" href="assets/p.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#2b180f 0%,#0c0908 100%);background-attachment:fixed;color:#ececec;min-height:100vh;}
+
+        .ai-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(43,24,15,0.95);border-bottom:1px solid rgba(243,156,18,0.25);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+        .nav-logo{display:flex;align-items:center;gap:10px;}
+        .nav-logo img{width:36px;height:36px;border-radius:50%;border:2px solid #f39c12;}
+        .nav-logo span{font-size:18px;font-weight:700;color:#f39c12;}
+        .nav-tag{font-size:11px;color:#e67e22;letter-spacing:1px;margin-left:4px;}
+        .nav-actions{display:flex;gap:8px;}
+        .nav-btn{padding:8px 16px;background:transparent;border:1px solid rgba(243,156,18,0.35);border-radius:8px;color:#ccc;text-decoration:none;font-size:13px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
+        .nav-btn:hover{border-color:#f39c12;color:#f39c12;}
+
+        .page{max-width:1080px;margin:0 auto;padding:36px 20px 80px;}
+        .page-title{font-size:30px;font-weight:800;color:#f39c12;margin-bottom:8px;}
+        .page-sub{font-size:14px;color:#a08060;max-width:640px;line-height:1.8;margin-bottom:32px;}
+
+        .mode-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;}
+        @media(max-width:600px){.mode-row{grid-template-columns:1fr;}}
+        .mode-card{background:rgba(43,24,15,0.6);border:2px solid rgba(243,156,18,0.18);border-radius:16px;padding:20px;cursor:pointer;transition:.2s;text-align:center;backdrop-filter:blur(6px);}
+        .mode-card:hover,.mode-card.active{border-color:#f39c12;background:rgba(43,24,15,0.8);}
+        .mode-card .mc-title{font-size:15px;font-weight:700;color:#f39c12;margin-bottom:6px;}
+        .mode-card .mc-desc{font-size:13px;color:#a08060;line-height:1.6;}
+
+        .options-bar{display:flex;gap:12px;margin-bottom:22px;flex-wrap:wrap;align-items:center;}
+        .opt-label{font-size:12px;color:#a08060;text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+        select{padding:10px 14px;background:rgba(12,9,8,0.8);border:1px solid rgba(243,156,18,0.2);border-radius:10px;color:#ccc;font-size:13px;outline:none;font-family:'Poppins',sans-serif;cursor:pointer;}
+        select:focus{border-color:#f39c12;}
+        select option{background:#1a0f07;}
+
+        .editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+        @media(max-width:720px){.editor-grid{grid-template-columns:1fr;}}
+        .editor-panel{background:rgba(43,24,15,0.5);border:1px solid rgba(243,156,18,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(6px);}
+        .ep-header{padding:14px 18px;background:rgba(43,24,15,0.7);border-bottom:1px solid rgba(243,156,18,0.15);display:flex;align-items:center;justify-content:space-between;}
+        .ep-title{font-size:14px;font-weight:700;color:#f39c12;}
+        .ep-meta{font-size:12px;color:#a08060;}
+        .copy-btn{background:transparent;border:1px solid rgba(243,156,18,0.3);border-radius:7px;color:#f39c12;font-size:12px;padding:4px 11px;cursor:pointer;font-family:'Poppins',sans-serif;transition:.2s;}
+        .copy-btn:hover{background:rgba(243,156,18,0.1);}
+        textarea.ep-area{width:100%;min-height:360px;background:transparent;border:none;color:#ececec;font-size:14px;font-family:'Poppins',sans-serif;padding:20px;resize:none;outline:none;line-height:1.8;}
+        textarea.ep-area::placeholder{color:#6b5040;}
+        textarea.ep-area.out-area{color:#ccc;}
+
+        .action-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;}
+        .action-btn{flex:1;padding:14px;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;min-width:130px;}
+        .action-btn:hover{opacity:.9;}
+        .action-btn:disabled{opacity:.45;cursor:not-allowed;}
+        .action-btn.ghost{background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);color:#f39c12;}
+        .action-btn.ghost:hover{background:rgba(243,156,18,0.18);}
+
+        .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.2),transparent);margin:30px 0;}
+
+        .howto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+        .howto-card{background:rgba(43,24,15,0.5);border:1px solid rgba(243,156,18,0.15);border-radius:13px;padding:18px;}
+        .howto-num{font-size:26px;font-weight:800;color:rgba(243,156,18,0.25);margin-bottom:8px;line-height:1;}
+        .howto-title{font-size:13px;font-weight:700;color:#f39c12;margin-bottom:5px;}
+        .howto-text{font-size:13px;color:#a08060;line-height:1.7;}
+
+        .hist-title{font-size:15px;font-weight:700;color:#f39c12;margin-bottom:14px;}
+        .hist-card{background:rgba(43,24,15,0.5);border:1px solid rgba(243,156,18,0.15);border-radius:12px;padding:16px;margin-bottom:10px;}
+        .hist-date{font-size:12px;color:#f39c12;font-weight:600;margin-bottom:6px;}
+        .hist-text{font-size:13px;color:#a08060;line-height:1.6;}
+    </style>
+</head>
+<body>
+<nav class="ai-nav">
+    <div class="nav-logo">
+        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
+        <span>PUC HUB <span class="nav-tag">AI Notes Summarizer</span></span>
+    </div>
+    <div class="nav-actions">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="index.html#services" class="nav-btn">Services</a>
+        <button onclick="history.back()" class="nav-btn">Back</button>
+    </div>
+</nav>
+
+<div class="page">
+    <div class="page-title">AI Notes Summarizer</div>
+    <div class="page-sub">Paste any lecture notes, textbook chapter, or study material — the AI instantly converts it into clean, exam-ready summaries in the format you choose. Save hours of revision time.</div>
+
+    <div class="mode-row">
+        <div class="mode-card active" id="mode-bullet" onclick="setMode('bullet')">
+            <div class="mc-title">Bullet Points</div>
+            <div class="mc-desc">Organized key points with clear headings and nested sub-bullets. Best for quick revision.</div>
+        </div>
+        <div class="mode-card" id="mode-exam" onclick="setMode('exam')">
+            <div class="mc-title">Exam Ready Q and A</div>
+            <div class="mc-desc">Converts your notes into question and answer pairs. Perfect for exam self-testing.</div>
+        </div>
+        <div class="mode-card" id="mode-short" onclick="setMode('short')">
+            <div class="mc-title">Short Paragraph</div>
+            <div class="mc-desc">A concise 2 to 3 paragraph summary of the most essential points. Great for overview.</div>
+        </div>
+    </div>
+
+    <div class="options-bar">
+        <span class="opt-label">Language</span>
+        <select id="langSel">
+            <option value="English">English</option>
+            <option value="Bangla">Bangla</option>
+            <option value="mixed Bangla and English">Mixed Bangla and English</option>
+        </select>
+        <span class="opt-label" style="margin-left:8px;">Detail Level</span>
+        <select id="detailSel">
+            <option value="concise">Concise</option>
+            <option value="detailed">Detailed</option>
+            <option value="very brief flash-card style">Flash Cards</option>
+        </select>
+    </div>
+
+    <div class="editor-grid">
+        <div class="editor-panel">
+            <div class="ep-header">
+                <div class="ep-title">Paste Your Notes Here</div>
+                <div class="ep-meta" id="charInfo">0 characters</div>
+            </div>
+            <textarea class="ep-area" id="notesInput" placeholder="Paste lecture notes, textbook chapters, or any study material here...
+
+The more detailed your input, the better the summary will be.
+Works with any subject — CSE, Math, Physics, Business, and more."></textarea>
+        </div>
+        <div class="editor-panel">
+            <div class="ep-header">
+                <div class="ep-title">AI Summary Output</div>
+                <button class="copy-btn" onclick="copySummary()">Copy</button>
+            </div>
+            <textarea class="ep-area out-area" id="summaryOutput" placeholder="Your AI-generated summary will appear here after you click Summarize..." readonly></textarea>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button class="action-btn" id="sumBtn" onclick="summarize()">Summarize with AI</button>
+        <button class="action-btn ghost" onclick="saveSummary()">Save to History</button>
+        <button class="action-btn ghost" onclick="clearAll()">Clear All</button>
+    </div>
+
+    <div class="howto-grid">
+        <div class="howto-card"><div class="howto-num">01</div><div class="howto-title">Paste Your Notes</div><div class="howto-text">Copy text from your notebook, textbook PDF, or lecture slides and paste it into the left panel.</div></div>
+        <div class="howto-card"><div class="howto-num">02</div><div class="howto-title">Choose Format</div><div class="howto-text">Select Bullet Points for revision, Q and A for exam practice, or Short Paragraph for a quick overview.</div></div>
+        <div class="howto-card"><div class="howto-num">03</div><div class="howto-title">Pick Language</div><div class="howto-text">Get your summary in English, Bangla, or a mixed format depending on what you are comfortable with.</div></div>
+        <div class="howto-card"><div class="howto-num">04</div><div class="howto-title">Save and Review</div><div class="howto-text">Save important summaries to your history for quick access before your exam.</div></div>
+    </div>
+
+    <div class="divider"></div>
+    <div id="historySection" style="display:none;">
+        <div class="hist-title">Saved Summaries</div>
+        <div id="historyList"></div>
+    </div>
+</div>
+
+<script>
+function getAPIKey() {
+    let key = localStorage.getItem('groq_api_key');
+    if (!key) {
+        key = prompt('Enter your Groq API Key to use AI features:\n(Get a free key from console.groq.com)');
+        if (key && key.trim()) {
+            localStorage.setItem('groq_api_key', key.trim());
+        }
+    }
+    return key ? key.trim() : '';
+}
+
+async function callAI(system, message) {
+    const API_KEY = getAPIKey();
+    if (!API_KEY) throw new Error('No API key provided. Please refresh and enter your Groq API key.');
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
+        },
+        body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [
+                { role: 'system', content: system },
+                { role: 'user', content: message }
+            ],
+            max_tokens: 1500,
+            temperature: 0.7
+        })
+    });
+    if (!r.ok) {
+        if (r.status === 401) {
+            localStorage.removeItem('groq_api_key');
+            throw new Error('Invalid API key. Please refresh and enter a valid key.');
+        }
+        const e = await r.json().catch(() => ({}));
+        throw new Error(e.error?.message || 'API Error ' + r.status);
+    }
+    const data = await r.json();
+    return data.choices?.[0]?.message?.content || '';
+}
+
+let currentMode = 'bullet';
+
+function setMode(m) {
+    currentMode = m;
+    ['bullet', 'exam', 'short'].forEach(id =>
+        document.getElementById('mode-' + id).classList.toggle('active', id === m)
+    );
+}
+
+document.getElementById('notesInput').addEventListener('input', function () {
+    document.getElementById('charInfo').textContent = this.value.length + ' characters';
+});
+
+async function summarize() {
+    const notes = document.getElementById('notesInput').value.trim();
+    if (!notes || notes.length < 20) {
+        alert('Please paste some notes first (at least 20 characters).');
+        return;
+    }
+    const lang = document.getElementById('langSel').value;
+    const detail = document.getElementById('detailSel').value;
+    const btn = document.getElementById('sumBtn');
+    const out = document.getElementById('summaryOutput');
+    btn.disabled = true;
+    btn.textContent = 'Summarizing...';
+    out.value = 'AI is reading and summarizing your notes...';
+
+    const prompts = {
+        bullet: `Create a ${detail} bullet-point summary with clear headings and nested bullets.`,
+        exam: `Convert into a ${detail} Q and A exam preparation format with at least 5 question-answer pairs.`,
+        short: `Write a ${detail} paragraph summary capturing the most essential points.`
+    };
+
+    try {
+        const r = await callAI(
+            `You are an expert study assistant. Summarize notes for university students. Respond in ${lang}.`,
+            `${prompts[currentMode]}\n\nNotes:\n${notes}`
+        );
+        out.value = r;
+    } catch (e) {
+        out.value = 'Error: ' + e.message;
+    }
+    btn.disabled = false;
+    btn.textContent = 'Summarize with AI';
+}
+
+function clearAll() {
+    document.getElementById('notesInput').value = '';
+    document.getElementById('summaryOutput').value = '';
+    document.getElementById('charInfo').textContent = '0 characters';
+}
+
+function copySummary() {
+    const txt = document.getElementById('summaryOutput').value;
+    if (!txt || txt.startsWith('AI is')) return;
+    navigator.clipboard.writeText(txt).then(() => alert('Copied!')).catch(() => {});
+}
+
+function saveSummary() {
+    const txt = document.getElementById('summaryOutput').value;
+    if (!txt || txt.startsWith('AI is') || txt.startsWith('Your AI')) return;
+    const saves = JSON.parse(localStorage.getItem('puc_summaries') || '[]');
+    saves.unshift({ date: new Date().toLocaleString(), text: txt.substring(0, 200) + '...' });
+    saves.splice(5);
+    localStorage.setItem('puc_summaries', JSON.stringify(saves));
+    loadHistory();
+    alert('Summary saved!');
+}
+
+function loadHistory() {
+    const saves = JSON.parse(localStorage.getItem('puc_summaries') || '[]');
+    const sec = document.getElementById('historySection');
+    if (!saves.length) { sec.style.display = 'none'; return; }
+    sec.style.display = 'block';
+    document.getElementById('historyList').innerHTML = saves.map(s =>
+        `<div class="hist-card"><div class="hist-date">${s.date}</div><div class="hist-text">${s.text}</div></div>`
+    ).join('');
+}
+
+if (localStorage.getItem('isLoggedIn') !== 'true') {
+    alert('Please login first!');
+    window.location.href = 'login.html';
+}
+if (typeof trackUserActivity === 'function') trackUserActivity('AI Notes Summarizer');
+loadHistory();
+</script>
+</body>
+</html>

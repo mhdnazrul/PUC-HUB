@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Room Info — PUC HUB</title>
+    <link rel="icon" type="image/png" href="assets/p.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#2b180f 0%,#0c0908 100%);background-attachment:fixed;color:#ececec;min-height:100vh;}
+
+        .ai-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(43,24,15,0.95);border-bottom:1px solid rgba(243,156,18,0.25);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+        .nav-logo{display:flex;align-items:center;gap:10px;}
+        .nav-logo img{width:36px;height:36px;border-radius:50%;border:2px solid #f39c12;}
+        .nav-logo span{font-size:18px;font-weight:700;color:#f39c12;}
+        .nav-tag{font-size:11px;color:#e67e22;letter-spacing:1px;margin-left:4px;}
+        .nav-actions{display:flex;gap:8px;}
+        .nav-btn{padding:8px 16px;background:transparent;border:1px solid rgba(243,156,18,0.35);border-radius:8px;color:#ccc;text-decoration:none;font-size:13px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
+        .nav-btn:hover{border-color:#f39c12;color:#f39c12;}
+
+        .page{max-width:1100px;margin:0 auto;padding:36px 20px 70px;}
+        .page-title{font-size:30px;font-weight:800;color:#f39c12;margin-bottom:6px;}
+        .page-sub{font-size:14px;color:#a08060;margin-bottom:28px;}
+
+        /* FLOOR TABS */
+        .floor-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px;}
+        .floor-tab{padding:9px 20px;border-radius:25px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid rgba(243,156,18,0.3);color:#a08060;background:rgba(43,24,15,0.4);transition:.2s;font-family:'Poppins',sans-serif;}
+        .floor-tab:hover,.floor-tab.active{border-color:#f39c12;color:#f39c12;background:rgba(243,156,18,0.1);}
+
+        /* FLOOR SECTION */
+        .floor-section{display:none;}
+        .floor-section.active{display:block;}
+        .floor-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding:16px 22px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.25);border-radius:14px;backdrop-filter:blur(8px);}
+        .floor-num{font-size:32px;font-weight:800;color:#f39c12;line-height:1;}
+        .floor-info h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:3px;}
+        .floor-info p{font-size:13px;color:#a08060;}
+
+        /* LEGEND */
+        .legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+        .leg-item{display:flex;align-items:center;gap:6px;font-size:13px;color:#a08060;}
+        .leg-dot{width:13px;height:13px;border-radius:3px;border:1px solid;}
+        .leg-free{background:rgba(39,174,96,0.15);border-color:rgba(39,174,96,0.5);}
+        .leg-booked{background:rgba(231,76,60,0.12);border-color:rgba(231,76,60,0.4);}
+        .leg-pending{background:rgba(243,156,18,0.12);border-color:rgba(243,156,18,0.4);}
+        .leg-mine{background:rgba(155,89,182,0.12);border-color:rgba(155,89,182,0.4);}
+
+        /* ROOMS GRID */
+        .rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:36px;}
+        .room-card{background:rgba(43,24,15,0.5);border:1px solid rgba(243,156,18,0.2);border-radius:16px;overflow:hidden;transition:.2s;backdrop-filter:blur(6px);}
+        .room-card:hover{border-color:rgba(243,156,18,0.5);transform:translateY(-2px);}
+        .room-header{padding:16px 18px;border-bottom:1px solid rgba(243,156,18,0.1);display:flex;align-items:center;justify-content:space-between;}
+        .room-name{font-size:16px;font-weight:700;color:#fff;}
+        .room-type{font-size:12px;padding:4px 12px;border-radius:15px;font-weight:700;}
+        .type-lab{background:rgba(52,152,219,0.12);color:#3498db;border:1px solid rgba(52,152,219,0.35);}
+        .type-class{background:rgba(243,156,18,0.12);color:#f39c12;border:1px solid rgba(243,156,18,0.35);}
+        .type-office{background:rgba(230,126,34,0.12);color:#e67e22;border:1px solid rgba(230,126,34,0.35);}
+        .type-special{background:rgba(155,89,182,0.12);color:#9b59b6;border:1px solid rgba(155,89,182,0.35);}
+        .type-library{background:rgba(26,188,156,0.12);color:#1abc9c;border:1px solid rgba(26,188,156,0.35);}
+        .room-body{padding:16px 18px;}
+        .room-desc{font-size:14px;color:#a08060;margin-bottom:14px;line-height:1.6;}
+
+        .slots-title{font-size:12px;color:#a08060;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;font-weight:600;}
+        .slots-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+        .slot{padding:8px 10px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;text-align:center;border:1px solid;position:relative;}
+        .slot-free{background:rgba(39,174,96,0.1);border-color:rgba(39,174,96,0.35);color:#27ae60;}
+        .slot-free:hover{background:rgba(39,174,96,0.2);border-color:#27ae60;}
+        .slot-booked{background:rgba(231,76,60,0.08);border-color:rgba(231,76,60,0.3);color:#c0392b;cursor:default;}
+        .slot-pending{background:rgba(243,156,18,0.08);border-color:rgba(243,156,18,0.3);color:#e67e22;cursor:default;}
+        .slot-mybook{background:rgba(155,89,182,0.1);border-color:rgba(155,89,182,0.35);color:#9b59b6;}
+        .slot-day{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;opacity:.7;}
+        .no-book{font-size:13px;color:#6b5040;margin-top:8px;}
+
+        /* MODAL */
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;justify-content:center;align-items:center;backdrop-filter:blur(7px);}
+        .modal-overlay.show{display:flex;}
+        .modal-box{background:#1a0f07;border:1px solid rgba(243,156,18,0.35);border-radius:20px;padding:30px;width:90%;max-width:430px;animation:modalIn .25s ease;}
+        @keyframes modalIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        .modal-title{font-size:18px;font-weight:800;color:#f39c12;margin-bottom:5px;}
+        .modal-sub{font-size:13px;color:#a08060;margin-bottom:20px;}
+        .modal-field{margin-bottom:13px;}
+        .modal-field label{font-size:12px;color:#a08060;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:600;}
+        .modal-field input{width:100%;padding:11px 14px;background:rgba(12,9,8,0.8);border:1px solid rgba(243,156,18,0.2);border-radius:10px;color:#ececec;font-size:14px;outline:none;font-family:'Poppins',sans-serif;}
+        .modal-field input:focus{border-color:#f39c12;}
+        .modal-actions{display:flex;gap:10px;margin-top:18px;}
+        .btn-confirm{flex:1;padding:13px;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;}
+        .btn-cancel{flex:1;padding:13px;background:transparent;border:1px solid rgba(243,156,18,0.3);color:#aaa;border-radius:11px;font-size:14px;cursor:pointer;font-family:'Poppins',sans-serif;}
+        .btn-cancel:hover{border-color:#f39c12;color:#f39c12;}
+
+        /* MY BOOKINGS */
+        .section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.2),transparent);margin:36px 0;}
+        .req-title{font-size:18px;font-weight:700;color:#f39c12;margin-bottom:16px;}
+        .req-card{background:rgba(43,24,15,0.5);border:1px solid rgba(243,156,18,0.18);border-radius:13px;padding:16px 18px;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+        .req-info{font-size:14px;color:#ccc;line-height:1.8;}
+        .req-info strong{color:#f39c12;}
+        .req-status{padding:5px 14px;border-radius:15px;font-size:12px;font-weight:700;}
+        .status-approved{background:rgba(39,174,96,0.12);color:#27ae60;border:1px solid rgba(39,174,96,0.3);}
+        .status-pending{background:rgba(243,156,18,0.12);color:#f39c12;border:1px solid rgba(243,156,18,0.3);}
+        .status-rejected{background:rgba(231,76,60,0.1);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);}
+        .cancel-btn{padding:6px 13px;background:transparent;border:1px solid rgba(231,76,60,0.3);border-radius:8px;color:#c0392b;font-size:12px;cursor:pointer;font-family:'Poppins',sans-serif;transition:.2s;}
+        .cancel-btn:hover{background:rgba(231,76,60,0.1);}
+        .empty-state{text-align:center;padding:36px;color:#6b5040;font-size:14px;}
+    </style>
+</head>
+<body>
+<nav class="ai-nav">
+    <div class="nav-logo">
+        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
+        <span>PUC HUB <span class="nav-tag">Room Info & Booking</span></span>
+    </div>
+    <div class="nav-actions">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="index.html#services" class="nav-btn">Services</a>
+        <button onclick="history.back()" class="nav-btn">Back</button>
+    </div>
+</nav>
+
+<div class="page">
+    <div class="page-title">University Room Info & Booking</div>
+    <div class="page-sub">Premier University Chittagong — Browse rooms by floor and book a slot. Weekdays only (Sat–Wed).</div>
+
+    <div class="floor-tabs" id="floorTabs"></div>
+
+    <div class="legend">
+        <div class="leg-item"><div class="leg-dot leg-free"></div> Available</div>
+        <div class="leg-item"><div class="leg-dot leg-pending"></div> Pending</div>
+        <div class="leg-item"><div class="leg-dot leg-booked"></div> Booked</div>
+        <div class="leg-item"><div class="leg-dot leg-mine"></div> My Booking</div>
+    </div>
+
+    <div id="floorSections"></div>
+
+    <div class="section-divider"></div>
+    <div class="req-title">My Booking Requests</div>
+    <div id="myBookings"></div>
+</div>
+
+<div class="modal-overlay" id="bookingModal">
+    <div class="modal-box">
+        <div class="modal-title" id="modalTitle">Book a Slot</div>
+        <div class="modal-sub" id="modalSub"></div>
+        <div class="modal-field"><label>Your Name</label><input id="bookName" placeholder="Full Name"/></div>
+        <div class="modal-field"><label>Student ID</label><input id="bookId" placeholder="e.g. 221193"/></div>
+        <div class="modal-field"><label>Purpose</label><input id="bookPurpose" placeholder="e.g. Lab Practice, Group Study, Project Work"/></div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            <button class="btn-confirm" onclick="confirmBooking()">Send Request</button>
+        </div>
+    </div>
+</div>
+
+<script>
+if (localStorage.getItem('isLoggedIn') !== 'true') { alert('Please login first!'); window.location.href = 'login.html'; }
+
+const DAYS = ['Sat','Sun','Mon','Tue','Wed'];
+const SLOTS = ['8:00–10:00','10:00–12:00','12:00–2:00','2:00–4:00'];
+
+const FLOORS = [
+    {
+        num:10, label:'10th Floor', dept:'Department Club',
+        info:'Student clubs — Computer Club, Robotic Club, Debating Club.',
+        rooms:[
+            { id:'f10_club', name:'Computer Club Room', type:'special', desc:'Student computer club activities. Not available for individual booking.' },
+            { id:'f10_rob', name:'Robotic Club Room', type:'special', desc:'Robotics & engineering projects. Not available for individual booking.' },
+            { id:'f10_deb', name:'Debating Club Room', type:'special', desc:'Debate practice and events. Not available for individual booking.' },
+        ]
+    },
+    {
+        num:9, label:'9th Floor', dept:'CSE Department',
+        info:'Primary CSE department floor — labs, classrooms, faculty offices.',
+        rooms:[
+            { id:'f9_lab1', name:'Computer Lab 1', type:'lab', desc:'40 PCs, Projector, AC. Primary programming lab.' },
+            { id:'f9_lab2', name:'Computer Lab 2', type:'lab', desc:'40 PCs, Projector, AC. Secondary programming lab.' },
+            { id:'f9_lab3', name:'Computer Lab 3', type:'lab', desc:'35 PCs, Projector. Networking and OS lab.' },
+            { id:'f9_lab4', name:'Computer Lab 4', type:'lab', desc:'30 PCs, AC. Available for project work.' },
+            { id:'f9_soft', name:'Software Training Lab', type:'special', desc:'30 PCs. Available on request only.' },
+            { id:'f9_seminar', name:'Seminar Hall', type:'special', desc:'100 seats. For presentations and seminars.' },
+            { id:'f9_cls1', name:'Classroom 901', type:'class', desc:'60 seats, whiteboard, projector.' },
+            { id:'f9_cls2', name:'Classroom 902', type:'class', desc:'60 seats, whiteboard, projector.' },
+            { id:'f9_cls3', name:'Classroom 903', type:'class', desc:'50 seats, whiteboard.' },
+            { id:'f9_tchr', name:"Teacher's Room", type:'office', desc:"Faculty lounge. Not available for booking." },
+            { id:'f9_it', name:'IT Office', type:'office', desc:'Admin office. Not available for booking.' },
+        ]
+    },
+    {
+        num:8, label:'8th Floor', dept:'CSE — Extended',
+        info:'Additional CSE classrooms and IT support.',
+        rooms:[
+            { id:'f8_cls1', name:'Classroom 801', type:'class', desc:'55 seats, whiteboard, projector.' },
+            { id:'f8_cls2', name:'Classroom 802', type:'class', desc:'55 seats, whiteboard, projector.' },
+            { id:'f8_cls3', name:'Classroom 803', type:'class', desc:'50 seats, whiteboard.' },
+            { id:'f8_cls4', name:'Classroom 804', type:'class', desc:'50 seats, whiteboard.' },
+            { id:'f8_it', name:'IT Support Office', type:'office', desc:'IT helpdesk. Not available for booking.' },
+            { id:'f8_store', name:'Equipment Store', type:'office', desc:'Equipment storage. Not available for booking.' },
+        ]
+    },
+    {
+        num:7, label:'7th Floor', dept:'EEE Department',
+        info:'Electrical & Electronic Engineering department. Not under CSE.',
+        rooms:[
+            { id:'f7_info', name:'EEE Department', type:'office', desc:'This entire floor belongs to EEE Department. Not available for CSE students to book.' },
+        ]
+    },
+    {
+        num:6, label:'6th Floor', dept:'Economics & Business',
+        info:'Economics and Business faculty. Not under CSE management.',
+        rooms:[
+            { id:'f6_info', name:'Economics Department', type:'office', desc:'This floor belongs to Economics Department. Not available for booking.' },
+        ]
+    },
+    {
+        num:4, label:'4th Floor', dept:'Library & General Classrooms',
+        info:'Central library, theory classrooms and IT office.',
+        rooms:[
+            { id:'f4_lib', name:'Central Library', type:'library', desc:'University central library. Open for all students. No booking required.' },
+            { id:'f4_cls1', name:'Theory Classroom 401', type:'class', desc:'60 seats, whiteboard, projector.' },
+            { id:'f4_cls2', name:'Theory Classroom 402', type:'class', desc:'60 seats, whiteboard, projector.' },
+            { id:'f4_cls3', name:'Theory Classroom 403', type:'class', desc:'55 seats, whiteboard.' },
+            { id:'f4_cls4', name:'Theory Classroom 404', type:'class', desc:'55 seats, whiteboard.' },
+            { id:'f4_it', name:'IT Office', type:'office', desc:'Admin office. Not available for booking.' },
+        ]
+    },
+];
+
+const NON_BOOKABLE_TYPES = ['office','library'];
+const NON_BOOKABLE_IDS = ['f7_info','f6_info','f10_club','f10_rob','f10_deb'];
+
+function getBookings() { return JSON.parse(localStorage.getItem('puc_room_bookings')||'[]'); }
+function saveBookings(b) { localStorage.setItem('puc_room_bookings', JSON.stringify(b)); }
+function getUser() { try { return JSON.parse(localStorage.getItem('userData')||'{}'); } catch(e){ return {}; } }
+function getUID() { const u=getUser(); return u.studentId||u.username||'guest'; }
+
+let pendingBooking = null;
+
+function openModal(roomId, roomName, day, slot) {
+    pendingBooking={roomId,roomName,day,slot};
+    document.getElementById('modalTitle').textContent=roomName;
+    document.getElementById('modalSub').textContent=day+' · '+slot;
+    const u=getUser();
+    document.getElementById('bookName').value=u.username||'';
+    document.getElementById('bookId').value=u.studentId||'';
+    document.getElementById('bookPurpose').value='';
+    document.getElementById('bookingModal').classList.add('show');
+}
+function closeModal() { document.getElementById('bookingModal').classList.remove('show'); pendingBooking=null; }
+
+function confirmBooking() {
+    const name=document.getElementById('bookName').value.trim();
+    const sid=document.getElementById('bookId').value.trim();
+    const purpose=document.getElementById('bookPurpose').value.trim();
+    if (!name||!sid||!purpose) { alert('Please fill all fields!'); return; }
+    const bookings=getBookings();
+    bookings.push({ id:Date.now(), uid:getUID(), roomId:pendingBooking.roomId, roomName:pendingBooking.roomName, day:pendingBooking.day, slot:pendingBooking.slot, name,sid,purpose, status:'pending', time:new Date().toLocaleString() });
+    saveBookings(bookings); closeModal(); renderAll(); alert('Booking request sent! Pending admin approval.');
+}
+
+function cancelBooking(id) {
+    if (!confirm('Cancel this booking?')) return;
+    saveBookings(getBookings().filter(b=>b.id!==id)); renderAll();
+}
+
+function getSlotStatus(roomId, day, slot) {
+    const uid=getUID();
+    const b=getBookings().find(b=>b.roomId===roomId&&b.day===day&&b.slot===slot);
+    if (!b) return 'free';
+    if (b.uid===uid) return 'mine';
+    if (b.status==='approved') return 'booked';
+    return 'pending';
+}
+
+function buildFloorTabs() {
+    const tabs=document.getElementById('floorTabs');
+    FLOORS.forEach((f,i)=>{
+        const btn=document.createElement('button');
+        btn.className='floor-tab'+(i===0?' active':'');
+        btn.textContent=f.label;
+        btn.onclick=()=>{
+            document.querySelectorAll('.floor-tab').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('.floor-section').forEach(s=>s.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('floor-'+f.num).classList.add('active');
+        };
+        tabs.appendChild(btn);
+    });
+}
+
+function renderRooms() {
+    const container=document.getElementById('floorSections');
+    container.innerHTML='';
+    FLOORS.forEach((floor,fi)=>{
+        const sec=document.createElement('div');
+        sec.className='floor-section'+(fi===0?' active':'');
+        sec.id='floor-'+floor.num;
+        let html=`<div class="floor-header"><div class="floor-num">${floor.num}</div><div class="floor-info"><h3>${floor.label} — ${floor.dept}</h3><p>${floor.info}</p></div></div><div class="rooms-grid">`;
+        floor.rooms.forEach(room=>{
+            const isNonBook=NON_BOOKABLE_TYPES.includes(room.type)||NON_BOOKABLE_IDS.includes(room.id);
+            const typeLabel={lab:'Lab',class:'Classroom',office:'Office',special:'Special',library:'Library'}[room.type]||'Room';
+            const typeClass='type-'+room.type;
+            let slotsHtml='';
+            if (!isNonBook) {
+                slotsHtml='<div class="slots-title">Time Slots — click to book</div><div class="slots-grid">';
+                DAYS.forEach(day=>{ SLOTS.forEach(slot=>{
+                    const status=getSlotStatus(room.id,day,slot);
+                    const cls={free:'slot-free',booked:'slot-booked',pending:'slot-pending',mine:'slot-mybook'}[status];
+                    const click=status==='free'?`onclick="openModal('${room.id}','${room.name}','${day}','${slot}')"` :'';
+                    slotsHtml+=`<div class="slot ${cls}" ${click}><div class="slot-day">${day}</div>${slot}</div>`;
+                });});
+                slotsHtml+='</div>';
+            } else {
+                slotsHtml='<div class="no-book">Not available for booking.</div>';
+            }
+            html+=`<div class="room-card"><div class="room-header"><div class="room-name">${room.name}</div><div class="room-type ${typeClass}">${typeLabel}</div></div><div class="room-body"><div class="room-desc">${room.desc}</div>${slotsHtml}</div></div>`;
+        });
+        html+='</div>';
+        sec.innerHTML=html;
+        container.appendChild(sec);
+    });
+}
+
+function renderMyBookings() {
+    const uid=getUID();
+    const my=getBookings().filter(b=>b.uid===uid).reverse();
+    const el=document.getElementById('myBookings');
+    if (my.length===0) { el.innerHTML='<div class="empty-state">No booking requests yet.</div>'; return; }
+    el.innerHTML=my.map(b=>{
+        const sc=b.status==='approved'?'status-approved':b.status==='rejected'?'status-rejected':'status-pending';
+        const label=b.status==='approved'?'Approved':b.status==='rejected'?'Rejected':'Pending';
+        return `<div class="req-card"><div class="req-info"><strong>${b.roomName}</strong> · ${b.day} · ${b.slot}<br>Purpose: ${b.purpose} &nbsp;·&nbsp; ID: ${b.sid} &nbsp;·&nbsp; ${b.time}</div><div style="display:flex;gap:8px;align-items:center;"><div class="req-status ${sc}">${label}</div>${b.status==='pending'?`<button class="cancel-btn" onclick="cancelBooking(${b.id})">Cancel</button>`:''}</div></div>`;
+    }).join('');
+}
+
+function renderAll() { renderRooms(); renderMyBookings(); }
+document.getElementById('bookingModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+buildFloorTabs(); renderAll();
+</script>
+</body>
+</html>

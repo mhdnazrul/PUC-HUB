@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<!-- Made by: Team PUC HUB | Rahul -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routine Generator — PUC HUB</title>
+    <link rel="icon" type="image/png" href="assets/p.png">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Segoe UI',sans-serif;background:radial-gradient(circle at top,#2b180f 0%,#0c0908 100%);background-attachment:fixed;color:#e0e0e0;min-height:100vh;}
+
+        /* NAV */
+        .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;background:rgba(43,24,15,0.95);border-bottom:1px solid rgba(243,156,18,0.2);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+        .nav-left{display:flex;align-items:center;gap:10px;}
+        .nav-left img{width:32px;height:32px;border-radius:50%;border:2px solid #f39c12;}
+        .nav-title{font-size:14px;font-weight:700;color:#f39c12;}
+        .nav-sub{font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase;}
+        .nav-right{display:flex;gap:10px;}
+        .nav-btn{padding:6px 14px;background:transparent;border:1px solid rgba(243,156,18,0.3);border-radius:7px;color:#aaa;font-size:12px;cursor:pointer;text-decoration:none;transition:.2s;font-family:inherit;}
+        .nav-btn:hover{border-color:#f39c12;color:#f39c12;}
+
+        /* PAGES */
+        .page{display:none;}
+        .page.active{display:block;}
+
+        /* ── FORM PAGE ── */
+        .form-wrap{max-width:860px;margin:0 auto;padding:36px 20px 60px;}
+        .page-heading{font-size:24px;font-weight:800;color:#f39c12;margin-bottom:6px;}
+        .page-sub-text{font-size:13px;color:#666;margin-bottom:28px;}
+
+        .card{background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.18);border-radius:16px;padding:28px;margin-bottom:20px;}
+        .card-title{font-size:11px;font-weight:700;color:rgba(243,156,18,0.7);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(243,156,18,0.1);}
+
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+        .row.full{grid-template-columns:1fr;}
+        .row.three{grid-template-columns:1fr 1fr 1fr;}
+
+        .field label{font-size:10px;color:#666;letter-spacing:1.2px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:600;}
+
+        /* INPUTS — red class added for validation */
+        input[type=text],input[type=time],select{
+            width:100%;background:rgba(255,255,255,0.04);
+            border:1px solid rgba(243,156,18,0.18);border-radius:8px;
+            padding:10px 13px;color:#ddd;font-size:13px;outline:none;transition:.2s;font-family:inherit;
+        }
+        input:focus,select:focus{border-color:rgba(243,156,18,0.5);background:rgba(255,255,255,0.06);}
+        select option{background:#1a0d05;color:#ddd;}
+
+        /* RED VALIDATION */
+        input.error,select.error{
+            border-color:rgba(231,76,60,0.8)!important;
+            background:rgba(231,76,60,0.06)!important;
+            box-shadow:0 0 0 2px rgba(231,76,60,0.15);
+        }
+        input.error:focus,select.error:focus{border-color:#e74c3c!important;}
+        .error-msg{font-size:10px;color:#e74c3c;margin-top:4px;display:none;letter-spacing:.3px;}
+        .field.has-error .error-msg{display:block;}
+
+        /* SLOT CARDS */
+        .slot-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;position:relative;}
+        .slot-card.theory{border-left:4px solid rgba(52,152,219,0.6);}
+        .slot-card.lab{border-left:4px solid rgba(46,204,113,0.6);}
+        .slot-card.break{border-left:4px solid rgba(243,156,18,0.6);}
+        .slot-card.slot-error{border-color:rgba(231,76,60,0.4)!important;background:rgba(231,76,60,0.03);}
+        .slot-type-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+        .slot-type-label.theory{color:#5dade2;}
+        .slot-type-label.lab{color:#58d68d;}
+        .slot-type-label.break{color:#f39c12;}
+        .del-btn{position:absolute;top:12px;right:12px;background:rgba(220,50,50,0.1);border:1px solid rgba(220,50,50,0.25);color:#f08080;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:12px;transition:.2s;font-family:inherit;}
+        .del-btn:hover{background:rgba(220,50,50,0.22);}
+
+        /* ADD BUTTONS */
+        .add-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+        .add-btn{flex:1;min-width:100px;padding:10px 12px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:1px dashed;transition:.15s;text-transform:uppercase;font-family:inherit;}
+        .add-theory{background:rgba(52,152,219,0.07);border-color:rgba(52,152,219,0.4);color:#5dade2;}
+        .add-theory:hover{background:rgba(52,152,219,0.15);}
+        .add-lab{background:rgba(46,204,113,0.07);border-color:rgba(46,204,113,0.4);color:#58d68d;}
+        .add-lab:hover{background:rgba(46,204,113,0.15);}
+        .add-break{background:rgba(243,156,18,0.07);border-color:rgba(243,156,18,0.4);color:#f39c12;}
+        .add-break:hover{background:rgba(243,156,18,0.15);}
+        .clear-btn{background:rgba(220,50,50,0.07);border-color:rgba(220,50,50,0.35);color:#f08080;}
+        .clear-btn:hover{background:rgba(220,50,50,0.14);}
+
+        /* ERROR SUMMARY */
+        .error-banner{display:none;background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3);border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#e74c3c;}
+        .error-banner.show{display:block;}
+
+        /* GENERATE BUTTON */
+        .gen-btn{width:100%;padding:15px;background:linear-gradient(135deg,#f39c12,#e67e22);color:#000;font-weight:800;font-size:14px;border:none;border-radius:10px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:8px;transition:.2s;font-family:inherit;}
+        .gen-btn:hover{opacity:.88;box-shadow:0 6px 24px rgba(243,156,18,0.3);}
+
+        /* ── PREVIEW PAGE ── */
+        .preview-outer{min-height:100vh;background:#f0f0f0;display:flex;flex-direction:column;}
+        .preview-content{flex:1;padding:24px 16px 40px;display:flex;justify-content:center;}
+        .routine-sheet{width:580px;max-width:100%;background:#fff;box-shadow:0 8px 40px rgba(0,0,0,0.2);}
+
+        /* ROUTINE HEADER */
+        .r-header{background:linear-gradient(135deg,#b0b0b0,#909090);padding:36px 28px;text-align:center;position:relative;overflow:hidden;}
+        .r-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(255,220,100,0.35) 0%,transparent 60%);pointer-events:none;}
+        .r-university{font-size:13px;font-weight:700;color:#000;letter-spacing:.5px;margin-bottom:6px;font-family:'Courier New',monospace;}
+        .r-dept{font-size:15px;font-weight:900;color:#000;margin-bottom:12px;font-family:'Courier New',monospace;}
+        .r-meta-bar{border-top:2px solid rgba(0,0,0,0.3);border-bottom:2px solid rgba(0,0,0,0.3);padding:8px 0;margin-bottom:12px;}
+        .r-meta-line{font-size:12px;font-weight:700;color:#000;font-family:'Courier New',monospace;letter-spacing:.5px;}
+        .r-title{font-size:34px;font-weight:900;color:#444;letter-spacing:3px;font-family:'Courier New',monospace;}
+        .r-body{background:#fff;}
+        .day-row{display:grid;grid-template-columns:120px 1fr;border-bottom:2px solid #ccc;min-height:100px;}
+        .day-row:nth-child(odd){background:#f0f0f0;}
+        .day-row:nth-child(even){background:#e4e4e4;}
+        .day-name-col{background:#3a3a3a;display:flex;align-items:center;justify-content:center;border-right:2px solid #fff;}
+        .day-name{font-size:15px;font-weight:900;color:#fff;text-transform:uppercase;font-family:'Courier New',monospace;}
+        .day-classes{padding:14px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px;}
+        .class-item{font-size:13px;font-weight:700;color:#000;font-family:'Courier New',monospace;line-height:1.5;}
+        .class-type{font-size:9px;color:#666;font-weight:900;margin-left:6px;}
+        .break-text{font-size:16px;font-weight:900;color:#000;text-align:center;letter-spacing:3px;text-transform:uppercase;font-family:'Courier New',monospace;}
+        .no-class{color:#bbb;font-size:12px;font-style:italic;padding:8px 0;}
+
+        /* PRINT BAR */
+        .print-bar{display:flex;gap:12px;padding:18px 20px;background:#fff;border-top:1px solid #ddd;justify-content:center;flex-wrap:wrap;}
+        .print-btn{padding:11px 22px;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;text-transform:uppercase;font-family:inherit;transition:.2s;}
+        .print-btn.primary{background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;}
+        .print-btn.primary:hover{opacity:.88;}
+        .print-btn.secondary{background:#eee;border:1px solid #ccc;color:#333;}
+        .print-btn.secondary:hover{background:#ddd;}
+
+        @media print{.navbar,.print-bar{display:none!important;}body,html{background:#fff!important;}.preview-content{padding:0!important;background:#fff!important;}.routine-sheet{width:100%!important;box-shadow:none!important;}}
+        @keyframes fadeOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.95)}}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
+        <div><div class="nav-title">Routine Generator</div><div class="nav-sub">PUC HUB</div></div>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="index.html#services" class="nav-btn">Services</a>
+        <button onclick="history.back()" class="nav-btn">Back</button>
+    </div>
+</nav>
+
+<!-- ══ PAGE 1: FORM ══ -->
+<div id="formPage" class="page active">
+    <div class="form-wrap">
+        <div class="page-heading">Routine Generator</div>
+        <div class="page-sub-text">Fill in all fields below. Empty fields will be highlighted in red when you click Generate.</div>
+
+        <div id="errorBanner" class="error-banner"></div>
+
+        <!-- SECTION INFO -->
+        <div class="card">
+            <div class="card-title">Section Information</div>
+            <div class="row">
+                <div class="field" id="f-dept">
+                    <label>Department *</label>
+                    <input type="text" id="inp-dept" placeholder="e.g. Computer Science and Engineering" oninput="clearErr(this,'f-dept')">
+                    <div class="error-msg">Department is required</div>
+                </div>
+                <div class="field" id="f-section">
+                    <label>Section *</label>
+                    <input type="text" id="inp-section" placeholder="e.g. A, B, C" oninput="clearErr(this,'f-section')">
+                    <div class="error-msg">Section is required</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="field" id="f-semester">
+                    <label>Semester *</label>
+                    <select id="inp-semester" onchange="clearErr(this,'f-semester')">
+                        <option value="">Select Semester</option>
+                        <option>1st Semester</option><option>2nd Semester</option>
+                        <option>3rd Semester</option><option>4th Semester</option>
+                        <option>5th Semester</option><option>6th Semester</option>
+                        <option>7th Semester</option><option>8th Semester</option>
+                    </select>
+                    <div class="error-msg">Please select a semester</div>
+                </div>
+                <div class="field" id="f-batch">
+                    <label>Batch / Year *</label>
+                    <input type="text" id="inp-batch" placeholder="e.g. 2023-2024" oninput="clearErr(this,'f-batch')">
+                    <div class="error-msg">Batch is required</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLASSES -->
+        <div class="card">
+            <div class="card-title">Classes and Schedule</div>
+            <div id="slotsContainer"></div>
+            <div class="add-row">
+                <button class="add-btn add-theory" onclick="addSlot('theory')">+ Theory Class</button>
+                <button class="add-btn add-lab" onclick="addSlot('lab')">+ Lab Class</button>
+                <button class="add-btn add-break" onclick="addSlot('break')">+ Break</button>
+                <button class="add-btn clear-btn" onclick="clearSlots()">Clear All</button>
+            </div>
+        </div>
+
+        <button class="gen-btn" onclick="generateRoutine()">Generate Routine Preview</button>
+    </div>
+</div>
+
+<!-- ══ PAGE 2: PREVIEW ══ -->
+<div id="previewPage" class="page">
+    <div class="preview-outer">
+        <div class="preview-content">
+            <div class="routine-sheet" id="routineSheet">
+                <div class="r-header">
+                    <div class="r-glow"></div>
+                    <div class="r-university">Premier University, Chittagong</div>
+                    <div class="r-dept" id="outDept"></div>
+                    <div class="r-meta-bar">
+                        <div class="r-meta-line" id="outMeta1"></div>
+                        <div class="r-meta-line" id="outMeta2"></div>
+                    </div>
+                    <div class="r-title">Class Routine</div>
+                </div>
+                <div class="r-body" id="outSchedule"></div>
+            </div>
+        </div>
+        <div class="print-bar">
+            <button class="print-btn secondary" onclick="goEdit()">Edit</button>
+            <button class="print-btn primary" onclick="printRoutine()">Download / Print</button>
+            <a href="index.html" class="print-btn secondary" style="text-decoration:none;display:inline-flex;align-items:center;">Home</a>
+        </div>
+    </div>
+</div>
+
+<script>
+var slotId = 0;
+var DAYS = ['SATURDAY','SUNDAY','MONDAY','TUESDAY','WEDNESDAY'];
+
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+}
+function goEdit() { showPage('formPage'); }
+
+// ── VALIDATION HELPERS ──
+function markError(el, fieldId, msg) {
+    el.classList.add('error');
+    var field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.add('has-error');
+        var em = field.querySelector('.error-msg');
+        if (em && msg) em.textContent = msg;
+    }
+}
+function clearErr(el, fieldId) {
+    el.classList.remove('error');
+    var field = document.getElementById(fieldId);
+    if (field) field.classList.remove('has-error');
+}
+function markInputError(input, msg) {
+    input.classList.add('error');
+    if (msg) {
+        var hint = input.parentElement?.querySelector('.error-msg');
+        if (hint) { hint.textContent = msg; hint.style.display = 'block'; }
+    }
+}
+function clearInputError(input) {
+    input.classList.remove('error');
+    var hint = input.parentElement?.querySelector('.error-msg');
+    if (hint) hint.style.display = 'none';
+}
+
+// ── ADD SLOT ──
+function addSlot(type) {
+    slotId++;
+    var id = 'slot' + slotId;
+    var container = document.getElementById('slotsContainer');
+    var div = document.createElement('div');
+    div.className = 'slot-card ' + type;
+    div.id = id;
+
+    var typeLabel = type === 'theory' ? 'Theory Class' : type === 'lab' ? 'Lab Class' : 'Break';
+    var dayOptions = DAYS.map((d,i)=>`<option value="${i}">${d.charAt(0)+d.slice(1).toLowerCase()}</option>`).join('');
+
+    if (type === 'break') {
+        div.innerHTML = `
+            <button class="del-btn" onclick="removeSlot('${id}')">Remove</button>
+            <div class="slot-type-label break">${typeLabel}</div>
+            <div class="row three">
+                <div class="field"><label>Day *</label>
+                    <select class="s-day" onchange="clearInputError(this)"><option value="">Select Day</option>${dayOptions}</select>
+                    <div class="error-msg">Select a day</div></div>
+                <div class="field"><label>Start Time</label>
+                    <input type="time" class="s-start" value="10:00"></div>
+                <div class="field"><label>End Time</label>
+                    <input type="time" class="s-end" value="10:30"></div>
+            </div>
+            <input type="hidden" class="s-type" value="break">`;
+    } else {
+        div.innerHTML = `
+            <button class="del-btn" onclick="removeSlot('${id}')">Remove</button>
+            <div class="slot-type-label ${type}">${typeLabel}</div>
+            <div class="row full">
+                <div class="field"><label>Course Name *</label>
+                    <input type="text" class="s-course" placeholder="e.g. Data Structures and Algorithms" oninput="clearInputError(this)">
+                    <div class="error-msg">Course name is required</div></div>
+            </div>
+            <div class="row three">
+                <div class="field"><label>Day *</label>
+                    <select class="s-day" onchange="clearInputError(this)"><option value="">Select Day</option>${dayOptions}</select>
+                    <div class="error-msg">Select a day</div></div>
+                <div class="field"><label>Start Time</label>
+                    <input type="time" class="s-start" value="08:00"></div>
+                <div class="field"><label>End Time</label>
+                    <input type="time" class="s-end" value="09:30"></div>
+            </div>
+            <div class="row three">
+                <div class="field"><label>Course Code *</label>
+                    <input type="text" class="s-code" placeholder="e.g. CSE-501" oninput="clearInputError(this)">
+                    <div class="error-msg">Course code is required</div></div>
+                <div class="field"><label>Teacher Name *</label>
+                    <input type="text" class="s-teacher" placeholder="e.g. Dr. Karim" oninput="clearInputError(this)">
+                    <div class="error-msg">Teacher name is required</div></div>
+                <div class="field"><label>Room Number *</label>
+                    <input type="text" class="s-room" placeholder="e.g. 901" oninput="clearInputError(this)">
+                    <div class="error-msg">Room number is required</div></div>
+            </div>
+            <input type="hidden" class="s-type" value="${type}">`;
+    }
+
+    container.appendChild(div);
+    div.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function removeSlot(id) {
+    var el = document.getElementById(id);
+    if (el) { el.style.animation='fadeOut .25s ease'; setTimeout(()=>el.remove(),250); }
+}
+function clearSlots() {
+    if (confirm('Remove all classes?')) { document.getElementById('slotsContainer').innerHTML=''; slotId=0; }
+}
+
+// ── GENERATE WITH VALIDATION ──
+function generateRoutine() {
+    // Clear previous errors
+    document.querySelectorAll('.error').forEach(el=>el.classList.remove('error'));
+    document.querySelectorAll('.has-error').forEach(el=>el.classList.remove('has-error'));
+    document.querySelectorAll('.error-msg').forEach(el=>el.style.display='none');
+    document.querySelectorAll('.slot-card').forEach(el=>el.classList.remove('slot-error'));
+
+    var hasTopError = false;
+    var dept   = document.getElementById('inp-dept').value.trim();
+    var sec    = document.getElementById('inp-section').value.trim();
+    var sem    = document.getElementById('inp-semester').value;
+    var batch  = document.getElementById('inp-batch').value.trim();
+
+    if (!dept)  { markError(document.getElementById('inp-dept'),   'f-dept',    'Department is required'); hasTopError=true; }
+    if (!sec)   { markError(document.getElementById('inp-section'), 'f-section', 'Section is required');   hasTopError=true; }
+    if (!sem)   { markError(document.getElementById('inp-semester'),'f-semester','Please select a semester'); hasTopError=true; }
+    if (!batch) { markError(document.getElementById('inp-batch'),   'f-batch',  'Batch is required');      hasTopError=true; }
+
+    var cards = document.getElementById('slotsContainer').querySelectorAll('.slot-card');
+    if (!cards.length) {
+        var banner = document.getElementById('errorBanner');
+        banner.textContent = 'Please add at least one class before generating.';
+        banner.classList.add('show');
+        banner.style.animation = 'shake .4s ease';
+        setTimeout(()=>{ banner.style.animation=''; }, 400);
+        if (hasTopError) scrollToFirstError();
+        return;
+    }
+
+    var slots = [];
+    var slotErrors = 0;
+
+    cards.forEach(function(card) {
+        var type    = card.querySelector('.s-type')?.value;
+        var dayEl   = card.querySelector('.s-day');
+        var start   = card.querySelector('.s-start')?.value;
+        var end     = card.querySelector('.s-end')?.value;
+        var courseEl= card.querySelector('.s-course');
+        var codeEl  = card.querySelector('.s-code');
+        var teachEl = card.querySelector('.s-teacher');
+        var roomEl  = card.querySelector('.s-room');
+
+        var cardHasError = false;
+
+        if (!dayEl?.value) { markInputError(dayEl,'Select a day'); cardHasError=true; }
+
+        if (type === 'break') {
+            if (!cardHasError) slots.push({type:'break', day:+dayEl.value, start, end});
+        } else {
+            if (!courseEl?.value.trim()) { markInputError(courseEl,'Course name is required'); cardHasError=true; }
+            if (!codeEl?.value.trim())   { markInputError(codeEl,  'Course code is required'); cardHasError=true; }
+            if (!teachEl?.value.trim())  { markInputError(teachEl, 'Teacher name is required'); cardHasError=true; }
+            if (!roomEl?.value.trim())   { markInputError(roomEl,  'Room number is required'); cardHasError=true; }
+
+            if (!cardHasError) {
+                slots.push({type, day:+dayEl.value, start, end,
+                    course:courseEl.value.trim(), code:codeEl.value.trim(),
+                    teacher:teachEl.value.trim(), room:roomEl.value.trim()
+                });
+            } else {
+                card.classList.add('slot-error');
+                slotErrors++;
+            }
+        }
+    });
+
+    var totalErrors = (hasTopError ? 1 : 0) + slotErrors;
+    var banner = document.getElementById('errorBanner');
+
+    if (totalErrors > 0 || slots.length === 0) {
+        var msgs = [];
+        if (hasTopError) msgs.push('Please fill in all Section Information fields (highlighted above).');
+        if (slotErrors > 0) msgs.push(`${slotErrors} class card(s) have missing fields — check the red highlights below.`);
+        if (slots.length === 0 && slotErrors === 0) msgs.push('Please complete the class details.');
+        banner.innerHTML = '⚠ ' + msgs.join(' ');
+        banner.classList.add('show');
+        banner.style.animation = 'shake .4s ease';
+        setTimeout(()=>{ banner.style.animation=''; },400);
+        scrollToFirstError();
+        return;
+    }
+
+    banner.classList.remove('show');
+
+    // Build schedule
+    var schedule = {};
+    DAYS.forEach((_,i)=>schedule[i]=[]);
+    slots.forEach(s=>schedule[s.day].push(s));
+    DAYS.forEach((_,i)=>schedule[i].sort((a,b)=>(a.start||'').localeCompare(b.start)));
+
+    // Render header
+    document.getElementById('outDept').textContent   = 'Department of '+dept;
+    document.getElementById('outMeta1').textContent  = 'Semester: '+sem+'  |  Batch: '+batch;
+    document.getElementById('outMeta2').textContent  = 'Section: '+sec+'  |  Premier University Chittagong';
+
+    // Render schedule
+    var html='';
+    DAYS.forEach(function(day,idx){
+        var classes=schedule[idx], inner='';
+        if(!classes.length){
+            inner='<div class="no-class">No class scheduled</div>';
+        } else {
+            classes.forEach(function(c){
+                if(c.type==='break'){
+                    inner+=`<div class="break-text">--- BREAK ---</div>`;
+                } else {
+                    var short=shortName(c.teacher);
+                    var lbl=c.type==='lab'?'[LAB]':'[THEORY]';
+                    inner+=`<div class="class-item">${esc(c.code)} / ${short} / Room-${esc(c.room)} &nbsp; ${c.start} - ${c.end}<span class="class-type">${lbl}</span></div>`;
+                }
+            });
+        }
+        html+=`<div class="day-row"><div class="day-name-col"><div class="day-name">${day}</div></div><div class="day-classes">${inner}</div></div>`;
+    });
+    document.getElementById('outSchedule').innerHTML=html;
+    showPage('previewPage');
+}
+
+function scrollToFirstError() {
+    var first = document.querySelector('.error, .slot-error');
+    if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function shortName(name){
+    if(!name) return '';
+    return name.replace(/^(Dr\.|Mr\.|Mrs\.|Ms\.)\s*/i,'').trim().substring(0,3).toUpperCase();
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function printRoutine(){
+    var content=document.getElementById('routineSheet').outerHTML;
+    var w=window.open('','_blank');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Class Routine</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#fff;font-family:'Courier New',monospace;display:flex;justify-content:center;padding:10px;}
+        .routine-sheet{width:580px;background:#fff;}
+        .r-header{background:linear-gradient(135deg,#b0b0b0,#909090);padding:36px 28px;text-align:center;}
+        .r-glow{display:none;}
+        .r-university{font-size:13px;font-weight:700;color:#000;margin-bottom:6px;}
+        .r-dept{font-size:15px;font-weight:900;color:#000;margin-bottom:12px;}
+        .r-meta-bar{border-top:2px solid rgba(0,0,0,.3);border-bottom:2px solid rgba(0,0,0,.3);padding:8px 0;margin-bottom:12px;}
+        .r-meta-line{font-size:12px;font-weight:700;color:#000;}
+        .r-title{font-size:34px;font-weight:900;color:#444;letter-spacing:3px;}
+        .day-row{display:grid;grid-template-columns:120px 1fr;border-bottom:2px solid #ccc;min-height:90px;}
+        .day-row:nth-child(odd){background:#f0f0f0;}
+        .day-row:nth-child(even){background:#e4e4e4;}
+        .day-name-col{background:#3a3a3a;display:flex;align-items:center;justify-content:center;border-right:2px solid #fff;}
+        .day-name{font-size:14px;font-weight:900;color:#fff;text-transform:uppercase;}
+        .day-classes{padding:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:7px;}
+        .class-item{font-size:12px;font-weight:700;color:#000;line-height:1.5;}
+        .class-type{font-size:9px;color:#666;font-weight:900;margin-left:5px;}
+        .break-text{font-size:14px;font-weight:900;color:#000;text-align:center;letter-spacing:3px;}
+        .no-class{color:#bbb;font-size:11px;font-style:italic;}
+        @media print{body{padding:0;}.routine-sheet{width:100%;}}
+    </style></head><body>${content}
+    <script>window.onload=function(){window.print();}<\/script>
+    </body></html>`);
+    w.document.close();
+}
+
+addSlot('theory');
+</script>
+</body>
+</html>

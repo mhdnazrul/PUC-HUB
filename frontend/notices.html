@@ -1,0 +1,475 @@
+<!-- Made by: Team PUC HUB | Internet Programming Lab Project -->
+ <!--Rudra -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Notice Board - PUC Problem Solver</title>
+<link rel="icon" type="image/png" href="assets/p.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+
+:root{
+  --acc:#f39c12;--acc2:#e67e22;
+  --bg1:#2b180f;--bg2:#0c0908;
+  --card:rgba(43,24,15,0.6);
+  --border:rgba(243,156,18,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Poppins',sans-serif;
+  background:radial-gradient(ellipse at 20% 5%,rgba(90,45,0,0.22) 0%,transparent 55%),
+             linear-gradient(160deg,#2b180f 0%,#0c0908 55%,#050202 100%);
+  background-attachment:fixed;
+  color:#ececec;min-height:100vh;overflow-x:hidden;
+}
+
+/* NAV */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:58px;
+  background:rgba(43,24,15,0.96);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:300;
+  backdrop-filter:blur(14px);
+}
+.nav-l{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:32px;height:32px;border-radius:50%;border:2px solid var(--acc);object-fit:cover;}
+.nav-brand{font-size:14px;font-weight:700;color:var(--acc);}
+.nav-sub{font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase;}
+.nav-r{display:flex;align-items:center;gap:6px;}
+.nav-a{padding:6px 12px;color:#888;font-size:12px;text-decoration:none;border-radius:6px;transition:.2s;cursor:pointer;background:transparent;border:none;font-family:'Poppins',sans-serif;}
+.nav-a:hover{color:var(--acc);}
+.nav-back{padding:6px 14px;border:1px solid #333;border-radius:7px;color:#888;font-size:11px;cursor:pointer;text-decoration:none;transition:.2s;font-family:'Poppins',sans-serif;background:transparent;}
+.nav-back:hover{border-color:var(--acc);color:var(--acc);}
+
+/* PAGE */
+.page{max-width:1000px;margin:0 auto;padding:40px 16px 80px;}
+
+/* HEADER */
+.page-header{margin-bottom:40px;}
+.ph-label{font-size:10px;color:rgba(243,156,18,0.6);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
+.ph-title{font-size:32px;font-weight:900;background:linear-gradient(135deg,#f39c12,#e67e22,#f1c40f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
+.ph-desc{font-size:13px;color:#666;line-height:1.7;}
+.ph-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px;}
+.ph-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 20px;text-align:center;}
+.ph-stat .n{font-size:20px;font-weight:800;color:var(--acc);}
+.ph-stat .l{font-size:10px;color:#666;letter-spacing:1px;text-transform:uppercase;}
+
+/* FILTER BAR */
+.filter-bar{
+  display:flex;gap:12px;flex-wrap:wrap;
+  margin-bottom:28px;
+  padding:18px 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+.filter-bar input,
+.filter-bar select{
+  flex:1;min-width:180px;
+  padding:10px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(243,156,18,0.2);
+  border-radius:9px;
+  color:#ececec;font-size:13px;
+  font-family:'Poppins',sans-serif;
+  transition:.2s;
+}
+.filter-bar input::placeholder{color:#555;}
+.filter-bar input:focus,
+.filter-bar select:focus{outline:none;border-color:var(--acc);}
+.filter-bar select option{background:#1a0c04;}
+.filter-count{font-size:12px;color:#666;align-self:center;white-space:nowrap;padding:0 4px;}
+
+/* NOTICE LIST */
+.notice-list{display:flex;flex-direction:column;gap:0;}
+
+/* NOTICE ITEM — horizontal timeline style */
+.notice-item{
+  display:flex;gap:0;
+  position:relative;
+  animation:fadeUp .4s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* DATE COLUMN */
+.ni-date{
+  flex-shrink:0;width:80px;
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:18px;
+  position:relative;
+}
+.ni-date-day{font-size:24px;font-weight:900;color:var(--acc);line-height:1;}
+.ni-date-mon{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+/* TIMELINE LINE */
+.ni-line{
+  flex-shrink:0;width:36px;
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:24px;
+}
+.ni-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--acc);flex-shrink:0;
+  box-shadow:0 0 8px rgba(243,156,18,0.4);
+  position:relative;z-index:1;
+}
+.ni-track{
+  flex:1;width:2px;
+  background:linear-gradient(to bottom,rgba(243,156,18,0.3),rgba(243,156,18,0.05));
+  margin-top:6px;
+}
+.notice-item:last-child .ni-track{display:none;}
+
+/* CONTENT */
+.ni-content{
+  flex:1;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px 20px;
+  margin:8px 0 16px;
+  transition:all .22s;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.ni-content::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--acc),var(--acc2));
+  opacity:0;transition:.22s;border-radius:14px 0 0 14px;
+}
+.ni-content:hover{border-color:rgba(243,156,18,0.35);transform:translateX(4px);box-shadow:0 6px 24px rgba(0,0,0,0.2);}
+.ni-content:hover::before{opacity:1;}
+
+.ni-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.ni-cat{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;
+}
+.cat-admission{background:rgba(52,152,219,0.12);color:#5dade2;border:1px solid rgba(52,152,219,0.25);}
+.cat-exam{background:rgba(231,76,60,0.12);color:#e74c3c;border:1px solid rgba(231,76,60,0.25);}
+.cat-event{background:rgba(39,174,96,0.12);color:#55d98d;border:1px solid rgba(39,174,96,0.25);}
+.cat-general{background:rgba(243,156,18,0.12);color:var(--acc);border:1px solid rgba(243,156,18,0.25);}
+.cat-academic{background:rgba(155,89,182,0.12);color:#bb8fce;border:1px solid rgba(155,89,182,0.25);}
+.cat-finance{background:rgba(26,188,156,0.12);color:#76d7c4;border:1px solid rgba(26,188,156,0.25);}
+
+.ni-title{font-size:14px;font-weight:700;color:#ececec;line-height:1.4;flex:1;}
+.ni-desc{font-size:12px;color:#777;line-height:1.6;margin-bottom:12px;}
+.ni-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ni-meta{font-size:10px;color:#555;}
+.ni-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;
+  background:rgba(243,156,18,0.1);color:var(--acc);
+  border:1px solid rgba(243,156,18,0.25);border-radius:7px;
+  font-size:11px;font-weight:600;cursor:pointer;
+  font-family:'Poppins',sans-serif;transition:.2s;
+}
+.ni-btn:hover{background:rgba(243,156,18,0.2);}
+
+/* DETAIL PANEL */
+.detail-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.88);z-index:999;
+  backdrop-filter:blur(10px);
+  justify-content:center;align-items:center;
+  padding:20px;
+}
+.detail-overlay.open{display:flex;}
+.detail-box{
+  width:100%;max-width:600px;
+  background:linear-gradient(160deg,#1a0c04,#0c0908);
+  border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  animation:boxIn .25s ease;
+  max-height:90vh;overflow-y:auto;
+}
+@keyframes boxIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+.db-head{
+  padding:20px 24px;
+  background:rgba(43,24,15,0.8);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:12px;
+}
+.db-head-info{flex:1;}
+.db-head-cat{margin-bottom:8px;}
+.db-head-title{font-size:16px;font-weight:700;color:#ececec;line-height:1.4;}
+.db-close{
+  width:28px;height:28px;flex-shrink:0;
+  border-radius:50%;background:rgba(255,255,255,0.06);
+  border:none;color:#aaa;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:2px;
+}
+.db-body{padding:24px;}
+.db-field{margin-bottom:16px;}
+.db-field-label{font-size:10px;color:rgba(243,156,18,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+.db-field-value{font-size:13px;color:#ccc;line-height:1.7;}
+.db-divider{height:1px;background:rgba(243,156,18,0.08);margin:16px 0;}
+.db-link{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 24px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#000;font-size:13px;font-weight:700;
+  border-radius:10px;text-decoration:none;transition:.2s;
+  margin-top:4px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;
+}
+.db-link:hover{filter:brightness(1.08);transform:translateY(-1px);}
+
+/* EMPTY */
+.no-res{text-align:center;padding:60px;color:#555;font-size:13px;font-style:italic;}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:#1a0f07;border:1px solid var(--acc);border-radius:10px;padding:12px 18px;font-size:12px;color:#ececec;z-index:9999;transform:translateY(80px);opacity:0;transition:.3s;max-width:280px;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-l">
+    <img src="assets/p.png" class="nav-logo" alt="PUC" onerror="this.style.display='none'">
+    <div><div class="nav-brand">PUC Problem Solver</div><div class="nav-sub">Notice Board</div></div>
+  </div>
+  <div class="nav-r">
+    <a onclick="window.location.replace('index.html')" class="nav-a">Home</a>
+    <a onclick="window.location.replace('index.html#services')" class="nav-a">Services</a>
+    <a onclick="window.location.replace('index.html#team')" class="nav-a">Team</a>
+    <a onclick="window.location.replace('index.html')" class="nav-back">Back</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="ph-label">Premier University Chittagong</div>
+    <div class="ph-title">Official Notice Board</div>
+    <div class="ph-desc">All official notices and announcements from Premier University Chittagong. Updated regularly from puc.ac.bd.</div>
+    <div class="ph-stats">
+      <div class="ph-stat"><div class="n" id="totalCount">9</div><div class="l">Total Notices</div></div>
+      <div class="ph-stat"><div class="n">2026</div><div class="l">Latest Year</div></div>
+      <div class="ph-stat"><div class="n">6</div><div class="l">Categories</div></div>
+    </div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="Search notices by title or description..." oninput="filterNotices()">
+    <select id="catFilter" onchange="filterNotices()">
+      <option value="">All Categories</option>
+      <option value="Admission">Admission</option>
+      <option value="Exam">Exam</option>
+      <option value="Academic">Academic</option>
+      <option value="Event">Event</option>
+      <option value="Finance">Finance</option>
+      <option value="General">General</option>
+    </select>
+    <select id="yearFilter" onchange="filterNotices()">
+      <option value="">All Years</option>
+      <option value="2026">2026</option>
+      <option value="2025">2025</option>
+    </select>
+    <span class="filter-count" id="filterCount"></span>
+  </div>
+
+
+
+
+
+
+
+  <!-- NOTICE LIST -->
+  <div id="noticeList"></div>
+
+</div>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay" onclick="handleOverlayClick(event)">
+  <div class="detail-box">
+    <div class="db-head">
+      <div class="db-head-info">
+        <div class="db-head-cat" id="dCat"></div>
+        <div class="db-head-title" id="dTitle"></div>
+      </div>
+      <button class="db-close" onclick="closeDetail()">&#x2715;</button>
+    </div>
+    <div class="db-body">
+      <div class="db-field">
+        <div class="db-field-label">Date Published</div>
+        <div class="db-field-value" id="dDate"></div>
+      </div>
+      <div class="db-divider"></div>
+      <div class="db-field">
+        <div class="db-field-label">Details</div>
+        <div class="db-field-value" id="dDesc"></div>
+      </div>
+      <div class="db-divider"></div>
+      <div class="db-field">
+        <div class="db-field-label">Source</div>
+        <div class="db-field-value">Premier University Official Website — puc.ac.bd</div>
+      </div>
+      <a id="dLink" href="#" target="_blank" class="db-link">View on puc.ac.bd</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+
+
+
+<script>
+var NOTICES = [
+  {
+    id:1,
+    day:'16',mon:'Mar',year:'2026',
+    category:'General',
+    title:'No Objection Certificate — Vice Chancellor Travel to Australia',
+    desc:'No Objection Certificate for the Vice Chancellor\'s travel to Australia from 18 March 2026 to 05 April 2026. Approved by the authority.',
+    url:'https://puc.ac.bd/Home/Events/no-objection-certificate-for-the-vice-chancellor%E2%80%99s-travel-to-australia-from-18-march-2026-to-05-april-2026'
+  },
+  {
+    id:2,
+    day:'10',mon:'Mar',year:'2026',
+    category:'Admission',
+    title:'BBA (4-Year) Admission Test Result — Batch 51, Spring 2026',
+    desc:'Notice for BBA (4-Year) Admission Test Result. Date of Admission Test: March 09, 2026. Publication of Result: March 10, 2026. Interested students are instructed to complete all admission formalities as per schedule.',
+    url:'https://puc.ac.bd/Home/Events/notice-bba--4-year--admission-test-result-date-of-admission-test--march-09--2026-publication-of-result--march-10--2026'
+  },
+  {
+    id:3,
+    day:'10',mon:'Feb',year:'2026',
+    category:'Admission',
+    title:'Admission Test Result — Bachelor of Architecture Batch-28, Spring 2026',
+    desc:'Admission Test Result and Admission Notice for Bachelor of Architecture Batch-28, Session: Spring 2026. Date of Admission Test: 07 February 2026. Interested candidates are instructed to complete admission formalities as per the schedule.',
+    url:'https://puc.ac.bd/Home/Events/admission-test-result-and-admission-notice-bachelor-of-architecture-batch-28-session--spring--2026-date-of-admission-test--07-02-2026'
+  },
+  {
+    id:4,
+    day:'08',mon:'Feb',year:'2026',
+    category:'Admission',
+    title:'Admission Test Result — MBA (1.5-Year) Batch-29, Spring 2026',
+    desc:'Admission Test Result and Admission Notice for Faculty of Business Studies, Program: MBA (1.5-Year), Admission Batch-29. Admission Test Date: 06 February 2026. Students are instructed to complete all admission formalities promptly.',
+    url:'https://puc.ac.bd/Home/Events/admission-test-result-and-admission-notice-faculty-of-business-studies-program--mba--1-5-year--admission-batch--29-test--06-02-2026'
+  },
+  {
+    id:5,
+    day:'03',mon:'Feb',year:'2026',
+    category:'Admission',
+    title:'Admission Test Result — LL.B. (Honors) Batch-58, Spring 2026',
+    desc:'Admission Test Result and Admission Notice for Program: LL.B. (Honors), Session: Spring 2026, Batch: 58th. Interested students are instructed to complete all admission formalities by the specified date. Payment can be made at any branch of United Commercial Bank Ltd.',
+    url:'https://puc.ac.bd/Home/Events/admission-test-result-and-admission-notice--program--ll-b---honors---session--spring-2026--batch--58th-'
+  },
+  {
+    id:6,
+    day:'03',mon:'Feb',year:'2026',
+    category:'Admission',
+    title:'Admission Test Result — B.Sc. (Engineering) CSE Batch-49, Spring 2026',
+    desc:'Admission Test Result and Admission Notice for B.Sc. (Engineering) in CSE Program, Batch #49th, Session: Spring 2026. Date of Admission Test: 02 February 2026. Selected candidates are requested to complete admission formalities.',
+    url:'https://puc.ac.bd/Home/Events/admission-test-result-and-admission-notice-for-b--sc---engineering--in-cse-program-batch---49th--session--spring--2026--date-of-admission-test-02-02-2026'
+  },
+  {
+    id:7,
+    day:'03',mon:'Feb',year:'2026',
+    category:'Admission',
+    title:'Notice for Candidates — B.Sc. CSE Batch-49, Spring 2026 Admission Test',
+    desc:'Notice for candidates seeking admission to B.Sc. (Engineering) in CSE Program, Batch-49, Session: Spring 2026. Date of Admission Test: 02 February 2026. Candidates are requested to bring their admit card to the exam center.',
+    url:'https://puc.ac.bd/Home/Events/notice-for-candidates-seeking-admission-to-b-sc--engineering--in-cse-program-batch-49--session-spring--2026%3b-date-of-admission-test--02-02-2026'
+  },
+  {
+    id:8,
+    day:'01',mon:'Feb',year:'2026',
+    category:'Admission',
+    title:'FDT (4-Year) Admission Test Result — Session: Spring 2026',
+    desc:'Notice for FDT (4-Year) Admission Test Result, Session: Spring 2026. Date of Admission Test: January 31, 2026. Publication of Result: February 01, 2026. Students should complete admission formalities within the stipulated time.',
+    url:'https://puc.ac.bd/Home/Events/notice-fdt--4-year--admission-test-result--session--spring-2026--date-of-admission-test--january-31--2026-publication-of-result--february-01--2026'
+  },
+  {
+    id:9,
+    day:'26',mon:'Jan',year:'2026',
+    category:'Admission',
+    title:'Notice for Candidates — B.A. (Honors) English Batch-48, Spring 2026',
+    desc:'Notice for candidates seeking admission to B.A. (Honors) in English Program, Batch: 48, Session: Spring 2026. Result Date: 26 January 2026. Selected candidates are instructed to complete all admission formalities as per the schedule.',
+    url:'https://puc.ac.bd/Home/Events/notice-for-candidates-seeking-admission-to-b--a---honors--in-english-program-batch--48-session--spring-2026-result-date--26-01-2026'
+  },
+];
+
+var filtered = NOTICES.slice();
+
+function getCatClass(cat){
+  var m={'Admission':'cat-admission','Exam':'cat-exam','Academic':'cat-academic','Event':'cat-event','Finance':'cat-finance','General':'cat-general'};
+  return m[cat]||'cat-general';
+}
+
+function renderList(list){
+  var el=document.getElementById('noticeList');
+  document.getElementById('filterCount').textContent=list.length+' notice'+(list.length!==1?'s':'');
+  document.getElementById('totalCount').textContent=NOTICES.length;
+  if(!list.length){el.innerHTML='<div class="no-res">No notices found matching your search.</div>';return;}
+  el.innerHTML=list.map(function(n,i){
+    return '<div class="notice-item" style="animation-delay:'+(i*0.06).toFixed(2)+'s;">'
+      +'<div class="ni-date"><div class="ni-date-day">'+n.day+'</div><div class="ni-date-mon">'+n.mon+'</div></div>'
+      +'<div class="ni-line"><div class="ni-dot"></div><div class="ni-track"></div></div>'
+      +'<div class="ni-content" onclick="openDetail('+n.id+')">'
+      +'<div class="ni-top"><div class="ni-title">'+n.title+'</div>'
+      +'<span class="ni-cat '+getCatClass(n.category)+'">'+n.category+'</span></div>'
+      +'<div class="ni-desc">'+n.desc.substring(0,120)+(n.desc.length>120?'...':'')+'</div>'
+      +'<div class="ni-footer"><span class="ni-meta">'+n.day+' '+n.mon+' '+n.year+' &middot; Premier University</span>'
+      +'<button class="ni-btn" onclick="event.stopPropagation();openDetail('+n.id+')">View Details</button></div>'
+      +'</div></div>';
+  }).join('');
+}
+
+function filterNotices(){
+  var q=document.getElementById('searchInput').value.toLowerCase();
+  var cat=document.getElementById('catFilter').value;
+  var yr=document.getElementById('yearFilter').value;
+  filtered=NOTICES.filter(function(n){
+    var mq=!q||(n.title.toLowerCase().includes(q)||n.desc.toLowerCase().includes(q));
+    var mc=!cat||n.category===cat;
+    var my=!yr||n.year===yr;
+    return mq&&mc&&my;
+  });
+  renderList(filtered);
+}
+
+function openDetail(id){
+  var n=NOTICES.find(function(x){return x.id===id;});
+  if(!n)return;
+  document.getElementById('dCat').innerHTML='<span class="ni-cat '+getCatClass(n.category)+'">'+n.category+'</span>';
+  document.getElementById('dTitle').textContent=n.title;
+  document.getElementById('dDate').textContent=n.day+' '+n.mon+' '+n.year;
+  document.getElementById('dDesc').textContent=n.desc;
+  document.getElementById('dLink').href=n.url;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+function closeDetail(){document.getElementById('detailOverlay').classList.remove('open');}
+function handleOverlayClick(e){if(e.target===document.getElementById('detailOverlay'))closeDetail();}
+
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show';clearTimeout(t._t);t._t=setTimeout(function(){t.className='toast';},3000);}
+
+document.addEventListener('DOMContentLoaded',function(){
+  if(localStorage.getItem('isLoggedIn')!=='true'){window.location.href='login.html';return;}
+  renderList(NOTICES);
+  if(typeof trackUserActivity==='function') trackUserActivity('Notice Board');
+});
+</script>
+<script src="js/auth.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/tracker.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

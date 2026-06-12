@@ -1,0 +1,77 @@
+name: Production & Staging CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, staging ]
+  pull_request:
+    branches: [ main, staging ]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd backend
+          npm run lint --if-present
+
+      - name: Run Tests
+        run: |
+          cd backend
+          npm test --if-present
+        env:
+          NODE_ENV: test
+          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.TEST_JWT_SECRET }}
+
+  deploy:
+    needs: test-and-lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Staging Deployment Flow (staging branch)
+      - name: Deploy Backend to Staging
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          curl -fX POST "${{ secrets.RENDER_STAGING_DEPLOY_HOOK_URL }}"
+
+      - name: Deploy Frontend to Vercel (Staging)
+        if: github.ref == 'refs/heads/staging'
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # Production Deployment Flow (main branch)
+      - name: Deploy Backend to Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -fX POST "${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK_URL }}"
+
+      - name: Deploy Frontend to Vercel (Production)
+        if: github.ref == 'refs/heads/main'
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'

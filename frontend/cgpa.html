@@ -1,0 +1,279 @@
+<!-- Made by: Team PUC HUB | Internet Programming Lab Project | Rahul -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGPA Calculator — PUC HUB</title>
+<link rel="icon" type="image/png" href="assets/p.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#f39c12;--acc2:#e67e22;--card:rgba(43,24,15,0.55);--border:rgba(243,156,18,0.18);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#2b180f 0%,#0c0908 100%);background-attachment:fixed;color:#ececec;min-height:100vh;}
+.ai-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(43,24,15,0.95);border-bottom:1px solid rgba(243,156,18,0.25);position:sticky;top:0;z-index:300;backdrop-filter:blur(12px);}
+.nav-logo-wrap{display:flex;align-items:center;gap:10px;}
+.nav-logo-wrap img{width:36px;height:36px;border-radius:50%;border:2px solid #f39c12;object-fit:cover;}
+.nav-brand{font-size:18px;font-weight:700;color:#f39c12;}
+.nav-tag{font-size:11px;color:#e67e22;letter-spacing:1px;margin-left:4px;}
+.nav-actions{display:flex;gap:8px;}
+.nav-btn{padding:8px 16px;background:transparent;border:1px solid rgba(243,156,18,0.35);border-radius:8px;color:#ccc;text-decoration:none;font-size:13px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
+.nav-btn:hover{border-color:#f39c12;color:#f39c12;}
+.page{max-width:960px;margin:0 auto;padding:32px 16px 80px;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.2),transparent);margin:32px 0;}
+.hero-strip{background:rgba(43,24,15,0.6);border:1px solid var(--border);border-radius:18px;padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden;}
+.hero-strip::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--acc),var(--acc2),var(--acc));}
+.hs-label{font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(243,156,18,0.6);text-transform:uppercase;margin-bottom:6px;}
+.hs-title{font-size:24px;font-weight:800;color:#ececec;margin-bottom:6px;}
+.hs-title span{color:var(--acc);}
+.hs-sub{font-size:13px;color:#a08060;line-height:1.7;}
+.step-card{background:rgba(43,24,15,0.6);border:1px solid var(--border);border-radius:18px;padding:28px 30px;margin-bottom:20px;}
+.step-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+.step-num{width:36px;height:36px;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#000;}
+.step-title{font-size:16px;font-weight:700;color:#ececec;}
+.step-sub{font-size:12px;color:#a08060;margin-top:2px;}
+.count-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+.count-label{font-size:13px;color:#a08060;font-weight:600;min-width:130px;}
+.count-input{width:80px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:#ececec;font-family:'Courier New',monospace;font-size:18px;font-weight:700;text-align:center;outline:none;transition:border-color .2s;}
+.count-input:focus{border-color:var(--acc);}
+.count-adj{width:36px;height:36px;background:rgba(243,156,18,0.08);border:1px solid var(--border);border-radius:10px;color:var(--acc);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.count-adj:hover{background:rgba(243,156,18,0.18);}
+.btn-gen{padding:11px 24px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#000;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:11px;cursor:pointer;transition:opacity .2s;}
+.btn-gen:hover{opacity:0.88;}
+.subject-block{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 22px;margin-bottom:16px;}
+.subject-block.theory-block{border-color:rgba(243,156,18,0.2);}
+.subject-block.lab-block{border-color:rgba(52,152,219,0.2);background:rgba(52,152,219,0.03);}
+.sb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.sb-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 11px;border-radius:20px;}
+.theory-badge{background:rgba(243,156,18,0.1);color:var(--acc);border:1px solid rgba(243,156,18,0.25);}
+.lab-badge{background:rgba(52,152,219,0.1);color:#5dade2;border:1px solid rgba(52,152,219,0.2);}
+.marks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
+.mg-item{display:flex;flex-direction:column;gap:5px;}
+.mg-label{font-size:10px;color:#666;letter-spacing:1px;text-transform:uppercase;font-weight:700;}
+.mg-max{font-size:10px;color:#555;margin-top:1px;}
+.mg-input{padding:9px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#ececec;font-family:'Courier New',monospace;font-size:14px;font-weight:600;text-align:center;outline:none;transition:border-color .2s;width:100%;}
+.mg-input:focus{border-color:var(--acc);background:rgba(243,156,18,0.04);}
+.mg-input::placeholder{color:#444;font-style:italic;font-size:12px;}
+.mg-input.lab-inp:focus{border-color:#5dade2;background:rgba(52,152,219,0.04);}
+.credit-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.credit-row label{font-size:11px;color:#a08060;letter-spacing:1px;text-transform:uppercase;font-weight:700;white-space:nowrap;}
+.credit-inp{width:90px;padding:7px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#ececec;font-family:'Courier New',monospace;font-size:14px;font-weight:600;text-align:center;outline:none;transition:border-color .2s;}
+.credit-inp:focus{border-color:var(--acc);}
+.credit-inp::placeholder{color:#444;font-style:italic;font-size:11px;}
+.live-score{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 13px;margin-top:14px;font-size:12px;color:#666;}
+.ls-val{font-family:'Courier New',monospace;font-weight:700;color:var(--acc);font-size:15px;}
+.ls-grade{font-weight:700;font-size:14px;}
+.btn-calc{width:100%;margin-top:16px;padding:18px 24px;background:transparent;color:var(--acc);font-family:'Poppins',sans-serif;font-size:16px;font-weight:800;letter-spacing:0.5px;border:2px solid var(--acc);border-radius:12px;cursor:pointer;position:relative;overflow:hidden;transition:all .25s;box-shadow:0 0 18px rgba(243,156,18,0.12);}
+.btn-calc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--acc),var(--acc2));opacity:0;transition:opacity .25s;z-index:0;}
+.btn-calc span{position:relative;z-index:1;}
+.btn-calc:hover{color:#000;box-shadow:0 6px 24px rgba(243,156,18,0.35);}
+.btn-calc:hover::before{opacity:1;}
+.result-card{background:rgba(43,24,15,0.7);border:1px solid rgba(243,156,18,0.45);border-radius:18px;padding:30px;margin-bottom:20px;position:relative;overflow:hidden;}
+.result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--acc),var(--acc2));}
+.res-top{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;align-items:flex-start;}
+.res-main{flex:1;min-width:200px;}
+.res-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(243,156,18,0.6);margin-bottom:6px;}
+.res-cgpa{font-family:'Courier New',monospace;font-size:clamp(48px,9vw,72px);font-weight:700;color:var(--acc);line-height:1;}
+.res-grade-pill{display:inline-block;margin-top:8px;padding:5px 18px;border-radius:30px;font-size:15px;font-weight:800;letter-spacing:1px;border:2px solid var(--acc);color:var(--acc);}
+.res-sgpa-box{background:rgba(0,0,0,0.3);border:1px solid rgba(243,156,18,0.15);border-radius:12px;padding:16px 20px;min-width:160px;}
+.res-sgpa-label{font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.res-sgpa-val{font-family:'Courier New',monospace;font-size:28px;font-weight:700;color:#ececec;}
+.res-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:22px;}
+.res-table th{font-size:10px;font-weight:700;color:var(--acc);letter-spacing:1.5px;text-transform:uppercase;padding:0 10px 10px;border-bottom:1px solid rgba(243,156,18,0.2);text-align:left;}
+.res-table td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:#888;vertical-align:middle;}
+.res-table td:first-child{color:#ccc;font-weight:600;}
+.res-table .grade-cell{font-weight:800;font-size:14px;}
+.res-table .tot-row td{background:rgba(243,156,18,0.06);font-weight:700;color:#ececec;border-bottom:none;}
+.grade-bar{height:4px;border-radius:2px;background:rgba(255,255,255,0.06);margin-top:4px;overflow:hidden;}
+.grade-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .6s ease;}
+.grade-ref{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;}
+.gr-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px;text-align:center;}
+.gr-grade{font-size:15px;font-weight:800;color:var(--acc);}
+.gr-range{font-size:10px;color:#666;margin-top:2px;}
+.gr-point{font-size:12px;color:#999;font-family:'Courier New',monospace;margin-top:2px;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-dl,.btn-reset-res{display:inline-flex;align-items:center;gap:7px;padding:12px 22px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-dl{background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);color:var(--acc);}
+.btn-dl:hover{background:rgba(243,156,18,0.2);}
+.btn-reset-res{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#888;}
+.btn-reset-res:hover{border-color:#555;color:#ccc;}
+.toast{position:fixed;bottom:22px;right:22px;background:#1a0f07;border:1px solid var(--acc);border-radius:10px;padding:12px 18px;font-size:13px;color:#ececec;z-index:9999;transform:translateY(80px);opacity:0;transition:.3s;max-width:280px;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.tok{border-color:#55d98d;color:#55d98d;}
+.toast.terr{border-color:#e74c3c;color:#e74c3c;}
+.hidden{display:none!important;}
+.fade-in{animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:600px){.marks-grid{grid-template-columns:repeat(2,1fr);}.res-top{flex-direction:column;}.hero-strip,.step-card,.result-card{padding:20px 18px;}}
+</style>
+</head>
+<body>
+
+<nav class="ai-nav">
+  <div class="nav-logo-wrap">
+    <img src="assets/p.png" alt="PUC" onerror="this.style.display='none'">
+    <span class="nav-brand">PUC HUB <span class="nav-tag">CGPA Calculator</span></span>
+  </div>
+  <div class="nav-actions">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="index.html#services" class="nav-btn">Services</a>
+    <button onclick="history.back()" class="nav-btn">Back</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero-strip">
+    <div class="hs-label">Premier University Chittagong</div>
+    <div class="hs-title">Semester <span>CGPA Calculator</span></div>
+    <div class="hs-sub">Enter your marks for theory and lab subjects. Your GPA, CGPA and grade will be calculated instantly based on PUC grading system.</div>
+  </div>
+
+  <div class="step-card" id="step1">
+    <div class="step-header"><div class="step-num">1</div><div><div class="step-title">How Many Subjects?</div><div class="step-sub">Enter the number of theory and lab subjects this semester</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:22px;">
+      <div class="count-wrap"><div class="count-label">Theory Subjects</div><button class="count-adj" onclick="adj('tCount',-1)">-</button><input class="count-input" type="number" id="tCount" value="4" min="0" max="12"><button class="count-adj" onclick="adj('tCount',1)">+</button></div>
+      <div class="count-wrap"><div class="count-label">Lab Subjects</div><button class="count-adj" onclick="adj('lCount',-1)">-</button><input class="count-input" type="number" id="lCount" value="2" min="0" max="8"><button class="count-adj" onclick="adj('lCount',1)">+</button></div>
+    </div>
+    <button class="btn-gen" onclick="generateSubjects()">Generate Subject Fields</button>
+    <div style="font-size:11px;color:rgba(243,156,18,0.55);margin-top:8px;">Click here to create input fields for all subjects</div>
+  </div>
+
+  <div class="step-card hidden" id="step2">
+    <div class="step-header"><div class="step-num">2</div><div><div class="step-title">Enter Marks for Each Subject</div><div class="step-sub">Fill in obtained marks — fields are pre-labelled with max marks</div></div></div>
+    <div id="subjectFields"></div>
+    <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(230,126,34,0.08);border:1px solid rgba(230,126,34,0.4);border-left:4px solid var(--acc2);border-radius:12px;padding:16px 18px;margin-top:18px;">
+      <div style="width:38px;height:38px;flex-shrink:0;background:rgba(230,126,34,0.15);border:1px solid rgba(230,126,34,0.3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;">&#9998;</div>
+      <div><div style="font-size:14px;font-weight:700;color:var(--acc2);margin-bottom:4px;">Missing a subject name or credit? Edit it yourself.</div><div style="font-size:12px;color:#a08060;line-height:1.7;">All fields are editable. Click on any subject name or credit value to update it before calculating.</div></div>
+    </div>
+    <button class="btn-calc" onclick="calculate()"><span>Calculate GPA &amp; CGPA</span></button>
+  </div>
+
+  <div class="result-card hidden fade-in" id="resultCard">
+    <div class="res-top">
+      <div class="res-main"><div class="res-label">Semester GPA</div><div class="res-cgpa" id="resSGPA">0.00</div><div class="res-grade-pill" id="resOverallGrade">-</div></div>
+      <div class="res-sgpa-box"><div class="res-sgpa-label">Total Credits</div><div class="res-sgpa-val" id="resTotalCredits">0</div><div style="margin-top:12px;"><div class="res-sgpa-label">Total Quality Points</div><div class="res-sgpa-val" style="font-size:20px;" id="resTotalQP">0.00</div></div></div>
+    </div>
+    <div style="overflow-x:auto;margin-bottom:22px;">
+      <table class="res-table"><thead><tr><th>Subject</th><th style="text-align:center">Type</th><th style="text-align:center">Total</th><th style="text-align:center">Marks</th><th style="text-align:center">%</th><th style="text-align:center">Grade</th><th style="text-align:center">GPA</th><th style="text-align:center">Credit</th><th style="text-align:right">Quality Pts</th></tr></thead><tbody id="resBody"></tbody></table>
+    </div>
+    <div class="btn-row" style="margin-bottom:20px;"><button class="btn-dl" onclick="downloadResult()">Download Result</button><button class="btn-reset-res" onclick="resetAll()">New Calculation</button></div>
+    <div style="font-size:12px;color:#555;text-align:center;line-height:1.7;">Based on <a href="https://puc.ac.bd" target="_blank" style="color:var(--acc);text-decoration:none;">Premier University Chittagong</a> official grading system.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="step-card">
+    <div class="step-header"><div class="step-num" style="font-size:12px;">REF</div><div><div class="step-title">PUC Grading Scale Reference</div><div class="step-sub">Official grading system — always visible for reference</div></div></div>
+    <div class="grade-ref">
+      <div class="gr-item"><div class="gr-grade">A+</div><div class="gr-range">80 – 100</div><div class="gr-point">4.00</div></div>
+      <div class="gr-item"><div class="gr-grade">A</div><div class="gr-range">75 – 79</div><div class="gr-point">3.75</div></div>
+      <div class="gr-item"><div class="gr-grade">A-</div><div class="gr-range">70 – 74</div><div class="gr-point">3.50</div></div>
+      <div class="gr-item"><div class="gr-grade">B+</div><div class="gr-range">65 – 69</div><div class="gr-point">3.25</div></div>
+      <div class="gr-item"><div class="gr-grade">B</div><div class="gr-range">60 – 64</div><div class="gr-point">3.00</div></div>
+      <div class="gr-item"><div class="gr-grade">B-</div><div class="gr-range">55 – 59</div><div class="gr-point">2.75</div></div>
+      <div class="gr-item"><div class="gr-grade">C+</div><div class="gr-range">50 – 54</div><div class="gr-point">2.50</div></div>
+      <div class="gr-item"><div class="gr-grade">C</div><div class="gr-range">45 – 49</div><div class="gr-point">2.25</div></div>
+      <div class="gr-item"><div class="gr-grade">D</div><div class="gr-range">40 – 44</div><div class="gr-point">2.00</div></div>
+      <div class="gr-item"><div class="gr-grade" style="color:#e74c3c;">F</div><div class="gr-range">0 – 39</div><div class="gr-point" style="color:#e74c3c;">0.00</div></div>
+    </div>
+    <div style="margin-top:22px;">
+      <div style="font-size:11px;font-weight:700;color:rgba(243,156,18,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Theory Marks Breakdown (Total: 100)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Attendance</div><div style="font-size:20px;font-weight:800;color:var(--acc);font-family:'Courier New',monospace;">10</div></div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Assignment</div><div style="font-size:20px;font-weight:800;color:var(--acc);font-family:'Courier New',monospace;">10</div></div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">CT 1+2</div><div style="font-size:20px;font-weight:800;color:var(--acc);font-family:'Courier New',monospace;">20</div></div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Mid Term</div><div style="font-size:20px;font-weight:800;color:var(--acc);font-family:'Courier New',monospace;">20</div></div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Final Exam</div><div style="font-size:20px;font-weight:800;color:var(--acc);font-family:'Courier New',monospace;">40</div></div>
+      </div>
+    </div>
+    <div style="margin-top:18px;">
+      <div style="font-size:11px;font-weight:700;color:rgba(52,152,219,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Lab Marks Breakdown (Total: 100)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">
+        <div style="background:rgba(52,152,219,0.04);border:1px solid rgba(52,152,219,0.12);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Attendance</div><div style="font-size:20px;font-weight:800;color:#5dade2;font-family:'Courier New',monospace;">10</div></div>
+        <div style="background:rgba(52,152,219,0.04);border:1px solid rgba(52,152,219,0.12);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Report</div><div style="font-size:20px;font-weight:800;color:#5dade2;font-family:'Courier New',monospace;">10</div></div>
+        <div style="background:rgba(52,152,219,0.04);border:1px solid rgba(52,152,219,0.12);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Viva</div><div style="font-size:20px;font-weight:800;color:#5dade2;font-family:'Courier New',monospace;">10</div></div>
+        <div style="background:rgba(52,152,219,0.04);border:1px solid rgba(52,152,219,0.12);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Quiz</div><div style="font-size:20px;font-weight:800;color:#5dade2;font-family:'Courier New',monospace;">30</div></div>
+        <div style="background:rgba(52,152,219,0.04);border:1px solid rgba(52,152,219,0.12);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:12px;font-weight:700;color:#ccc;">Lab Perf.</div><div style="font-size:20px;font-weight:800;color:#5dade2;font-family:'Courier New',monospace;">40</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="js/auth.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/tracker.js"></script>
+<script src="js/app.js"></script>
+<script>
+var GRADES=[{min:80,grade:'A+',point:4.00},{min:75,grade:'A',point:3.75},{min:70,grade:'A-',point:3.50},{min:65,grade:'B+',point:3.25},{min:60,grade:'B',point:3.00},{min:55,grade:'B-',point:2.75},{min:50,grade:'C+',point:2.50},{min:45,grade:'C',point:2.25},{min:40,grade:'D',point:2.00},{min:0,grade:'F',point:0.00}];
+function getGrade(p){for(var i=0;i<GRADES.length;i++){if(p>=GRADES[i].min)return GRADES[i];}return GRADES[GRADES.length-1];}
+function gradeColor(g){if(g==='A+'||g==='A'||g==='A-')return'#55d98d';if(g==='B+'||g==='B'||g==='B-')return'#f39c12';if(g==='C+'||g==='C')return'#e67e22';if(g==='D')return'#e67e22';return'#e74c3c';}
+function adj(id,d){var el=document.getElementById(id);el.value=Math.max(0,Math.min(parseInt(id==='tCount'?12:8),parseInt(el.value||0)+d));}
+function generateSubjects(){
+  var tc=parseInt(document.getElementById('tCount').value)||0;
+  var lc=parseInt(document.getElementById('lCount').value)||0;
+  if(tc+lc===0){showToast('Please enter at least 1 subject.','err');return;}
+  var html='';
+  for(var i=0;i<tc;i++)html+=theoryBlock(i);
+  for(var j=0;j<lc;j++)html+=labBlock(j);
+  document.getElementById('subjectFields').innerHTML=html;
+  document.getElementById('step2').classList.remove('hidden');
+  document.getElementById('step2').classList.add('fade-in');
+  document.getElementById('resultCard').classList.add('hidden');
+  document.querySelectorAll('.mg-input,.credit-inp').forEach(function(el){el.addEventListener('input',updateLiveScore);});
+  setTimeout(function(){document.getElementById('step2').scrollIntoView({behavior:'smooth',block:'start'});},80);
+}
+function theoryBlock(i){
+  return '<div class="subject-block theory-block"><div class="sb-header"><input style="background:transparent;border:none;border-bottom:1px solid rgba(243,156,18,0.3);color:#ececec;font-size:14px;font-weight:700;font-family:Poppins,sans-serif;outline:none;padding:2px 4px;width:220px;" id="tname_'+i+'" placeholder="e.g. Programming Fundamentals"><span class="sb-badge theory-badge">Theory</span></div><div class="credit-row"><label>Course Credit</label><input class="credit-inp" type="number" step="0.25" min="0.5" max="6" id="tcredit_'+i+'" placeholder="e.g. 3.0"></div><div class="marks-grid">'+
+    mgItem('Attendance','10','tat_'+i,10)+mgItem('Assignment','10','tass_'+i,10)+mgItem('CT 1 + CT 2','20','tct_'+i,20)+mgItem('Mid Term','20','tmid_'+i,20)+mgItem('Final Exam','40','tfin_'+i,40)+
+    '</div><div class="live-score"><span style="color:#666;font-size:12px;">Total:</span><span class="ls-val" id="tlsv_'+i+'">—</span><span style="color:#555;">/100</span><span class="ls-grade" id="tlsg_'+i+'"></span></div></div>';
+}
+function labBlock(j){
+  return '<div class="subject-block lab-block"><div class="sb-header"><input style="background:transparent;border:none;border-bottom:1px solid rgba(52,152,219,0.3);color:#ececec;font-size:14px;font-weight:700;font-family:Poppins,sans-serif;outline:none;padding:2px 4px;width:220px;" id="lname_'+j+'" placeholder="e.g. Programming Lab"><span class="sb-badge lab-badge">Lab</span></div><div class="credit-row"><label>Course Credit</label><input class="credit-inp" type="number" step="0.25" min="0.5" max="6" id="lcredit_'+j+'" placeholder="e.g. 1.5"></div><div class="marks-grid">'+
+    mgItem('Attendance','10','lat_'+j,10,'lab-inp')+mgItem('Report','10','lrep_'+j,10,'lab-inp')+mgItem('Viva','10','lviva_'+j,10,'lab-inp')+mgItem('Quiz','30','lquiz_'+j,30,'lab-inp')+mgItem('Lab Performance','40','lperf_'+j,40,'lab-inp')+
+    '</div><div class="live-score"><span style="color:#666;font-size:12px;">Total:</span><span class="ls-val" style="color:#5dade2;" id="llsv_'+j+'">—</span><span style="color:#555;">/100</span><span class="ls-grade" id="llsg_'+j+'"></span></div></div>';
+}
+function mgItem(label,max,id,maxVal,extraClass){return '<div class="mg-item"><div class="mg-label">'+label+'</div><div class="mg-max">Out of '+max+'</div><input class="mg-input'+(extraClass?' '+extraClass:'')+'" type="number" step="0.5" min="0" max="'+maxVal+'" id="'+id+'" placeholder="0"></div>';}
+function getVal(id){var el=document.getElementById(id);if(!el)return 0;var v=parseFloat(el.value);return isNaN(v)?0:v;}
+function updateLiveScore(){
+  var tc=parseInt(document.getElementById('tCount').value)||0;
+  var lc=parseInt(document.getElementById('lCount').value)||0;
+  for(var i=0;i<tc;i++){var tot=getVal('tat_'+i)+getVal('tass_'+i)+getVal('tct_'+i)+getVal('tmid_'+i)+getVal('tfin_'+i);var g=getGrade(tot);var lv=document.getElementById('tlsv_'+i);var lg=document.getElementById('tlsg_'+i);if(lv)lv.textContent=tot.toFixed(1);if(lg){lg.textContent=g.grade+' ('+g.point.toFixed(2)+')';lg.style.color=gradeColor(g.grade);}}
+  for(var j=0;j<lc;j++){var ltot=getVal('lat_'+j)+getVal('lrep_'+j)+getVal('lviva_'+j)+getVal('lquiz_'+j)+getVal('lperf_'+j);var lg2=getGrade(ltot);var llv=document.getElementById('llsv_'+j);var llg=document.getElementById('llsg_'+j);if(llv)llv.textContent=ltot.toFixed(1);if(llg){llg.textContent=lg2.grade+' ('+lg2.point.toFixed(2)+')';llg.style.color=gradeColor(lg2.grade);}}
+}
+function calculate(){
+  var tc=parseInt(document.getElementById('tCount').value)||0;
+  var lc=parseInt(document.getElementById('lCount').value)||0;
+  var results=[],totalQP=0,totalCredits=0,hasError=false;
+  for(var i=0;i<tc;i++){var name=(document.getElementById('tname_'+i).value.trim())||'Theory Subject '+(i+1);var credit=parseFloat(document.getElementById('tcredit_'+i).value);if(isNaN(credit)||credit<=0){document.getElementById('tcredit_'+i).style.borderColor='#e74c3c';hasError=true;continue;}document.getElementById('tcredit_'+i).style.borderColor='';var marks=getVal('tat_'+i)+getVal('tass_'+i)+getVal('tct_'+i)+getVal('tmid_'+i)+getVal('tfin_'+i);var g=getGrade(marks);var qp=g.point*credit;totalQP+=qp;totalCredits+=credit;results.push({name:name,type:'Theory',credit:credit,marks:marks,total:100,pct:marks,grade:g.grade,point:g.point,qp:qp});}
+  for(var j=0;j<lc;j++){var lname=(document.getElementById('lname_'+j).value.trim())||'Lab Subject '+(j+1);var lcredit=parseFloat(document.getElementById('lcredit_'+j).value);if(isNaN(lcredit)||lcredit<=0){document.getElementById('lcredit_'+j).style.borderColor='#e74c3c';hasError=true;continue;}document.getElementById('lcredit_'+j).style.borderColor='';var lmarks=getVal('lat_'+j)+getVal('lrep_'+j)+getVal('lviva_'+j)+getVal('lquiz_'+j)+getVal('lperf_'+j);var lg=getGrade(lmarks);var lqp=lg.point*lcredit;totalQP+=lqp;totalCredits+=lcredit;results.push({name:lname,type:'Lab',credit:lcredit,marks:lmarks,total:100,pct:lmarks,grade:lg.grade,point:lg.point,qp:lqp});}
+  if(hasError){showToast('Please enter all course credits.','err');return;}
+  if(results.length===0){showToast('No subjects to calculate.','err');return;}
+  var sgpa=totalCredits>0?(totalQP/totalCredits):0;
+  var overallGrade=getGrade((sgpa/4)*100);
+  document.getElementById('resSGPA').textContent=sgpa.toFixed(2);
+  document.getElementById('resOverallGrade').textContent=overallGrade.grade;
+  document.getElementById('resOverallGrade').style.borderColor=gradeColor(overallGrade.grade);
+  document.getElementById('resOverallGrade').style.color=gradeColor(overallGrade.grade);
+  document.getElementById('resTotalCredits').textContent=totalCredits.toFixed(2);
+  document.getElementById('resTotalQP').textContent=totalQP.toFixed(2);
+  var rb=document.getElementById('resBody');rb.innerHTML='';
+  results.forEach(function(r){
+    var pct=r.pct.toFixed(1);var barW=Math.min(100,r.pct);
+    rb.innerHTML+='<tr><td>'+esc(r.name)+'</td><td style="text-align:center"><span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;'+(r.type==='Theory'?'background:rgba(243,156,18,0.1);color:var(--acc);':'background:rgba(52,152,219,0.1);color:#5dade2;')+'">'+r.type+'</span></td><td style="text-align:center;font-family:\'Courier New\',monospace">'+r.total+'</td><td style="text-align:center"><div style="font-family:\'Courier New\',monospace;font-weight:700;color:#ececec">'+pct+'</div><div class="grade-bar"><div class="grade-bar-fill" style="width:'+barW+'%"></div></div></td><td style="text-align:center;font-family:\'Courier New\',monospace">'+pct+'%</td><td style="text-align:center" class="grade-cell"><span style="color:'+gradeColor(r.grade)+'">'+r.grade+'</span></td><td style="text-align:center;font-family:\'Courier New\',monospace;color:var(--acc)">'+r.point.toFixed(2)+'</td><td style="text-align:center;font-family:\'Courier New\',monospace">'+r.credit+'</td><td style="text-align:right;font-family:\'Courier New\',monospace;color:var(--acc);font-weight:700">'+r.qp.toFixed(2)+'</td></tr>';
+  });
+  rb.innerHTML+='<tr class="tot-row"><td colspan="6">Semester GPA = Total Quality Points / Total Credits</td><td style="text-align:center;color:var(--acc);font-family:\'Courier New\',monospace;font-size:16px;">'+sgpa.toFixed(2)+'</td><td style="text-align:center;font-family:\'Courier New\',monospace">'+totalCredits.toFixed(2)+'</td><td style="text-align:right;font-family:\'Courier New\',monospace;color:var(--acc)">'+totalQP.toFixed(2)+'</td></tr>';
+  document.getElementById('resultCard').classList.remove('hidden');
+  document.getElementById('resultCard').classList.add('fade-in');
+  setTimeout(function(){document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});},100);
+  window._cgpaRes={sgpa:sgpa,results:results,totalCredits:totalCredits,totalQP:totalQP,overallGrade:overallGrade.grade};
+  if(typeof trackUserActivity==='function')trackUserActivity('CGPA Calculator');
+}
+function downloadResult(){var d=window._cgpaRes;if(!d)return;var now=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>GPA Result - PUC</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a1a;}h1{color:#b8731a;font-size:22px;margin-bottom:4px;}.sub{color:#888;font-size:12px;margin-bottom:24px;}table{width:100%;border-collapse:collapse;margin:18px 0;}th{background:#b8731a;color:#fff;padding:10px 14px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;}td{padding:9px 14px;border-bottom:1px solid #eee;font-size:13px;}.tot td{font-weight:700;background:#fff8ee;}.sgpa{font-size:40px;font-weight:700;color:#b8731a;margin:10px 0 4px;}.badge{display:inline-block;background:#fff3dc;border:1px solid #e0a040;border-radius:20px;padding:4px 14px;font-size:10px;color:#b8731a;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}.notice{font-size:11px;color:#aaa;margin-top:24px;line-height:1.7;}</style></head><body><div class="badge">PUC HUB — GPA Result</div><h1>Premier University Chittagong</h1><div class="sub">Semester GPA Result — Generated: '+now+'</div><div class="sgpa">'+d.sgpa.toFixed(2)+'</div><div style="color:#888;font-size:13px;margin-bottom:18px;">Grade: <strong>'+d.overallGrade+'</strong> | Total Credits: '+d.totalCredits.toFixed(2)+' | Quality Points: '+d.totalQP.toFixed(2)+'</div><table><thead><tr><th>Subject</th><th>Type</th><th>Marks</th><th>%</th><th>Grade</th><th>GPA Point</th><th>Credit</th><th>Quality Points</th></tr></thead><tbody>';d.results.forEach(function(r){html+='<tr><td>'+r.name+'</td><td>'+r.type+'</td><td>'+r.marks.toFixed(1)+'/'+r.total+'</td><td>'+r.pct.toFixed(1)+'%</td><td><strong>'+r.grade+'</strong></td><td>'+r.point.toFixed(2)+'</td><td>'+r.credit+'</td><td>'+r.qp.toFixed(2)+'</td></tr>';});html+='<tr class="tot"><td colspan="6">Semester GPA</td><td>'+d.totalCredits.toFixed(2)+'</td><td>'+d.totalQP.toFixed(2)+' / '+d.totalCredits.toFixed(2)+' = <strong>'+d.sgpa.toFixed(2)+'</strong></td></tr></tbody></table><div class="notice">Based on Premier University Chittagong official grading system.</div></body></html>';var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='PUC_GPA_Result.html';a.click();showToast('Result downloaded.','ok');}
+function resetAll(){document.getElementById('step2').classList.add('hidden');document.getElementById('resultCard').classList.add('hidden');document.getElementById('subjectFields').innerHTML='';window.scrollTo({top:0,behavior:'smooth'});}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='ok'?' tok':type==='err'?' terr':'');clearTimeout(t._t);t._t=setTimeout(function(){t.className='toast';},3500);}
+document.addEventListener('DOMContentLoaded',function(){if(localStorage.getItem('isLoggedIn')!=='true'){window.location.href='login.html';}});
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "visitors": [
+    {
+      "username": "Rahul Singha",
+      "studentId": "022242000510101",
+      "loginTime": "2024-03-13T10:30:00.000Z",
+      "activities": ["Question Bank", "CGPA Calculator"]
+    },
+    {
+      "username": "Tabib",
+      "studentId": "022242000510102",
+      "loginTime": "2024-03-13T09:15:00.000Z",
+      "activities": ["Class Routine", "Blood Donation"]
+    },
+    {
+      "username": "Rudra",
+      "studentId": "022242000510103",
+      "loginTime": "2024-03-13T08:45:00.000Z",
+      "activities": ["Exam Routine"]
+    }
+  ]
+}

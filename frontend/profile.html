@@ -1,0 +1,1030 @@
+<!-- Made by: Team PUC HUB | Internet Programming Lab Project -->
+<!-- Advanced Profile Page - Complete Student Profile Management -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile — PUC HUB</title>
+    <link rel="icon" type="image/png" href="assets/p.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== VARIABLES ===== */
+        :root {
+            --main-color: #f39c12;
+            --accent-color: #e67e22;
+            --dark-bg: #0c0908;
+            --card-bg: rgba(43, 24, 15, 0.4);
+            --border: rgba(243, 156, 18, 0.18);
+            --text: #ececec;
+            --muted: #888;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #2b180f 0%, #0c0908 100%);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 5%;
+            background: rgba(43, 24, 15, 0.4);
+            backdrop-filter: blur(15px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            border-bottom: 1px solid rgba(243, 156, 18, 0.1);
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--main-color);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--main-color);
+            letter-spacing: 1px;
+        }
+
+        /* ===== NAV LINKS ===== */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--main-color);
+            background: rgba(243, 156, 18, 0.1);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, var(--main-color), var(--accent-color));
+            color: #000;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
+        }
+
+        /* ===== PAGE CONTAINER ===== */
+        .profile-container {
+            padding-top: 100px;
+            padding-bottom: 50px;
+            padding-left: 5%;
+            padding-right: 5%;
+            min-height: 100vh;
+        }
+
+        .profile-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--main-color), transparent);
+        }
+
+        .profile-header h1 {
+            font-size: 42px;
+            color: var(--main-color);
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .profile-header p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        /* ===== CARD ===== */
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin-top: 40px;
+        }
+
+        /* ===== USER INFO BAR ===== */
+        .user-info-bar {
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(230, 126, 34, 0.05) 100%);
+            border: 1px solid rgba(243, 156, 18, 0.25);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-info-bar p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .user-info-bar span {
+            color: var(--main-color);
+            font-weight: 700;
+        }
+
+        /* ===== PROFILE PHOTO SECTION ===== */
+        .photo-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .photo-section h3 {
+            color: var(--main-color);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .profile-preview {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid var(--main-color);
+            margin: 0 auto 18px;
+            object-fit: cover;
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-preview:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(243, 156, 18, 0.4);
+        }
+
+        .upload-btn {
+            background: rgba(243, 156, 18, 0.15);
+            border: 1px solid rgba(243, 156, 18, 0.4);
+            color: var(--main-color);
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-btn:hover {
+            background: rgba(243, 156, 18, 0.25);
+            border-color: var(--main-color);
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .photo-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 12px;
+        }
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section-title {
+            color: var(--main-color);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(243, 156, 18, 0.2);
+        }
+
+        /* ===== FORM GRID ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 25px;
+        }
+
+        .form-grid.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: var(--main-color);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .label-required {
+            color: #e74c3c;
+        }
+
+        .label-optional {
+            color: #888;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--main-color);
+            background: rgba(243, 156, 18, 0.08);
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #555;
+        }
+
+        .form-group select option {
+            background: #2b180f;
+            color: white;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .form-error {
+            display: none;
+            font-size: 12px;
+            color: var(--error);
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--error);
+            background: rgba(231, 76, 60, 0.08);
+        }
+
+        /* ===== INFO SECTION ===== */
+        .info-box {
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--main-color);
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h4 {
+            color: var(--main-color);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .info-box p {
+            font-size: 12px;
+            color: #aaa;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .info-box li {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        /* ===== BUTTON SECTION ===== */
+        .button-section {
+            display: flex;
+            gap: 16px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .save-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--main-color), var(--accent-color));
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .save-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .skip-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 24px;
+            background: transparent;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            color: var(--main-color);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .skip-btn:hover {
+            background: rgba(243, 156, 18, 0.08);
+            border-color: var(--main-color);
+        }
+
+        /* ===== ALERT ===== */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border: 1px solid;
+        }
+
+        .alert.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: #27ae60;
+            border-color: rgba(39, 174, 96, 0.3);
+        }
+
+        .alert.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .profile-card {
+                padding: 30px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-header h1 {
+                font-size: 28px;
+            }
+
+            .button-section {
+                flex-direction: column;
+            }
+
+            .save-btn,
+            .skip-btn {
+                width: 100%;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 16px;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .profile-header h1 {
+                font-size: 24px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .profile-preview {
+                width: 110px;
+                height: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="logo-container">
+        <img src="assets/p.png" alt="PUC" class="nav-logo-img" onerror="this.style.display='none'">
+        <div class="logo">PUC HUB</div>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#team">Team</a></li>
+        <li><button class="logout-btn" onclick="logout()">Logout</button></li>
+    </ul>
+</nav>
+
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="profile-container">
+    <div class="profile-wrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div class="profile-header">
+            <h1 id="pageTitle">Complete Your Profile</h1>
+            <p id="pageSubtitle">
+                Let us know more about you! This information helps us personalize your experience and connect you with relevant resources and opportunities across the platform.
+            </p>
+        </div>
+
+        <!-- ===== PROFILE CARD ===== -->
+        <div class="profile-card">
+
+            <!-- ===== ALERT ===== -->
+            <div class="alert" id="alertBox"></div>
+
+            <!-- ===== USER INFO ===== -->
+            <div class="user-info-bar" id="userInfoBar" style="display:none;">
+                <div>
+                    <p>Logged in as: <span id="displayUsername"></span></p>
+                </div>
+                <div>
+                    <p>Student ID: <span id="displayStudentId"></span></p>
+                </div>
+            </div>
+
+            <!-- ===== PHOTO SECTION ===== -->
+            <div class="photo-section">
+                <h3>Profile Photo</h3>
+                <img id="profilePreview" src="assets/default-avatar.png" alt="Profile" class="profile-preview" onerror="this.src='assets/default-avatar.png'">
+                <br>
+                <label for="imageUpload" class="upload-btn">Change Photo</label>
+                <input type="file" id="imageUpload" accept="image/*">
+                <p class="photo-hint">Optional - JPG, PNG up to 5MB. Recommended: 300x300px</p>
+            </div>
+
+            <!-- ===== FORM ===== -->
+            <form id="profileForm">
+
+                <!-- ===== BASIC INFO ===== -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Academic Information</h4>
+
+                    <div class="info-box">
+                        <h4>Why we need this?</h4>
+                        <p>Your academic details help us provide relevant course materials, question banks, and resources specific to your department and semester.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <!-- Department -->
+                        <div class="form-group">
+                            <label>Department <span class="label-required">*</span></label>
+                            <select id="department" required>
+                                <option value="">Select Your Department</option>
+                                <option value="CSE">Computer Science & Engineering (CSE)</option>
+                                <option value="EEE">Electrical & Electronic Engineering (EEE)</option>
+                                <option value="BBA">Business Administration (BBA)</option>
+                                <option value="English">English Department</option>
+                                <option value="Law">Law Department</option>
+                            </select>
+                            <div class="form-hint">Used for Question Bank & AI resources</div>
+                            <div class="form-error" id="deptError"></div>
+                        </div>
+
+                        <!-- Semester -->
+                        <div class="form-group">
+                            <label>Semester <span class="label-required">*</span></label>
+                            <select id="semester" required>
+                                <option value="">Select Your Semester</option>
+                                <option value="1st">1st Semester</option>
+                                <option value="2nd">2nd Semester</option>
+                                <option value="3rd">3rd Semester</option>
+                                <option value="4th">4th Semester</option>
+                                <option value="5th">5th Semester</option>
+                                <option value="6th">6th Semester</option>
+                                <option value="7th">7th Semester</option>
+                                <option value="8th">8th Semester</option>
+                            </select>
+                            <div class="form-error" id="semError"></div>
+                        </div>
+
+                        <!-- Section -->
+                        <div class="form-group">
+                            <label>Section <span class="label-required">*</span></label>
+                            <select id="section" required>
+                                <option value="">Select Your Section</option>
+                                <option value="A">Section A</option>
+                                <option value="B">Section B</option>
+                                <option value="C">Section C</option>
+                                <option value="D">Section D</option>
+                                <option value="E">Section E</option>
+                            </select>
+                            <div class="form-error" id="secError"></div>
+                        </div>
+
+                        <!-- Advisor -->
+                        <div class="form-group">
+                            <label>Class Advisor <span class="label-required">*</span></label>
+                            <select id="advisor" required>
+                                <option value="">Select Your Class Advisor</option>
+                                <option value="Akram Sir">Akram Sir</option>
+                                <option value="Anik Sir">Anik Sir</option>
+                                <option value="Arif Sir">Arif Sir</option>
+                                <option value="Ashique Sir">Ashique Sir</option>
+                                <option value="Asif Sir">Asif Sir</option>
+                                <option value="Dhruba Sir">Dhruba Sir</option>
+                                <option value="Faisal Sir">Faisal Sir</option>
+                                <option value="Kaushik Sir">Kaushik Sir</option>
+                                <option value="Kingshuk Sir">Kingshuk Sir</option>
+                                <option value="Kollol Sir">Kollol Sir</option>
+                                <option value="Mehedi Sir">Mehedi Sir</option>
+                                <option value="Minhaz Sir">Minhaz Sir</option>
+                                <option value="Neamul Sir">Neamul Sir</option>
+                                <option value="Puja Maam">Puja Maam</option>
+                                <option value="Roukon Sir">Roukon Sir</option>
+                                <option value="Sabrina Maam">Sabrina Maam</option>
+                                <option value="Nusrat Jahan Shirin Maam">Nusrat Jahan Shirin Maam</option>
+                                <option value="Shirin Maam">Shirin Maam</option>
+                                <option value="Tanni Maam">Tanni Maam</option>
+                                <option value="Taufiq Sir">Taufiq Sir</option>
+                                <option value="Trisha Maam">Trisha Maam</option>
+                                <option value="Tania Maam">Tania Maam</option>
+                                <option value="Avishek Das">Avishek Das</option>
+                                <option value="Kazi Md. Abrar Yeaser">Kazi Md. Abrar Yeaser</option>
+                                <option value="Mohammed Rezaur Rahman Chowdhury">Mohammed Rezaur Rahman Chowdhury</option>
+                                <option value="Tanzin Ahammad">Tanzin Ahammad</option>
+                                <option value="Sreyoshi Paul Maam">Sreyoshi Paul Maam</option>
+                                <option value="Tamim Sir">Tamim Sir</option>
+                                <option value="Asif Mohammad Saad">Asif Mohammad Saad</option>
+                                <option value="Noortaz Rezoana">Noortaz Rezoana</option>
+                                <option value="Tashin Hossain">Tashin Hossain</option>
+                                <option value="Nafisa Anjum">Nafisa Anjum</option>
+                                <option value="Jannat Tohfa Chowdhury">Jannat Tohfa Chowdhury</option>
+                                <option value="Fairuz Bilquis Khan">Fairuz Bilquis Khan</option>
+                                <option value="Samina Alam Maam">Samina Alam Maam</option>
+                                <option value="Jahedul Sir">Jahedul Sir</option>
+                                <option value="Sompod Ghosh Sir">Sompod Ghosh Sir</option>
+                                <option value="Rabbi Sir">Rabbi Sir</option>
+                                <option value="Hasan Sir">Hasan Sir</option>
+                                <option value="Umme Israt Maam">Umme Israt Maam</option>
+                            </select>
+                            <div class="form-error" id="advError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== HEALTH & EMERGENCY ===== -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Health & Emergency Information</h4>
+
+                    <div class="info-box">
+                        <h4>Important for Community Safety</h4>
+                        <p>Your blood group is used for Blood Donation Drive and emergency medical situations. This information helps save lives during medical emergencies on campus.</p>
+                    </div>
+
+                    <div class="form-grid full">
+                        <!-- Blood Group -->
+                        <div class="form-group">
+                            <label>Blood Group <span class="label-required">*</span></label>
+                            <select id="bloodGroup" required>
+                                <option value="">Select Your Blood Group</option>
+                                <option value="A+">A+ (Positive)</option>
+                                <option value="A-">A- (Negative)</option>
+                                <option value="B+">B+ (Positive)</option>
+                                <option value="B-">B- (Negative)</option>
+                                <option value="O+">O+ (Universal Donor)</option>
+                                <option value="O-">O- (Universal Donor)</option>
+                                <option value="AB+">AB+ (Universal Recipient)</option>
+                                <option value="AB-">AB- (Universal Recipient)</option>
+                            </select>
+                            <div class="form-hint">Used for Blood Donation Network - Help save lives!</div>
+                            <div class="form-error" id="bloodError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== CONTACT INFO ===== -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Contact Information</h4>
+
+                    <div class="info-box">
+                        <h4>Optional But Helpful</h4>
+                        <p>Your phone and email are used for notifications, account recovery, and important announcements. Keep them updated for better communication.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <label>Phone Number <span class="label-optional">(Optional)</span></label>
+                            <input type="tel" id="phone" placeholder="e.g., 01712345678">
+                            <div class="form-hint">For notifications and messages</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label>Email Address <span class="label-optional">(Optional)</span></label>
+                            <input type="email" id="email" placeholder="e.g., yourname@email.com">
+                            <div class="form-hint">For account recovery and announcements</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== BUTTONS ===== -->
+                <div class="button-section">
+                    <button type="submit" class="save-btn" id="saveBtn">
+                        <span id="btnText">Save Profile & Continue</span>
+                    </button>
+                    <button type="button" class="skip-btn" onclick="skipProfile()">
+                        Skip for Now
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+    // ===== PAGE INITIALIZATION =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const userData = localStorage.getItem('userData');
+
+        if (isLoggedIn !== 'true' || !userData) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        let user;
+        try {
+            user = JSON.parse(userData);
+        } catch (e) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Display user info
+        const infoBar = document.getElementById('userInfoBar');
+        if (infoBar) infoBar.style.display = 'flex';
+        if (document.getElementById('displayUsername')) {
+            document.getElementById('displayUsername').textContent = user.username || 'Student';
+        }
+        if (document.getElementById('displayStudentId')) {
+            document.getElementById('displayStudentId').textContent = user.studentId || 'N/A';
+        }
+
+        // Update title if profile already completed
+        if (user.profileCompleted) {
+            document.getElementById('pageTitle').textContent = 'Edit Your Profile';
+            document.getElementById('pageSubtitle').textContent = 'Update and manage your profile information below.';
+        }
+
+        // Load existing data
+        loadUserProfile(user);
+        setupImageUpload();
+        setupProfileForm();
+    });
+
+    // ===== IMAGE UPLOAD =====
+    function setupImageUpload() {
+        const imageUpload = document.getElementById('imageUpload');
+        const profilePreview = document.getElementById('profilePreview');
+
+        if (imageUpload && profilePreview) {
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.size > 5 * 1024 * 1024) {
+                    showAlert('File size must be less than 5MB', 'error');
+                    return;
+                }
+
+                if (!file.type.match('image.*')) {
+                    showAlert('Please select a valid image file', 'error');
+                    return;
+                }
+
+                compressImage(file, function(compressedSrc) {
+                    profilePreview.src = compressedSrc;
+                });
+            });
+        }
+    }
+
+    // ===== IMAGE COMPRESSION =====
+    function compressImage(file, callback) {
+        const MAX_WIDTH = 300;
+        const MAX_HEIGHT = 300;
+        const QUALITY = 0.7;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+                    if (width / height > 1) {
+                        height = Math.round(height * MAX_WIDTH / width);
+                        width = MAX_WIDTH;
+                    } else {
+                        width = Math.round(width * MAX_HEIGHT / height);
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const compressedBase64 = canvas.toDataURL('image/jpeg', QUALITY);
+                callback(compressedBase64);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ===== LOAD USER PROFILE =====
+    function loadUserProfile(user) {
+        document.getElementById('department').value = user.department || '';
+        document.getElementById('semester').value = user.semester || '';
+        document.getElementById('section').value = user.section || '';
+        document.getElementById('bloodGroup').value = user.bloodGroup || '';
+        document.getElementById('advisor').value = user.advisor || '';
+        document.getElementById('phone').value = user.phone || '';
+        document.getElementById('email').value = user.email || '';
+
+        const preview = document.getElementById('profilePreview');
+        if (preview && user.profileImage && user.profileImage.startsWith('data:image')) {
+            preview.src = user.profileImage;
+        }
+    }
+
+    // ===== SETUP FORM =====
+    function setupProfileForm() {
+        const form = document.getElementById('profileForm');
+        if (!form) return;
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitProfile();
+        });
+
+        // Real-time validation
+        ['department', 'semester', 'section', 'bloodGroup', 'advisor'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                if (this.value) {
+                    clearFieldError(id);
+                }
+            });
+        });
+    }
+
+    // ===== VALIDATION =====
+    function clearFieldError(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field && field.parentElement) {
+            field.parentElement.classList.remove('error');
+            const errorBox = field.parentElement.querySelector('.form-error');
+            if (errorBox) errorBox.style.display = 'none';
+        }
+    }
+
+    function setFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        if (field && field.parentElement) {
+            field.parentElement.classList.add('error');
+            const errorBox = field.parentElement.querySelector('.form-error');
+            if (errorBox) {
+                errorBox.textContent = message;
+                errorBox.style.display = 'block';
+            }
+        }
+    }
+
+    // ===== SUBMIT PROFILE =====
+    function submitProfile() {
+        // Validate required fields
+        const requiredFields = ['department', 'semester', 'section', 'bloodGroup', 'advisor'];
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            const value = document.getElementById(field).value.trim();
+            if (!value) {
+                setFieldError(field, 'This field is required');
+                isValid = false;
+            } else {
+                clearFieldError(field);
+            }
+        });
+
+        if (!isValid) {
+            showAlert('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Get user data
+        let userData;
+        try {
+            userData = JSON.parse(localStorage.getItem('userData'));
+        } catch (e) {
+            showAlert('Session error. Please login again.', 'error');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Update profile
+        userData.department = document.getElementById('department').value;
+        userData.semester = document.getElementById('semester').value;
+        userData.section = document.getElementById('section').value;
+        userData.bloodGroup = document.getElementById('bloodGroup').value;
+        userData.advisor = document.getElementById('advisor').value;
+        userData.phone = document.getElementById('phone').value.trim() || '';
+        userData.email = document.getElementById('email').value.trim() || '';
+        userData.profileCompleted = true;
+
+        // Handle profile image
+        const profilePreview = document.getElementById('profilePreview');
+        if (profilePreview && profilePreview.src && profilePreview.src.startsWith('data:image')) {
+            userData.profileImage = profilePreview.src;
+        }
+
+        // Save to localStorage
+        localStorage.setItem('userData', JSON.stringify(userData));
+
+        // Show success and redirect
+        showAlert('✓ Profile saved successfully! Redirecting...', 'success');
+        setTimeout(function() {
+            window.location.href = 'index.html';
+        }, 1500);
+    }
+
+    // ===== SKIP PROFILE =====
+    function skipProfile() {
+        if (confirm('You can complete your profile later from your account settings. Continue?')) {
+            window.location.href = 'index.html';
+        }
+        return false;
+    }
+
+    // ===== LOGOUT =====
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userData');
+            window.location.href = 'index.html';
+        }
+    }
+
+    // ===== ALERTS =====
+    function showAlert(msg, type) {
+        const box = document.getElementById('alertBox');
+        box.textContent = msg;
+        box.className = 'alert ' + type;
+        box.style.display = 'block';
+
+        if (type === 'success') {
+            setTimeout(() => {
+                box.style.display = 'none';
+            }, 3000);
+        }
+    }
+</script>
+
+</body>
+</html>

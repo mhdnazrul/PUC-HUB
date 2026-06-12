@@ -1,0 +1,592 @@
+<!-- Made by: Team PUC HUB | Internet Programming Lab Project -->
+<!--Rahul-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUC HUB - Premier University</title>
+    <link rel="icon" type="image/png" href="assets/p.png">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .badge-premium  { display:inline-block; background:linear-gradient(135deg,#3498db,#2980b9); color:#fff; font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .badge-standard { display:inline-block; background:rgba(26,188,156,0.12); color:#1abc9c; border:1px solid rgba(26,188,156,0.4); font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .badge-general  { display:inline-block; background:rgba(149,165,166,0.1); color:#95a5a6; border:1px solid rgba(149,165,166,0.35); font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .badge-normal   { display:inline-block; background:rgba(39,174,96,0.12); color:#27ae60; border:1px solid rgba(39,174,96,0.4); font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .badge-ai       { display:inline-block; background:rgba(155,89,182,0.12); color:#9b59b6; border:1px solid rgba(155,89,182,0.4); font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .badge-app      { display:inline-block; background:rgba(230,126,34,0.12); color:#e67e22; border:1px solid rgba(230,126,34,0.35); font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .badge-community{ display:inline-block; background:rgba(37,211,102,0.10); color:#25d366; border:1px solid rgba(37,211,102,0.35); font-size:11px; font-weight:700; letter-spacing:2px; padding:6px 20px; border-radius:30px; text-transform:uppercase; }
+        .tier-divider   { height:1px; background:linear-gradient(90deg,transparent,rgba(243,156,18,0.15),transparent); margin:10px 0 50px; }
+
+        /* ══ NAVBAR — study-partner.html স্টাইল অনুসরণ করে ══ */
+        .ai-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 28px;
+            background: rgba(43,24,15,0.95);
+            border-bottom: 1px solid rgba(243,156,18,0.25);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            height: 66px;
+            box-sizing: border-box;
+        }
+        .nav-logo { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+        .nav-logo img { width:38px; height:38px; border-radius:50%; border:2px solid #f39c12; object-fit:cover; }
+        .nav-logo-text { font-size:19px; font-weight:800; color:#f39c12; letter-spacing:1px; }
+        .nav-tag { font-size:10px; color:#e67e22; letter-spacing:1px; margin-left:2px; }
+        .nav-actions { display:flex; align-items:center; gap:8px; flex-wrap:nowrap; }
+
+        /* সাধারণ nav লিংক */
+        .nav-actions a.nav-link-item,
+        .nav-actions button.nav-link-item {
+            padding: 7px 14px;
+            background: transparent;
+            border: 1px solid rgba(243,156,18,0.3);
+            border-radius: 8px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: .2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .nav-actions a.nav-link-item:hover,
+        .nav-actions button.nav-link-item:hover,
+        .nav-actions a.nav-link-item.active {
+            border-color: #f39c12;
+            color: #f39c12;
+            background: rgba(243,156,18,0.08);
+        }
+
+        /* Services dropdown */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: #1e1008;
+            border: 1px solid rgba(243,156,18,0.2);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 210px;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .nav-dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: transparent;
+        }
+        .nav-dropdown-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+        .nav-dropdown-menu::-webkit-scrollbar-track {
+            background: rgba(43,24,15,0.5);
+            border-radius: 10px;
+        }
+        .nav-dropdown-menu::-webkit-scrollbar-thumb {
+            background: rgba(243,156,18,0.3);
+            border-radius: 10px;
+        }
+        .nav-dropdown-menu::-webkit-scrollbar-thumb:hover {
+            background: rgba(243,156,18,0.6);
+        }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .nav-dropdown-menu a {
+            display: flex; align-items: center; gap: 9px;
+            padding: 9px 13px; border-radius: 8px;
+            color: #aaa; text-decoration: none;
+            font-size: 13px; transition: .18s; white-space: nowrap;
+        }
+        .nav-dropdown-menu a:hover { background: rgba(243,156,18,0.08); color: #f39c12; }
+        .nav-dropdown-menu .drop-divider { height:1px; background:rgba(243,156,18,0.08); margin:5px 0; }
+        .nav-dropdown-menu .drop-label { font-size:10px; color:#555; letter-spacing:1.5px; text-transform:uppercase; padding:3px 13px; font-weight:700; }
+
+        /* My Activity বাটন */
+        .my-activity-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(243,156,18,0.12);
+            border: 1px solid rgba(243,156,18,0.38) !important;
+            color: #f39c12 !important;
+            padding: 7px 15px;
+            border-radius: 22px;
+            font-size: 12.5px; font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .my-activity-btn:hover { background: rgba(243,156,18,0.22) !important; transform: translateY(-1px); }
+
+        /* Login বাটন */
+        .login-btn {
+            background: linear-gradient(135deg,#f39c12,#e67e22);
+            color: #fff; border: none;
+            padding: 8px 20px; border-radius: 22px;
+            font-size: 12.5px; font-weight: 700;
+            cursor: pointer; letter-spacing: 0.4px;
+            text-transform: uppercase; transition: all 0.2s;
+            box-shadow: 0 3px 12px rgba(243,156,18,0.25);
+        }
+        .login-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(243,156,18,0.4); }
+
+        /* Profile dropdown */
+        .profile-dropdown { position: relative; }
+        .profile-btn {
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(243,156,18,0.1);
+            border: 1px solid rgba(243,156,18,0.35);
+            color: #f39c12; padding: 6px 14px;
+            border-radius: 22px; font-size: 12.5px;
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+            text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .profile-btn:hover { background: rgba(243,156,18,0.2); }
+        .profile-thumb { width:26px; height:26px; border-radius:50%; object-fit:cover; border:2px solid rgba(243,156,18,0.5); }
+        .dropdown-content {
+            display: none; position: absolute;
+            top: calc(100% + 10px); right: 0;
+            background: #1e1008;
+            border: 1px solid rgba(243,156,18,0.18);
+            border-radius: 12px; padding: 8px;
+            min-width: 175px; z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: transparent;
+        }
+        .profile-dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content a {
+            display: flex; align-items: center; gap: 9px;
+            padding: 9px 13px; border-radius: 8px;
+            color: #aaa; text-decoration: none;
+            font-size: 13px; transition: .18s; white-space: nowrap;
+        }
+        .dropdown-content a:hover { background: rgba(243,156,18,0.08); color: #f39c12; }
+
+        body { padding-top: 66px; }
+
+        /* Modals */
+        #upcomingModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.78); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(7px); }
+        .upcoming-box { background:#120d08; border:1px solid rgba(230,126,34,0.35); border-radius:18px; padding:36px 32px; width:90%; max-width:380px; text-align:center; position:relative; animation:upcomingIn .25s ease; }
+        @keyframes upcomingIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        .upcoming-box h3 { color:#e67e22; font-size:19px; margin-bottom:8px; font-weight:700; }
+        .upcoming-box p  { color:#777; font-size:13px; line-height:1.7; }
+        .upcoming-label  { display:inline-block; background:rgba(230,126,34,0.15); border:1px solid rgba(230,126,34,0.35); color:#e67e22; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 14px; border-radius:20px; margin-bottom:18px; }
+        #vipModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(6px); }
+        @keyframes vipIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+
+        /* Countdown */
+        .compact-countdown { max-width:580px; margin:0 auto; background:rgba(243,156,18,0.06); border:1px solid rgba(243,156,18,0.28); border-radius:18px; padding:20px 24px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; justify-content:center; position:relative; overflow:hidden; }
+        .compact-countdown::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 50%,rgba(243,156,18,0.05) 0%,transparent 70%); pointer-events:none; }
+        .cd-icon { width:52px; height:52px; border-radius:14px; background:rgba(243,156,18,0.12); border:1px solid rgba(243,156,18,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:24px; }
+        .cd-info { flex:1; min-width:160px; text-align:left; }
+        .cd-label { font-size:11px; color:rgba(243,156,18,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+        .cd-title { font-size:15px; font-weight:700; color:#f39c12; margin-bottom:4px; }
+        .cd-note  { font-size:11px; color:#888; }
+        .cd-timer { display:flex; gap:8px; align-items:center; flex-shrink:0; }
+        .cd-box   { background:rgba(243,156,18,0.1); border:1px solid rgba(243,156,18,0.3); border-radius:10px; padding:10px 10px 8px; min-width:52px; text-align:center; }
+        .cd-box .num { font-size:22px; font-weight:800; color:#f39c12; line-height:1; }
+        .cd-box .lbl { font-size:9px; color:rgba(243,156,18,0.6); letter-spacing:1px; text-transform:uppercase; margin-top:4px; }
+        .cd-sep { font-size:20px; font-weight:700; color:rgba(243,156,18,0.4); margin-bottom:8px; }
+    </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR — study-partner.html এর মতো structure ══ -->
+<nav class="ai-nav">
+    <div class="nav-logo">
+        <img src="assets/p.png" alt="PUC Logo" onerror="this.src='assets/p.png'">
+        <span class="nav-logo-text">PUC HUB</span>
+    </div>
+
+    <!-- JS দিয়ে ইনজেক্ট হবে -->
+    <div class="nav-actions" id="navActions">
+        <a href="#home" class="nav-link-item active">Home</a>
+        <div class="nav-dropdown">
+            <a href="#services" class="nav-link-item">Services ▾</a>
+            <div class="nav-dropdown-menu">
+                <div class="drop-label">⭐ Premium</div>
+                <a href="#" onclick="scrollToSection('premium');return false;">📚 Question Bank</a>
+                <a href="#" onclick="scrollToSection('premium');return false;">🤖 PUC AI Assistant</a>
+                <a href="#" onclick="scrollToSection('premium');return false;">📝 Cover Page Generator</a>
+                <a href="#" onclick="scrollToSection('premium');return false;">🩸 Blood Donation</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">🔵 Standard</div>
+                <a href="#" onclick="scrollToSection('standard');return false;">🏠 Mess &amp; Housing</a>
+                <a href="#" onclick="scrollToSection('standard');return false;">💰 Fee Calculator</a>
+                <a href="#" onclick="scrollToSection('standard');return false;">📞 Faculty Contacts</a>
+                <a href="#" onclick="scrollToSection('standard');return false;">🎓 CGPA Calculator</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">⚪ General</div>
+                <a href="#" onclick="scrollToSection('general');return false;">📅 Class Routine</a>
+                <a href="#" onclick="scrollToSection('general');return false;">📋 Exam Routine</a>
+                <a href="#" onclick="scrollToSection('general');return false;">📢 Notice Board</a>
+                <a href="#" onclick="scrollToSection('general');return false;">🏛 Club Info</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">🟢 Normal</div>
+                <a href="#" onclick="scrollToSection('normal');return false;">👥 Study Partner Finder</a>
+                <a href="#" onclick="scrollToSection('normal');return false;">🏫 University Room Info</a>
+                <a href="#" onclick="scrollToSection('normal');return false;">🎬 YouTube Playlists</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">🤖 AI Tools</div>
+                <a href="#" onclick="scrollToSection('aitools');return false;">📊 AI Study Tracker</a>
+                <a href="#" onclick="scrollToSection('aitools');return false;">🧠 Notes Summarizer</a>
+                <a href="#" onclick="scrollToSection('aitools');return false;">🐛 Code Debugger</a>
+                <a href="#" onclick="scrollToSection('aitools');return false;">✍️ Assignment Writer</a>
+            </div>
+        </div>
+        <a href="#team" class="nav-link-item">Team</a>
+        <button class="login-btn" onclick="goToLogin()">Login</button>
+    </div>
+</nav>
+
+<button id="backToTop" class="back-to-top" title="Go to top">&#8593;</button>
+
+<!-- HERO -->
+<section id="home" class="hero">
+    <div class="hero-bg-logo"></div>
+    <div class="joss-title">
+        <span class="letter">P</span><span class="letter">U</span><span class="letter">C</span><span class="letter">&nbsp;</span><span class="letter">P</span><span class="letter">r</span><span class="letter">o</span><span class="letter">b</span><span class="letter">l</span><span class="letter">e</span><span class="letter">m</span><span class="letter">&nbsp;</span><span class="letter">S</span><span class="letter">o</span><span class="letter">l</span><span class="letter">v</span><span class="letter">e</span><span class="letter">r</span>
+    </div>
+    <p>Your one-stop solution for university resources and tools.</p>
+</section>
+
+<!-- STATS -->
+<section class="stats-overview">
+    <div class="stat-item"><h2 class="counter" data-target="22">0</h2><p>Mid Questions</p></div>
+    <div class="stat-item"><h2 class="counter" data-target="20">0</h2><p>Final Questions</p></div>
+    <div class="stat-item"><h2 class="counter" data-target="35">0</h2><p>CT Questions</p></div>
+    <div class="stat-item"><h2 class="counter" data-target="22">0</h2><p>Blood Donation</p></div>
+    <div class="stat-item"><h2 class="counter" data-target="10">0</h2><p>Report Templates</p></div>
+    <div class="stat-item"><h2 class="counter" data-target="100">0</h2><p>Active Users</p></div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+    <h2 class="section-title">Our Services</h2>
+
+    <div id="premium" style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-premium">⭐ Premium Services</span></div>
+    <div class="services-grid" style="margin-bottom:56px;">
+        <div class="service-card" onclick="handleServiceClick('Question Bank')" style="border-color:rgba(52,152,219,0.45);background:rgba(52,152,219,0.07);cursor:pointer;"><div class="icon">📚</div><h3 style="color:#3498db;">Question Bank</h3><p>Download PDFs and access previous year question papers.</p></div>
+        <div class="service-card" onclick="handleServiceClick('PUC AI Assistant')" style="border-color:rgba(52,152,219,0.45);background:rgba(52,152,219,0.07);cursor:pointer;"><div class="icon">🤖</div><h3 style="color:#3498db;">PUC AI Assistant</h3><p>Ask coding questions and get instant AI-powered answers.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Cover Page Generator')" style="border-color:rgba(52,152,219,0.45);background:rgba(52,152,219,0.07);cursor:pointer;"><div class="icon">📝</div><h3 style="color:#3498db;">Cover Page Generator</h3><p>Lab &amp; Assignment Cover Page — instant &amp; professional.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Blood Donation')" style="border-color:rgba(52,152,219,0.45);background:rgba(52,152,219,0.07);cursor:pointer;"><div class="icon">🩸</div><h3 style="color:#3498db;">Blood Donation</h3><p>Find blood donors within the university in emergencies.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Routine Generator')" style="border-color:rgba(52,152,219,0.45);background:rgba(52,152,219,0.07);cursor:pointer;"><div class="icon">⚙️</div><h3 style="color:#3498db;">Routine Generator</h3><p>Create section-wise class and lab routines with time and room details.</p></div>
+    </div>
+    <div class="tier-divider"></div>
+
+    <div id="standard" style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-standard">🔵 Standard Services</span></div>
+    <div class="services-grid" style="margin-bottom:56px;">
+        <div class="service-card" onclick="handleServiceClick('Mess & Housing')" style="border-color:rgba(26,188,156,0.45);background:rgba(26,188,156,0.07);cursor:pointer;"><div class="icon">🏠</div><h3 style="color:#1abc9c;">Mess &amp; Housing</h3><p>Find safe and affordable housing near the campus.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Fee Calculator')" style="border-color:rgba(26,188,156,0.45);background:rgba(26,188,156,0.07);cursor:pointer;"><div class="icon">💰</div><h3 style="color:#1abc9c;">Fee Calculator</h3><p>Calculate your semester fees and total costs.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Faculty Contacts')" style="border-color:rgba(26,188,156,0.45);background:rgba(26,188,156,0.07);cursor:pointer;"><div class="icon">📞</div><h3 style="color:#1abc9c;">Faculty Contacts</h3><p>Find contact details of your teachers and advisors.</p></div>
+        <div class="service-card" onclick="handleServiceClick('CGPA Calculator')" style="border-color:rgba(26,188,156,0.45);background:rgba(26,188,156,0.07);cursor:pointer;"><div class="icon">🎓</div><h3 style="color:#1abc9c;">CGPA Calculator</h3><p>Calculate your semester GPA and overall CGPA.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Holiday Calendar')" style="border-color:rgba(26,188,156,0.45);background:rgba(26,188,156,0.07);cursor:pointer;"><div class="icon">🏖</div><h3 style="color:#1abc9c;">Holiday Calendar</h3><p>Official holidays and semester break dates.</p></div>
+    </div>
+    <div class="tier-divider"></div>
+
+    <div id="general" style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-general">⚪ General Services</span></div>
+    <div class="services-grid" style="margin-bottom:56px;">
+        <div class="service-card" onclick="handleServiceClick('Class Routine')" style="border-color:rgba(149,165,166,0.4);background:rgba(149,165,166,0.06);cursor:pointer;"><div class="icon">📅</div><h3 style="color:#95a5a6;">Class Routine</h3><p>Check your department's updated class schedule.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Exam Routine')" style="border-color:rgba(149,165,166,0.4);background:rgba(149,165,166,0.06);cursor:pointer;"><div class="icon">📋</div><h3 style="color:#95a5a6;">Exam Routine</h3><p>Access mid and final exam schedules easily.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Notice Board')" style="border-color:rgba(149,165,166,0.4);background:rgba(149,165,166,0.06);cursor:pointer;"><div class="icon">📢</div><h3 style="color:#95a5a6;">Notice Board</h3><p>Check all official university notices and announcements.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Club Information')" style="border-color:rgba(149,165,166,0.4);background:rgba(149,165,166,0.06);cursor:pointer;"><div class="icon">🏛</div><h3 style="color:#95a5a6;">Club Information</h3><p>Explore PUC clubs — Computer, Robotic, Debating and more.</p></div>
+        <div class="service-card" onclick="handleServiceClick('CP Leaderboard')" style="border-color:rgba(149,165,166,0.4);background:rgba(149,165,166,0.06);cursor:pointer;"><div class="icon">🏆</div><h3 style="color:#95a5a6;">Competitive Programming</h3><p>Track Codeforces rankings of PUC programmers.</p></div>
+    </div>
+    <div class="tier-divider"></div>
+
+    <div id="normal" style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-normal">🟢 Normal Services</span></div>
+    <div class="services-grid" style="margin-bottom:56px;">
+        <div class="service-card" onclick="handleServiceClick('Study Partner Finder')" style="border-color:rgba(39,174,96,0.45);background:rgba(39,174,96,0.07);cursor:pointer;"><div class="icon">👥</div><h3 style="color:#27ae60;">Study Partner Finder</h3><p>Connect with other students to find study partners and form study groups.</p></div>
+        <div class="service-card" onclick="handleServiceClick('University Room Info')" style="border-color:rgba(39,174,96,0.45);background:rgba(39,174,96,0.07);cursor:pointer;"><div class="icon">🏫</div><h3 style="color:#27ae60;">University Room Info</h3><p>Get detailed information about all university rooms and facilities.</p></div>
+        <div class="service-card" onclick="handleServiceClick('YouTube Playlists')" style="border-color:rgba(39,174,96,0.45);background:rgba(39,174,96,0.07);cursor:pointer;"><div class="icon">🎬</div><h3 style="color:#27ae60;">YouTube Playlists</h3><p>Curated YouTube playlists for Web Dev, App Dev, CP &amp; Hacking.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Learning Resources')" style="border-color:rgba(39,174,96,0.45);background:rgba(39,174,96,0.07);cursor:pointer;"><div class="icon">📚</div><h3 style="color:#27ae60;">Learning Resources</h3><p>Access free books, tutorials, and learning materials for all subjects.</p></div>
+    </div>
+    <div class="tier-divider"></div>
+
+    <div id="aitools" style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-ai">🤖 AI Tools</span></div>
+    <div class="services-grid" style="margin-bottom:56px;">
+        <div class="service-card" onclick="handleServiceClick('AI Study Tracker')" style="border-color:rgba(155,89,182,0.45);background:rgba(155,89,182,0.07);cursor:pointer;"><div class="icon">📊</div><h3 style="color:#9b59b6;">AI Study Tracker</h3><p>Track your study progress, set goals, and get AI-powered recommendations.</p></div>
+        <div class="service-card" onclick="handleServiceClick('AI Notes Summarizer')" style="border-color:rgba(155,89,182,0.45);background:rgba(155,89,182,0.07);cursor:pointer;"><div class="icon">🧠</div><h3 style="color:#9b59b6;">AI Notes Summarizer</h3><p>Convert long PDFs or notes into short, exam-ready summaries instantly.</p></div>
+        <div class="service-card" onclick="handleServiceClick('Code Debugger')" style="border-color:rgba(155,89,182,0.45);background:rgba(155,89,182,0.07);cursor:pointer;"><div class="icon">🐛</div><h3 style="color:#9b59b6;">Code Debugger</h3><p>Paste your code and get AI assistance in identifying and fixing bugs.</p></div>
+        <div class="service-card" onclick="handleServiceClick('AI Assignment Writer')" style="border-color:rgba(155,89,182,0.45);background:rgba(155,89,182,0.07);cursor:pointer;"><div class="icon">✍️</div><h3 style="color:#9b59b6;">AI Assignment Writer</h3><p>Generate complete assignments with structured content in seconds.</p></div>
+    </div>
+    <div class="tier-divider"></div>
+
+    <div style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-app">📱 App Services</span></div>
+    <div class="services-grid" style="margin-bottom:56px;">
+        <div class="service-card" onclick="showUpcoming()" style="border-color:rgba(230,126,34,0.4);background:rgba(230,126,34,0.07);cursor:pointer;"><div class="icon">📱</div><h3 style="color:#e67e22;">PUC Problem Solver App</h3><p>Download the full-featured .APK for Android — coming soon.</p></div>
+    </div>
+    <div class="tier-divider"></div>
+    <div style="text-align:center;margin-bottom:30px;margin-top:20px;"><span class="badge-community">Join Community</span></div>
+</section>
+
+<!-- WHATSAPP -->
+<section style="padding:0 5% 56px;text-align:center;">
+    <h2 style="font-size:20px;font-weight:700;color:#25d366;margin-bottom:6px;">Join Our PUC Problem Solver Community</h2>
+    <p style="font-size:12px;color:#666;margin-bottom:24px;">Connect, collaborate, and get updates — all in one place.</p>
+    <div style="max-width:580px;margin:0 auto;background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.25);border-radius:18px;padding:26px 30px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;">
+        <div style="width:52px;height:52px;border-radius:14px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="26" height="26" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+        <div style="flex:1;min-width:200px;text-align:left;"><div style="font-size:11px;color:rgba(37,211,102,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">WhatsApp Community</div><div style="font-size:17px;font-weight:700;color:#25d366;margin-bottom:5px;">Join WhatsApp Group</div><div style="font-size:12px;color:#888;">Stay connected — updates, notices &amp; service alerts first.</div></div>
+        <a href="https://chat.whatsapp.com/JoXB7rAH1WlBNI2jNC75ZO?mode=gi_t" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:700;text-decoration:none;transition:.2s;box-shadow:0 4px 16px rgba(37,211,102,0.25);flex-shrink:0;" onmouseover="this.style.background='#1ebe5d'" onmouseout="this.style.background='#25d366'">Join Now</a>
+    </div>
+</section>
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.2),transparent);margin:0 5%;"></div>
+
+<!-- TEAM -->
+<section id="team" class="team-section">
+    <h2 class="section-title">Development Team</h2>
+    <div class="team-slider-wrapper"><div class="team-track">
+        <div class="member-card leader-glow"><div class="badge">Group Leader</div><img src="assets/1.png" alt="Rahul"><h3>Rahul Singha</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Computer Club</span><span>Robotic Club</span><span>Debating Club</span></div></div>
+        <div class="member-card sub-leader-glow"><div class="badge">Sub Leader</div><img src="assets/7.jpeg" alt="Tabib"><h3>Tabib</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Computer Club</span></div></div>
+        <div class="member-card"><div class="badge">Member</div><img src="assets/5.jpeg" alt="Rudra"><h3>Rudra</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Computer Club</span></div></div>
+        <div class="member-card"><div class="badge">Member</div><img src="assets/8.jpeg" alt="Ador"><h3>Ador</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Debating Club</span></div></div>
+        <div class="member-card"><div class="badge">Member</div><img src="assets/4.png" alt="Alvi"><h3>Alvi</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Debating Club</span></div></div>
+        <!-- Duplicate for slider loop -->
+        <div class="member-card leader-glow"><div class="badge">Group Leader</div><img src="assets/1.png" alt="Rahul"><h3>Rahul Singha</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Computer Club</span><span>Robotic Club</span><span>Debating Club</span></div></div>
+        <div class="member-card sub-leader-glow"><div class="badge">Sub Leader</div><img src="assets/7.jpeg" alt="Tabib"><h3>Tabib</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Computer Club</span></div></div>
+        <div class="member-card"><div class="badge">Member</div><img src="assets/5.jpeg" alt="Rudra"><h3>Rudra</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Computer Club</span></div></div>
+        <div class="member-card"><div class="badge">Member</div><img src="assets/8.jpeg" alt="Ador"><h3>Ador</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Debating Club</span></div></div>
+        <div class="member-card"><div class="badge">Member</div><img src="assets/4.png" alt="Alvi"><h3>Alvi</h3><p class="dept">Dept. of CSE, PUC</p><div class="clubs"><span>Debating Club</span></div></div>
+    </div></div>
+</section>
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.2),transparent);margin:0 5%;"></div>
+
+<!-- SERVICE MARQUEE -->
+<section style="padding:50px 0 36px;overflow:hidden;position:relative;">
+    <h2 class="section-title" style="margin-bottom:8px;">Service Overview</h2>
+    <p style="text-align:center;font-size:12px;color:#666;margin-bottom:28px;letter-spacing:1px;">All available services at a glance</p>
+    <div style="overflow:hidden;position:relative;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(to right,#0c0908,transparent);z-index:2;pointer-events:none;"></div>
+        <div style="position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(to left,#0c0908,transparent);z-index:2;pointer-events:none;"></div>
+        <div style="display:flex;gap:14px;animation:scrollLTR 55s linear infinite;width:max-content;padding:10px 0;">
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">📚</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Question Bank</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">🤖</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">PUC AI Assistant</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">🩸</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Blood Donation</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">💰</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Fee Calculator</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">🎓</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">CGPA Calculator</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">🧠</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Notes Summarizer</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">🐛</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Code Debugger</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">📱</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Problem Solver App</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">📚</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Question Bank</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">🤖</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">PUC AI Assistant</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">💰</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Fee Calculator</div></div>
+            <div style="flex-shrink:0;width:190px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.2);border-radius:14px;padding:18px 16px;"><div style="font-size:28px;margin-bottom:10px;">👥</div><div style="font-size:13px;font-weight:600;color:#ececec;margin-bottom:5px;">Study Partner Finder</div></div>
+        </div>
+    </div>
+    <style>@keyframes scrollLTR{0%{transform:translateX(-50%)}100%{transform:translateX(0%)}}</style>
+</section>
+
+<!-- COUNTDOWN -->
+<section style="padding:0 5% 40px;text-align:center;">
+    <h2 style="font-size:16px;font-weight:700;color:#f39c12;margin-bottom:6px;">⏰ Exam Countdown</h2>
+    <p style="font-size:12px;color:#666;margin-bottom:18px;">Final examinations begin on the 26th — start your preparation now!</p>
+    <div class="compact-countdown">
+        <div class="cd-icon">⏰</div>
+        <div class="cd-info"><div class="cd-label">Final Exam Countdown</div><div class="cd-title">Time Remaining</div><div class="cd-note">Prepare well, succeed better 🎯</div></div>
+        <div class="cd-timer">
+            <div class="cd-box"><div class="num" id="cd-days">0</div><div class="lbl">Days</div></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-box"><div class="num" id="cd-hours">0</div><div class="lbl">Hrs</div></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-box"><div class="num" id="cd-minutes">0</div><div class="lbl">Min</div></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-box"><div class="num" id="cd-seconds">0</div><div class="lbl">Sec</div></div>
+        </div>
+    </div>
+</section>
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.2),transparent);margin:0 5%;"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-divider"></div>
+    <div style="text-align:center;padding:18px 5% 14px;"><a href="https://www.youtube.com/@PUCProblemSolver" target="_blank" style="display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 22px;text-decoration:none;transition:.2s;" onmouseover="this.style.borderColor='rgba(255,0,0,0.4)';this.style.background='rgba(255,0,0,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.background='rgba(255,255,255,0.04)'"><svg width="22" height="22" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span style="text-align:left;"><span style="display:block;font-size:11px;color:#666;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;">Website Guide</span><span style="display:block;font-size:13px;font-weight:600;color:#ccc;">How to use PUC HUB — Full video tutorial on YouTube</span></span></a></div>
+    <div class="footer-links"><a href="#home">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">FAQ</a></div>
+    <div class="copyright">&copy; 2024 <span>PUC Problem Solver Website</span> All Rights Reserved</div>
+</footer>
+
+<!-- MODALS -->
+<div id="upcomingModal"><div class="upcoming-box"><button onclick="closeUpcoming()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;">✕</button><div class="upcoming-label">Upcoming Soon</div><h3>PUC Problem Solver App</h3><p>The official Android app is currently under development.<br>Stay connected on WhatsApp for the launch announcement.</p></div></div>
+<div id="vipModal"><div style="background:#1a0f07;border:1px solid rgba(155,89,182,0.4);border-radius:20px;padding:36px;width:90%;max-width:400px;text-align:center;position:relative;animation:vipIn .3s ease;"><button onclick="closeVIPModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#888;font-size:20px;cursor:pointer;">✕</button><h3 style="color:#b07fd4;font-size:20px;margin-bottom:8px;">VIP Premium Feature</h3><p style="color:#888;font-size:13px;line-height:1.7;margin-bottom:20px;">Send <strong style="color:#f39c12;">20 BDT</strong> to unlock.</p><div style="background:rgba(155,89,182,0.1);border:1px solid rgba(155,89,182,0.3);border-radius:12px;padding:14px;margin-bottom:20px;"><div style="font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Send Payment To</div><div style="font-size:22px;font-weight:700;color:#f39c12;letter-spacing:1px;">01885-134402</div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;"><div style="background:rgba(229,57,53,0.1);border:1px solid rgba(229,57,53,0.3);border-radius:10px;padding:10px 6px;cursor:pointer;" onclick="copyNumber('bKash')"><div style="font-size:12px;font-weight:700;color:#ef9a9a;">bKash</div></div><div style="background:rgba(66,165,245,0.1);border:1px solid rgba(66,165,245,0.3);border-radius:10px;padding:10px 6px;cursor:pointer;" onclick="copyNumber('Nagad')"><div style="font-size:12px;font-weight:700;color:#90caf9;">Nagad</div></div><div style="background:rgba(102,187,106,0.1);border:1px solid rgba(102,187,106,0.3);border-radius:10px;padding:10px 6px;cursor:pointer;" onclick="copyNumber('Rocket')"><div style="font-size:12px;font-weight:700;color:#a5d6a7;">Rocket</div></div><div style="background:rgba(255,183,77,0.1);border:1px solid rgba(255,183,77,0.3);border-radius:10px;padding:10px 6px;cursor:pointer;" onclick="copyNumber('Upay')"><div style="font-size:12px;font-weight:700;color:#ffcc80;">Upay</div></div></div><p style="color:#666;font-size:12px;line-height:1.6;">After payment, send screenshot via WhatsApp. Access granted within 24 hours.</p><div id="copyMsg" style="display:none;margin-top:10px;color:#b07fd4;font-size:12px;"></div></div></div>
+
+<!-- ✅ routes.js আগে লোড হবে, তারপর tracker.js, তারপর app.js -->
+<script src="js/routes.js"></script>
+<script src="js/tracker.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+// ══════════════════════════════════════════════
+// ✅ NAVBAR AUTH UPDATE
+// সমস্যা ছিল: inline handleServiceClick শুধু alert করত
+// এখন: routes.js এর handleServiceClick ব্যবহার হবে সরাসরি
+// ══════════════════════════════════════════════
+function updateNavbarAuth() {
+    var isLoggedIn = localStorage.getItem('isLoggedIn');
+    var userData   = localStorage.getItem('userData');
+    var nav        = document.getElementById('navActions');
+    if (!nav) return;
+
+    var dropdownHTML = `
+        <div class="nav-dropdown">
+            <a href="#services" class="nav-link-item">Services ▾</a>
+            <div class="nav-dropdown-menu">
+                <div class="drop-label">⭐ Premium</div>
+                <a href="#" onclick="scrollToSection('premium');return false;">📚 Question Bank</a>
+                <a href="#" onclick="scrollToSection('premium');return false;">🤖 PUC AI Assistant</a>
+                <a href="#" onclick="scrollToSection('premium');return false;">📝 Cover Page Generator</a>
+                <a href="#" onclick="scrollToSection('premium');return false;">🩸 Blood Donation</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">🔵 Standard</div>
+                <a href="#" onclick="scrollToSection('standard');return false;">🏠 Mess &amp; Housing</a>
+                <a href="#" onclick="scrollToSection('standard');return false;">💰 Fee Calculator</a>
+                <a href="#" onclick="scrollToSection('standard');return false;">📞 Faculty Contacts</a>
+                <a href="#" onclick="scrollToSection('standard');return false;">🎓 CGPA Calculator</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">⚪ General</div>
+                <a href="#" onclick="scrollToSection('general');return false;">📅 Class Routine</a>
+                <a href="#" onclick="scrollToSection('general');return false;">📋 Exam Routine</a>
+                <a href="#" onclick="scrollToSection('general');return false;">📢 Notice Board</a>
+                <a href="#" onclick="scrollToSection('general');return false;">🏛 Club Info</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">🟢 Normal</div>
+                <a href="#" onclick="scrollToSection('normal');return false;">👥 Study Partner Finder</a>
+                <a href="#" onclick="scrollToSection('normal');return false;">🏫 University Room Info</a>
+                <a href="#" onclick="scrollToSection('normal');return false;">🎬 YouTube Playlists</a>
+                <div class="drop-divider"></div>
+                <div class="drop-label">🤖 AI Tools</div>
+                <a href="#" onclick="scrollToSection('aitools');return false;">📊 AI Study Tracker</a>
+                <a href="#" onclick="scrollToSection('aitools');return false;">🧠 Notes Summarizer</a>
+                <a href="#" onclick="scrollToSection('aitools');return false;">🐛 Code Debugger</a>
+                <a href="#" onclick="scrollToSection('aitools');return false;">✍️ Assignment Writer</a>
+            </div>
+        </div>`;
+
+    if (isLoggedIn === 'true' && userData) {
+        try {
+            var user = JSON.parse(userData);
+            var img  = (user.profileImage && user.profileImage.startsWith('data:image'))
+                       ? user.profileImage : 'assets/p.png';
+            nav.innerHTML = `
+                <a href="#home" class="nav-link-item active">Home</a>
+                ${dropdownHTML}
+                <a href="#team" class="nav-link-item">Team</a>
+                <a href="history.html" class="my-activity-btn">📊 My Activity</a>
+                <div class="profile-dropdown">
+                    <button class="profile-btn">
+                        <img src="${img}" class="profile-thumb" onerror="this.src='assets/p.png'">
+                        <span>${user.username || 'Profile'}</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="profile.html">👤 My Profile</a>
+                        <a href="history.html">📊 My Activity</a>
+                        <a href="#" onclick="doLogout();return false;">🚪 Logout</a>
+                    </div>
+                </div>`;
+        } catch(e) {
+            nav.innerHTML = `
+                <a href="#home" class="nav-link-item active">Home</a>
+                ${dropdownHTML}
+                <a href="#team" class="nav-link-item">Team</a>
+                <button class="login-btn" onclick="goToLogin()">Login</button>`;
+        }
+    } else {
+        nav.innerHTML = `
+            <a href="#home" class="nav-link-item active">Home</a>
+            ${dropdownHTML}
+            <a href="#team" class="nav-link-item">Team</a>
+            <button class="login-btn" onclick="goToLogin()">Login</button>`;
+    }
+}
+
+// ══ UTILITY FUNCTIONS ══
+function doLogout() {
+    if (confirm('Logout করবেন?')) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userData');
+        window.location.href = 'index.html';
+    }
+}
+function goToLogin()       { window.location.href = 'login.html'; }
+function scrollToSection(id) {
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+function showUpcoming()    { document.getElementById('upcomingModal').style.display = 'flex'; }
+function closeUpcoming()   { document.getElementById('upcomingModal').style.display = 'none'; }
+function showVIPModal()    { document.getElementById('vipModal').style.display = 'flex'; }
+function closeVIPModal()   { document.getElementById('vipModal').style.display = 'none'; }
+function copyNumber(m) {
+    navigator.clipboard && navigator.clipboard.writeText('01885134402');
+    var e = document.getElementById('copyMsg');
+    if (e) { e.style.display='block'; e.textContent=m+' number copied: 01885134402'; setTimeout(()=>e.style.display='none',3000); }
+}
+
+// ══ COUNTDOWN ══
+function updateCountdown() {
+    var now = new Date(), d=now.getDate(), m=now.getMonth(), y=now.getFullYear();
+    var target = new Date(y, m, 26, 0, 0, 0);
+    if (d >= 26) target = new Date(y, m+1, 26, 0, 0, 0);
+    var diff = target - now;
+    if (diff > 0) {
+        document.getElementById('cd-days').textContent    = Math.floor(diff/(1000*60*60*24));
+        document.getElementById('cd-hours').textContent   = Math.floor((diff/(1000*60*60))%24);
+        document.getElementById('cd-minutes').textContent = Math.floor((diff/1000/60)%60);
+        document.getElementById('cd-seconds').textContent = Math.floor((diff/1000)%60);
+    }
+}
+
+// ══ MODAL CLOSE ON OUTSIDE CLICK ══
+document.getElementById('upcomingModal').addEventListener('click', function(e){ if(e.target===this) closeUpcoming(); });
+document.getElementById('vipModal').addEventListener('click',      function(e){ if(e.target===this) closeVIPModal(); });
+
+// ══ INIT ══
+document.addEventListener('DOMContentLoaded', function() {
+    updateNavbarAuth();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Back to top
+    var btt = document.getElementById('backToTop');
+    if (btt) {
+        window.addEventListener('scroll', function(){ btt.classList.toggle('show', window.scrollY > 300); });
+        btt.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+    }
+
+    // Navbar scroll effect
+    var navbar = document.querySelector('.ai-nav');
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(30,16,8,0.98)';
+            } else {
+                navbar.style.background = 'rgba(43,24,15,0.95)';
+            }
+        }, { passive: true });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Playlists — PUC HUB</title>
+    <link rel="icon" type="image/png" href="assets/p.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#2b180f 0%,#0c0908 100%);background-attachment:fixed;color:#ececec;min-height:100vh;}
+
+        .ai-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(43,24,15,0.95);border-bottom:1px solid rgba(243,156,18,0.25);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+        .nav-logo{display:flex;align-items:center;gap:10px;}
+        .nav-logo img{width:36px;height:36px;border-radius:50%;border:2px solid #f39c12;}
+        .nav-logo span{font-size:18px;font-weight:700;color:#f39c12;}
+        .nav-tag{font-size:11px;color:#e67e22;letter-spacing:1px;margin-left:4px;}
+        .nav-actions{display:flex;gap:8px;}
+        .nav-btn{padding:8px 16px;background:transparent;border:1px solid rgba(243,156,18,0.35);border-radius:8px;color:#ccc;text-decoration:none;font-size:13px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
+        .nav-btn:hover{border-color:#f39c12;color:#f39c12;}
+
+        .page{max-width:1100px;margin:0 auto;padding:36px 20px 70px;}
+        .page-title{font-size:30px;font-weight:800;color:#f39c12;margin-bottom:6px;}
+        .page-sub{font-size:14px;color:#a08060;margin-bottom:32px;}
+
+        /* CATEGORY HEADER */
+        .cat-section{margin-bottom:50px;}
+        .cat-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding:18px 24px;background:rgba(43,24,15,0.6);border:1px solid rgba(243,156,18,0.25);border-radius:14px;backdrop-filter:blur(8px);}
+        .cat-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+        .cat-title{font-size:20px;font-weight:800;color:#f39c12;}
+        .cat-sub{font-size:13px;color:#a08060;margin-top:2px;}
+        .cat-count{font-size:13px;color:#6b5040;margin-left:auto;font-weight:600;}
+
+        /* LANGUAGE ROW */
+        .lang-section{margin-bottom:22px;}
+        .lang-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;border:1px solid;}
+        .lang-bn{background:rgba(39,174,96,0.1);color:#27ae60;border-color:rgba(39,174,96,0.35);}
+        .lang-en{background:rgba(52,152,219,0.1);color:#3498db;border-color:rgba(52,152,219,0.35);}
+        .lang-hi{background:rgba(243,156,18,0.1);color:#f39c12;border-color:rgba(243,156,18,0.35);}
+
+        /* CHANNEL CARDS */
+        .channels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+        .channel-card{display:flex;align-items:center;gap:13px;padding:15px 16px;background:rgba(43,24,15,0.5);border:1px solid rgba(243,156,18,0.18);border-radius:13px;text-decoration:none;transition:.2s;cursor:pointer;backdrop-filter:blur(5px);}
+        .channel-card:hover{border-color:rgba(243,156,18,0.5);background:rgba(43,24,15,0.7);transform:translateX(4px);}
+        .ch-icon{width:46px;height:46px;border-radius:11px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .ch-icon svg{width:22px;height:22px;}
+        .ch-info{flex:1;min-width:0;}
+        .ch-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .ch-desc{font-size:12px;color:#a08060;line-height:1.5;}
+        .ch-arrow{color:#a08060;font-size:16px;flex-shrink:0;transition:.2s;}
+        .channel-card:hover .ch-arrow{color:#f39c12;}
+
+        .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(243,156,18,0.15),transparent);margin:40px 0;}
+
+        /* YT SVG */
+        .yt-svg{fill:#ff0000;}
+    </style>
+</head>
+<body>
+<nav class="ai-nav">
+    <div class="nav-logo">
+        <img src="assets/p.png" onerror="this.style.display='none'" alt="">
+        <span>PUC HUB <span class="nav-tag">YouTube Playlists</span></span>
+    </div>
+    <div class="nav-actions">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="index.html#services" class="nav-btn">Services</a>
+        <button onclick="history.back()" class="nav-btn">Back</button>
+    </div>
+</nav>
+
+<div class="page">
+    <div class="page-title">YouTube Playlists</div>
+    <div class="page-sub">Handpicked YouTube channels for CSE students — Bangla, English, and Hindi resources. All categories shown below.</div>
+
+    <!-- ══ WEB DEV ══ -->
+    <div class="cat-section" id="web-dev">
+        <div class="cat-header">
+            <div class="cat-icon-wrap" style="background:rgba(52,152,219,0.12);border:1px solid rgba(52,152,219,0.3);">
+                <span style="font-size:22px;">&#127760;</span>
+            </div>
+            <div><div class="cat-title" style="color:#3498db;">Web Development</div><div class="cat-sub">Frontend, Backend, Full-Stack — HTML, CSS, JS, React, Node</div></div>
+            <div class="cat-count">10 channels</div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-bn">Bangla</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@LearnwithSumit" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Learn with Sumit</div><div class="ch-desc">Full-stack web development, React, Node.js — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@AnisulIslamBD" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Anisul Islam</div><div class="ch-desc">HTML, CSS, JS, Python basics — Bangla medium, beginner friendly</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@stacklearner" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Stack Learner</div><div class="ch-desc">JavaScript in depth, React, Node, problem solving — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@WebCoderBD" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Web Coder BD</div><div class="ch-desc">Frontend projects, CSS design, responsive layouts — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-en">English</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@TraversyMedia" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Traversy Media</div><div class="ch-desc">HTML, CSS, JS, React, Node — project-based tutorials</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@TheNetNinja" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">The Net Ninja</div><div class="ch-desc">Short beginner-friendly web dev series — 2000+ videos</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@Fireship" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Fireship</div><div class="ch-desc">Fast-paced concepts — web, app, 100 seconds series</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@WebDevSimplified" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Web Dev Simplified</div><div class="ch-desc">Explains complex concepts simply — great for beginners</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-hi">Hindi</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@HarkiratSingh_com" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Harkirat Singh</div><div class="ch-desc">Full-stack, Web3, system design — Hindi, very popular</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@CodeWithHarry" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Code With Harry</div><div class="ch-desc">Python, JavaScript, web dev mega courses — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@ApnaCollegeOfficial" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Apna College</div><div class="ch-desc">DSA, web dev, Java — structured course format, Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- ══ APP DEV ══ -->
+    <div class="cat-section" id="app-dev">
+        <div class="cat-header">
+            <div class="cat-icon-wrap" style="background:rgba(155,89,182,0.12);border:1px solid rgba(155,89,182,0.3);">
+                <span style="font-size:22px;">&#128241;</span>
+            </div>
+            <div><div class="cat-title" style="color:#9b59b6;">App Development</div><div class="cat-sub">Android, iOS, Flutter, React Native</div></div>
+            <div class="cat-count">9 channels</div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-bn">Bangla</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@FlutterBD" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Majharul Islam (Flutter BD)</div><div class="ch-desc">Flutter & Android dev in Bangla — beginner to advanced</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@DroidBangla" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Droid Bangla</div><div class="ch-desc">Android Kotlin development tutorials — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@TechBanglaOfficial" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Tech Bangla</div><div class="ch-desc">Mobile app development, tips and tricks — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-en">English</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@FilledStacks" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Flutter Mapp</div><div class="ch-desc">Flutter tutorials, projects, UI design — full courses</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@RivaanRanawat" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Rivaan Ranawat</div><div class="ch-desc">Flutter full apps — Reddit, Twitter, Amazon clones</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@PhilippLackner" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Philipp Lackner</div><div class="ch-desc">Android Kotlin, Compose, architecture patterns — English</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-hi">Hindi</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@TechnicalGuruji" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Technical Guruji</div><div class="ch-desc">App reviews, tutorials, Android guides — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@programmingpathshala" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Programming Pathshala</div><div class="ch-desc">Android dev, DSA, interview prep — Hindi, structured</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@kotlineers" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Kotlineers</div><div class="ch-desc">Kotlin, Android Jetpack Compose — Hindi tutorials</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- ══ COMPETITIVE PROGRAMMING ══ -->
+    <div class="cat-section" id="cp">
+        <div class="cat-header">
+            <div class="cat-icon-wrap" style="background:rgba(243,156,18,0.12);border:1px solid rgba(243,156,18,0.3);">
+                <span style="font-size:22px;">&#127942;</span>
+            </div>
+            <div><div class="cat-title" style="color:#f39c12;">Competitive Programming</div><div class="cat-sub">DSA, Algorithms, Codeforces, LeetCode</div></div>
+            <div class="cat-count">10 channels</div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-bn">Bangla</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@AnisulIslamBD" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Anisul Islam (CP Bangla)</div><div class="ch-desc">C, C++, Data Structures, Algorithms — Bangla medium</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@BongoDev" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Bongo Dev</div><div class="ch-desc">Problem solving, competitive programming — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@CFPractice" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Codeforces Practice BD</div><div class="ch-desc">Codeforces editorial solutions in Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@AlgorithmBangla" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Algorithm Bangla</div><div class="ch-desc">Graphs, DP, sorting — algorithms explained in Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-en">English</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@WilliamFiset" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">William Fiset</div><div class="ch-desc">Graph theory, algorithms, data structures — in depth</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@errichto" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Errichto</div><div class="ch-desc">Codeforces problemsolving, competitive programming tips</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@NeetCode" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">NeetCode</div><div class="ch-desc">LeetCode solutions with clean explanations — interview prep</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-hi">Hindi</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@ApnaCollegeOfficial" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Apna College</div><div class="ch-desc">DSA full course, Java, placement prep — Hindi, massive reach</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@takeUforward" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">take U forward (Striver)</div><div class="ch-desc">DSA sheet, graph series, DP masterclass — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@CodeHelp-zs5qv" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">CodeHelp (Love Babbar)</div><div class="ch-desc">450 DSA questions, placement bootcamp — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- ══ CYBER SECURITY ══ -->
+    <div class="cat-section" id="cyber">
+        <div class="cat-header">
+            <div class="cat-icon-wrap" style="background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.3);">
+                <span style="font-size:22px;">&#128274;</span>
+            </div>
+            <div><div class="cat-title" style="color:#e74c3c;">Cyber Security</div><div class="cat-sub">Ethical Hacking, Networking, CTF, Bug Bounty</div></div>
+            <div class="cat-count">9 channels</div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-bn">Bangla</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@CyberSecurityBD" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Cyber Hunters BD</div><div class="ch-desc">Ethical hacking, bug bounty, CTF — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@HackerOneBD" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">BD Security Lab</div><div class="ch-desc">Web security, network scanning, Kali Linux — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@SecurityBangla" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Security Bangla</div><div class="ch-desc">Cybersecurity awareness, phishing prevention — Bangla</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-en">English</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@NetworkChuck" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">NetworkChuck</div><div class="ch-desc">Networking, ethical hacking, Linux, Python for hackers</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@LiveOverflow" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">LiveOverflow</div><div class="ch-desc">CTF challenges, binary exploitation, hacking tutorials</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@davidbombal" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">David Bombal</div><div class="ch-desc">CCNA, Python hacking, Kali Linux — highly recommended</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+
+        <div class="lang-section">
+            <div class="lang-badge lang-hi">Hindi</div>
+            <div class="channels-grid">
+                <a href="https://www.youtube.com/@HackerBhai" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Hacker Bhai</div><div class="ch-desc">Ethical hacking tutorials, cybersecurity basics — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@GeekyHumans" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Geeky Humans</div><div class="ch-desc">Kali Linux, penetration testing, social engineering — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+                <a href="https://www.youtube.com/@RaghavPalPentester" target="_blank" class="channel-card"><div class="ch-icon"><svg viewBox="0 0 24 24" class="yt-svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="ch-info"><div class="ch-name">Raghav Pal</div><div class="ch-desc">Penetration testing, bug bounty, security tools — Hindi</div></div><div class="ch-arrow">&#8594;</div></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+if (localStorage.getItem('isLoggedIn') !== 'true') { alert('Please login first!'); window.location.href = 'login.html'; }
+</script>
+</body>
+</html>

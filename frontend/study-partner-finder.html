@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- Made by: Team PUC HUB | Rahul -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Partner Finder — PUC HUB</title>
+<link rel="icon" type="image/png" href="assets/p.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#2b180f 0%,#0c0908 100%);background-attachment:fixed;color:#e0e0e0;min-height:100vh;}
+
+/* ── NAVBAR ── */
+.ai-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(43,24,15,0.95);border-bottom:1px solid rgba(243,156,18,0.25);position:sticky;top:0;z-index:300;backdrop-filter:blur(12px);}
+.nav-logo-wrap{display:flex;align-items:center;gap:10px;}
+.nav-logo-wrap img{width:36px;height:36px;border-radius:50%;border:2px solid #f39c12;object-fit:cover;}
+.nav-brand{font-size:18px;font-weight:700;color:#f39c12;}
+.nav-tag{font-size:11px;color:#e67e22;letter-spacing:1px;margin-left:4px;}
+.nav-actions{display:flex;gap:8px;}
+.nav-btn{padding:8px 16px;background:transparent;border:1px solid rgba(243,156,18,0.35);border-radius:8px;color:#ccc;text-decoration:none;font-size:13px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
+.nav-btn:hover{border-color:#f39c12;color:#f39c12;}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:52px 20px 24px;}
+.hero-badge{display:inline-block;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);border-radius:20px;padding:6px 18px;font-size:11px;font-weight:700;color:#f39c12;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-size:38px;font-weight:900;color:#f5f5f5;margin-bottom:10px;line-height:1.15;}
+.hero h1 span{color:#f39c12;}
+.hero p{font-size:15px;color:#a08060;max-width:500px;margin:0 auto 30px;line-height:1.7;}
+.stats-bar{display:flex;justify-content:center;gap:36px;margin-bottom:40px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:28px;font-weight:900;color:#f39c12;}
+.stat-lbl{font-size:11px;color:#a08060;letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+
+/* MAIN WRAP */
+.post-wrap{max-width:760px;margin:0 auto;padding:0 20px 60px;}
+.section-title{font-size:12px;font-weight:700;color:rgba(243,156,18,0.7);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(243,156,18,0.1);}
+
+/* POST FORM */
+.post-card{background:rgba(43,24,15,0.7);border:1px solid rgba(243,156,18,0.2);border-radius:18px;padding:26px 28px;margin-bottom:30px;}
+.post-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.post-row.full{grid-template-columns:1fr;}
+.pf label{font-size:11px;color:#a08060;letter-spacing:1.2px;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:600;}
+input[type=text],select,textarea{width:100%;background:rgba(12,9,8,0.8);border:1px solid rgba(243,156,18,0.2);border-radius:10px;padding:12px 14px;color:#ddd;font-size:14px;outline:none;transition:.2s;font-family:'Poppins',sans-serif;}
+input:focus,select:focus,textarea:focus{border-color:rgba(243,156,18,0.5);}
+select option{background:#1a0f07;color:#ddd;}
+textarea{resize:vertical;min-height:80px;}
+input.err,select.err{border-color:rgba(231,76,60,0.8)!important;background:rgba(231,76,60,0.06)!important;}
+.post-btn{width:100%;padding:14px;background:linear-gradient(135deg,#f39c12,#e67e22);color:#000;font-weight:800;font-size:15px;border:none;border-radius:11px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:6px;transition:.2s;font-family:'Poppins',sans-serif;}
+.post-btn:hover{opacity:.88;box-shadow:0 6px 24px rgba(243,156,18,0.3);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+.filter-btn{padding:8px 18px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid rgba(243,156,18,0.25);background:transparent;color:#a08060;transition:.2s;font-family:'Poppins',sans-serif;}
+.filter-btn:hover,.filter-btn.active{border-color:#f39c12;color:#f39c12;background:rgba(243,156,18,0.07);}
+
+/* ── SINGLE COLUMN CARDS ── */
+.cards-list{display:flex;flex-direction:column;gap:18px;margin-bottom:48px;}
+
+.req-card{background:rgba(43,24,15,0.65);border:1px solid rgba(243,156,18,0.18);border-radius:16px;padding:24px 26px;transition:.2s;position:relative;overflow:hidden;}
+.req-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;}
+.req-card.theory::before{background:linear-gradient(90deg,#3498db,#5dade2);}
+.req-card.lab::before{background:linear-gradient(90deg,#2ecc71,#58d68d);}
+.req-card.general::before{background:linear-gradient(90deg,#f39c12,#e67e22);}
+.req-card:hover{border-color:rgba(243,156,18,0.38);box-shadow:0 8px 28px rgba(0,0,0,0.3);}
+
+.card-top{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.avatar{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;flex-shrink:0;}
+.card-name{font-size:18px;font-weight:800;color:#f5f5f5;}
+.card-sem{font-size:12px;color:#a08060;margin-top:3px;letter-spacing:.5px;}
+
+.subject-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;}
+.tag-theory{background:rgba(52,152,219,0.12);color:#5dade2;border:1px solid rgba(52,152,219,0.25);}
+.tag-lab{background:rgba(46,204,113,0.12);color:#58d68d;border:1px solid rgba(46,204,113,0.25);}
+.tag-general{background:rgba(243,156,18,0.12);color:#f39c12;border:1px solid rgba(243,156,18,0.25);}
+
+.card-subject{font-size:17px;font-weight:700;color:#ddd;margin-bottom:8px;}
+.card-note{font-size:14px;color:#a08060;line-height:1.7;margin-bottom:18px;}
+
+.card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;flex-wrap:wrap;gap:10px;}
+.posted-time{font-size:12px;color:#6b5040;}
+.card-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+.join-req-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.35);border-radius:10px;color:#f39c12;font-size:13px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:.2s;white-space:nowrap;}
+.join-req-btn:hover{background:rgba(243,156,18,0.2);}
+.join-req-btn.joined{background:rgba(39,174,96,0.12);border-color:rgba(39,174,96,0.35);color:#55d98d;}
+
+.wa-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:10px;color:#25d366;font-size:13px;font-weight:700;text-decoration:none;transition:.2s;white-space:nowrap;}
+.wa-btn:hover{background:rgba(37,211,102,0.2);}
+.wa-icon{width:15px;height:15px;flex-shrink:0;}
+
+/* WA GROUP BANNER */
+.wa-banner{background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:14px;padding:18px 22px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.wa-banner-text{font-size:14px;color:#a08060;line-height:1.6;}
+.wa-banner-text strong{color:#25d366;}
+.wa-banner-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.35);border-radius:10px;color:#25d366;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:.2s;}
+.wa-banner-btn:hover{background:rgba(37,211,102,0.22);}
+
+.empty-state{text-align:center;padding:48px 20px;color:#a08060;font-size:14px;}
+
+.toast{position:fixed;bottom:28px;right:28px;background:#1a0f07;border:1px solid rgba(243,156,18,0.4);border-radius:10px;padding:14px 20px;font-size:13px;color:#f39c12;z-index:999;transform:translateY(80px);opacity:0;transition:.3s;pointer-events:none;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.req-card{animation:fadeIn .3s ease both;}
+</style>
+</head>
+<body>
+
+<nav class="ai-nav">
+  <div class="nav-logo-wrap">
+    <img src="assets/p.png" onerror="this.style.display='none'" alt="">
+    <span class="nav-brand">PUC HUB <span class="nav-tag">Study Partner Finder</span></span>
+  </div>
+  <div class="nav-actions">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="index.html#services" class="nav-btn">Services</a>
+    <button onclick="history.back()" class="nav-btn">Back</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">PUC HUB — Study Network</div>
+  <h1>Find Your <span>Study Partner</span></h1>
+  <p>Connect with classmates, share knowledge, and study smarter together at Premier University Chittagong.</p>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num" id="totalCount">8</div><div class="stat-lbl">Active Requests</div></div>
+    <div class="stat"><div class="stat-num">2nd</div><div class="stat-lbl">Semester</div></div>
+    <div class="stat"><div class="stat-num" id="totalJoins">0</div><div class="stat-lbl">Total Joins</div></div>
+  </div>
+</div>
+
+<div class="post-wrap">
+
+  <div class="post-card">
+    <div class="section-title">Post Your Study Request</div>
+    <div class="post-row">
+      <div class="pf"><label>Your Name *</label><input type="text" id="f-name" placeholder="e.g. Ador"></div>
+      <div class="pf"><label>Semester *</label>
+        <select id="f-sem">
+          <option value="">Select Semester</option>
+          <option>1st Semester</option><option selected>2nd Semester</option>
+          <option>3rd Semester</option><option>4th Semester</option>
+          <option>5th Semester</option><option>6th Semester</option>
+          <option>7th Semester</option><option>8th Semester</option>
+        </select></div>
+    </div>
+    <div class="post-row">
+      <div class="pf"><label>Subject *</label><input type="text" id="f-subject" placeholder="e.g. Data Structures"></div>
+      <div class="pf"><label>Type *</label>
+        <select id="f-type">
+          <option value="">Select Type</option>
+          <option value="theory">Theory</option>
+          <option value="lab">Lab</option>
+          <option value="general">General Help</option>
+        </select></div>
+    </div>
+    <div class="post-row full">
+      <div class="pf"><label>Short Note (optional)</label>
+        <textarea id="f-note" placeholder="e.g. Looking for a partner to study — can meet on campus or online."></textarea></div>
+    </div>
+    <button class="post-btn" onclick="submitPost()">Post Request</button>
+  </div>
+
+  <div class="wa-banner">
+    <div class="wa-banner-text"><strong>Join the PUC HUB Study Group on WhatsApp</strong><br>All study partners, tutors, and students in one place.</div>
+    <a href="https://chat.whatsapp.com/EeEtbhcCMMUAuHv4PW0Bb5" target="_blank" class="wa-banner-btn">
+      <svg class="wa-icon" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Join WhatsApp Group
+    </a>
+  </div>
+
+  <div class="section-title">Active Study Requests</div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
+    <button class="filter-btn" onclick="filterCards('theory',this)">Theory</button>
+    <button class="filter-btn" onclick="filterCards('lab',this)">Lab</button>
+    <button class="filter-btn" onclick="filterCards('general',this)">General Help</button>
+  </div>
+  <div class="cards-list" id="cardsList"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var WA_LINK="https://chat.whatsapp.com/EeEtbhcCMMUAuHv4PW0Bb5";
+var AVATARS=[
+  {bg:"rgba(243,156,18,0.15)",color:"#f39c12"},
+  {bg:"rgba(52,152,219,0.15)",color:"#5dade2"},
+  {bg:"rgba(46,204,113,0.15)",color:"#58d68d"},
+  {bg:"rgba(231,76,60,0.15)",color:"#e74c3c"},
+  {bg:"rgba(155,89,182,0.15)",color:"#a569bd"},
+  {bg:"rgba(26,188,156,0.15)",color:"#1abc9c"},
+  {bg:"rgba(243,156,18,0.15)",color:"#f39c12"},
+  {bg:"rgba(52,152,219,0.15)",color:"#5dade2"},
+];
+var joinCounts={};
+var preloaded=[
+  {id:'p1',name:"Ador",     sem:"3rd Semester",subject:"Mathematics II",       type:"theory", note:"Available for group study sessions on campus. Can explain concepts clearly.",time:"Today"},
+  {id:'p2',name:"Promit",   sem:"3rd Semester",subject:"Physics",              type:"lab",    note:"Happy to assist with lab reports and physics problem sets.",time:"Today"},
+  {id:'p3',name:"Shajib",     sem:"3rd Semester",subject:"Programming in C",     type:"lab",    note:"Can help debug code and explain programming logic step by step.",time:"Today"},
+  {id:'p4',name:"Chaity",   sem:"3rd Semester",subject:"English Communication",type:"general",note:"Available for writing assignments, presentations, and spoken English practice.",time:"Today"},
+  {id:'p5',name:"Iftekhar", sem:"3rd Semester",subject:"Digital Logic Design", type:"theory", note:"Strong in Boolean algebra and circuit design. Prefers online sessions.",time:"Today"},
+  {id:'p6',name:"Nabila",   sem:"3rd Semester",subject:"Discrete Mathematics", type:"theory", note:"Available for set theory, graph theory, and combinatorics topics.",time:"Today"},
+  {id:'p7',name:"Rahul",    sem:"3rd Semester",subject:"Data Structures",      type:"lab",    note:"Can teach arrays, linked lists, stacks, queues, and basic algorithms.",time:"Today"},
+  {id:'p8',name:"Tabib",    sem:"3rd Semester",subject:"OOP with Java",        type:"theory", note:"Can help with classes, inheritance, polymorphism, and Java projects.",time:"Today"},
+];
+var userPosts=[];
+
+function initials(name){return name.trim().charAt(0).toUpperCase();}
+function typeTag(type){
+  if(type==='theory')return'<span class="subject-tag tag-theory">Theory</span>';
+  if(type==='lab')return'<span class="subject-tag tag-lab">Lab</span>';
+  return'<span class="subject-tag tag-general">General Help</span>';
+}
+function makeCard(data,idx){
+  var av=AVATARS[idx%AVATARS.length];
+  var count=joinCounts[data.id]||0;
+  var countLabel=count===0?'Join Request':count+' Joined';
+  return'<div class="req-card '+data.type+'" data-type="'+data.type+'" id="card-'+data.id+'">'+
+    '<div class="card-top">'+
+    '<div class="avatar" style="background:'+av.bg+';color:'+av.color+'">'+initials(data.name)+'</div>'+
+    '<div><div class="card-name">'+esc(data.name)+'</div><div class="card-sem">'+esc(data.sem)+'</div></div>'+
+    '</div>'+
+    typeTag(data.type)+
+    '<div class="card-subject">'+esc(data.subject)+'</div>'+
+    '<div class="card-note">'+esc(data.note||'')+'</div>'+
+    '<div class="card-footer">'+
+    '<span class="posted-time">'+esc(data.time)+'</span>'+
+    '<div class="card-actions">'+
+    '<button class="join-req-btn'+(count>0?' joined':'')+'" id="joinbtn-'+data.id+'" onclick="joinRequest(\''+data.id+'\')">'+
+    '<span id="joinlabel-'+data.id+'">'+countLabel+'</span></button>'+
+    '<a href="'+WA_LINK+'" target="_blank" class="wa-btn">'+
+    '<svg class="wa-icon" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'+
+    ' WhatsApp Group</a></div></div></div>';
+}
+
+function joinRequest(id){
+  joinCounts[id]=(joinCounts[id]||0)+1;
+  var count=joinCounts[id];
+  var btn=document.getElementById('joinbtn-'+id);
+  var lbl=document.getElementById('joinlabel-'+id);
+  if(btn)btn.classList.add('joined');
+  if(lbl)lbl.textContent=count+' Joined';
+  updateTotalJoins();
+  showToast('Request sent! Opening WhatsApp group...');
+  setTimeout(function(){window.open(WA_LINK,'_blank');},600);
+}
+
+function updateTotalJoins(){
+  var total=Object.values(joinCounts).reduce(function(a,b){return a+b;},0);
+  document.getElementById('totalJoins').textContent=total;
+}
+
+function renderAll(filter){
+  filter=filter||'all';
+  var all=preloaded.concat(userPosts);
+  var list=document.getElementById('cardsList');
+  var html='';var shown=0;
+  all.forEach(function(d,i){
+    if(filter==='all'||d.type===filter){html+=makeCard(d,i);shown++;}
+  });
+  if(!shown)html='<div class="empty-state">No study requests found for this filter.</div>';
+  list.innerHTML=html;
+  document.getElementById('totalCount').textContent=all.length;
+}
+
+function filterCards(type,btn){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderAll(type);
+}
+
+function submitPost(){
+  var name=document.getElementById('f-name').value.trim();
+  var sem=document.getElementById('f-sem').value;
+  var subject=document.getElementById('f-subject').value.trim();
+  var type=document.getElementById('f-type').value;
+  var note=document.getElementById('f-note').value.trim();
+  [document.getElementById('f-name'),document.getElementById('f-sem'),
+   document.getElementById('f-subject'),document.getElementById('f-type')]
+    .forEach(function(el){el.classList.remove('err');});
+  var ok=true;
+  if(!name){document.getElementById('f-name').classList.add('err');ok=false;}
+  if(!sem){document.getElementById('f-sem').classList.add('err');ok=false;}
+  if(!subject){document.getElementById('f-subject').classList.add('err');ok=false;}
+  if(!type){document.getElementById('f-type').classList.add('err');ok=false;}
+  if(!ok)return;
+  var now=new Date();
+  var timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  var uid='u'+Date.now();
+  userPosts.unshift({id:uid,name:name,sem:sem,subject:subject,type:type,
+    note:note||'Looking for a study partner. Feel free to connect!',time:'Just now — '+timeStr});
+  document.getElementById('f-name').value='';
+  document.getElementById('f-sem').value='';
+  document.getElementById('f-subject').value='';
+  document.getElementById('f-type').value='';
+  document.getElementById('f-note').value='';
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelector('.filter-btn').classList.add('active');
+  renderAll('all');
+  showToast('Your request has been posted!');
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},3500);
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+if(localStorage.getItem('isLoggedIn')!=='true'){window.location.href='login.html';}
+renderAll('all');
+if(typeof trackUserActivity==='function'){trackUserActivity('Study Partner Finder');}
+</script>
+<script src="js/auth.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/tracker.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
