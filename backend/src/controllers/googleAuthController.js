@@ -101,16 +101,16 @@ export const googleCallback = async (req, res) => {
 
     res.cookie('jid', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/api/v1/auth/refresh',
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     res.cookie('oauth_handoff', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 60 * 1000
     });
@@ -128,7 +128,11 @@ export const authMe = async (req, res) => {
     return res.status(401).json({ success: false, message: 'No handoff token found.' });
   }
 
-  res.clearCookie('oauth_handoff', { path: '/' });
+  res.clearCookie('oauth_handoff', {
+    path: '/',
+    secure: process.env.NODE_ENV === 'production' ? true : false,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  });
 
   try {
     const decoded = jwt.verify(handoffToken, JWT_SECRET);

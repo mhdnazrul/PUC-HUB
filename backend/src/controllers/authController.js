@@ -76,8 +76,8 @@ export const login = async (req, res) => {
 
     res.cookie('jid', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/api/v1/auth/refresh',
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -118,7 +118,11 @@ export const refresh = async (req, res) => {
         userId: existingToken.user_id,
         traceId: req.traceId
       });
-      res.clearCookie('jid');
+      res.clearCookie('jid', {
+        path: '/api/v1/auth/refresh',
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+      });
       return res.status(403).json({
         success: false,
         error_code: 'TOKEN_REUSE_DETECTED',
@@ -148,8 +152,8 @@ export const refresh = async (req, res) => {
 
     res.cookie('jid', newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/api/v1/auth/refresh',
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -171,6 +175,10 @@ export const logout = async (req, res) => {
       logger.error('Logout token revocation error', { traceId: req.traceId, error: error.message });
     }
   }
-  res.clearCookie('jid', { path: '/api/v1/auth/refresh' });
+  res.clearCookie('jid', {
+    path: '/api/v1/auth/refresh',
+    secure: process.env.NODE_ENV === 'production' ? true : false,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  });
   res.status(200).json({ success: true, message: 'Logged out successfully.' });
 };

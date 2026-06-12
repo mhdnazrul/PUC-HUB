@@ -6,8 +6,8 @@ export const setCsrfCookie = (req, res) => {
   
   res.cookie('csrf-token', csrfToken, {
     httpOnly: false, // Must be readable by client-side JS to send in X-CSRF-Token header
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production' ? true : false,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     path: '/'
   });
   
@@ -22,7 +22,7 @@ export const verifyCsrfToken = (req, res, next) => {
   }
 
   const cookieToken = req.cookies['csrf-token'];
-  const headerToken = req.headers['x-csrf-token'];
+  const headerToken = req.headers['x-csrf-token'] || req.headers['x-xsrf-token'];
 
   if (!cookieToken || !headerToken || cookieToken !== headerToken) {
     return res.status(403).json({
